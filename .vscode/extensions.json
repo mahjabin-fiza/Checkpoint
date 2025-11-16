@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "eamodio.gitlens",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "dsznajder.es7-react-js-snippets",
+    "eamodio.gitlens",
+    "ms-vscode.vscode-typescript-next"
+  ]
+}
