@@ -22,7 +22,7 @@ Run `nvm use` to switch automatically.
 
 ## to start the website, write the 2 commands below
 
--> use npm
--> run npm dev
+->nvm use
+-> npm run dev
 
 ## type rfce to get the default function code

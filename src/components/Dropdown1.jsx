@@ -1,7 +1,7 @@
-import React from 'react'
-import { useState, useRef, useEffect } from 'react'
+import React from 'react';
+import { useState, useRef, useEffect } from 'react';
 
-const Dropdown1 = ({options, defaultText}) => {
+const Dropdown1 = ({ options, title = 'tittle', defaultText }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(defaultText);
 
@@ -15,29 +15,53 @@ const Dropdown1 = ({options, defaultText}) => {
 
   useEffect(() => {
     function handleClickOutside(event) {
-        if(dropdownRef.current && !dropdownRef.current.contains(event.target)){
-            setIsOpen(false);
-        }
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
     }
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
 
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   return (
-    <div ref={dropdownRef} className="relative flex-1">
-      <button
-        onClick={toggleDropdown}
-        className="w-full h-12 text-sm bg-white border border-[#CCC3AF] rounded-lg px-2 text-gray-700 flex items-center justify-between shadow-sm hover:border-[#A88B68] transition">
-        <span>{selected}</span>
-        <svg
-          className={`w-4 h-4 transform transition-transform duration-300 ${
-            isOpen ? "rotate-180" : "rotate-0"
-          }`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
+    <div>
+      <div className="flex items-center w-full px-2 py-2 text-sm bg-white border border-[#CCC3AF] rounded-xl text-gray-700 shadow-sm hover:border-[#A88B68] transition">
+        <div className="flex-1">
+          <p className="text-xs text-[#9C9087]">{title}</p>
+
+          <div className="w-full inline-block text-[#4B3A2D] mt-1 rounded-lg text-black">
+            {selected}
+          </div>
+        </div>
+
+        <div
+          ref={dropdownRef}
+          onClick={toggleDropdown}
+          className="flex-shrink-0"
+        >
+          <div className="inline-flex items-center justify-center h-10 w-10">
+            <button type="button" className="p-3">
+              <svg
+                className={`w-4 h-4 text-[#4B3A2D] transform transition-transform duration-300 ${
+                  isOpen ? 'rotate-180' : 'rotate-0'
+                }`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
 
       {isOpen ? (
         <div className="absolute w-full mt-2 bg-white border border-[#CCC3AF] rounded-lg shadow-lg z-10">
@@ -45,14 +69,15 @@ const Dropdown1 = ({options, defaultText}) => {
             <div
               key={index}
               onClick={() => handleSelect(option)}
-              className="px-4 py-2 hover:bg-[#F5F3EE] cursor-pointer text-gray-700 transition">
+              className="px-4 py-2 hover:bg-[#F5F3EE] cursor-pointer text-gray-700 transition"
+            >
               {option}
             </div>
-            ))}
+          ))}
         </div>
-        ) : null}
+      ) : null}
     </div>
-    );
+  );
 };
 
-export default Dropdown1
+export default Dropdown1;

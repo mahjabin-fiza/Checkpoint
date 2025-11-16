@@ -18,20 +18,27 @@ function Search() {
           </h2>
         </div>
 
-        <div class="w-full max-w-4xl mx-auto shadow-md flex gap-3 bg-white/60 rounded-lg justify-center items-center px-4 py-3 relative z-10">
-          <Dropdown1
-            options={['Dhaka', "Cox's Bazar"]}
-            defaultText="Destination"
-          />
+        <div className="w-full max-w-4xl mx-auto shadow-md flex gap-2 bg-white/60 flex items-center px-2 py-1 relative z-10 rounded-lg">
+          <div className="grid grid-cols-5 gap-2 flex-1">
+            <Dropdown1
+              options={['Dhaka', "Cox's Bazar"]}
+              defaultText="Destination"
+            />
 
-          <Counter defaultText="Traveler(s)" />
+            <Dropdown1
+              options={['Dhaka', "Cox's Bazar"]}
+              defaultText="Destination"
+            />
 
-          <Counter defaultText="Duration" />
+            <Counter defaultText="Traveler(s)" />
 
-          <Budget_DD defaultText="Budget" />
+            <Counter defaultText="Duration" />
+
+            <Budget_DD defaultText="Budget" />
+          </div>
 
           <Link to="/Search_Result">
-            <button class="shadow-md border border-2 border-transparent bg-[#A88B68] font-semibold text-white w-40 h-14 rounded-lg hover:bg-[#87A87C]/10 hover:text-[#4B3A2D] hover:border-[#4B3A2D] hover:scale-105 transition duration-300 ease-in-out relative z-10">
+            <button class="px-4 py-2 shadow-md border border-2 border-transparent bg-[#A88B68] font-semibold text-white w-28 h-16 rounded-lg hover:bg-[#87A87C]/10 hover:text-[#4B3A2D] hover:border-[#4B3A2D] hover:scale-105 transition duration-300 ease-in-out relative z-10">
               Search
             </button>
           </Link>
