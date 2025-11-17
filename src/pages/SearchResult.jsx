@@ -6,6 +6,7 @@ import Counter from '../components/Counter.jsx';
 import Budget_DD from '../components/Budget_DD.jsx';
 import Search from '../components/Search.jsx';
 import CostBox1 from '../components/costBox1.jsx';
+import PerDayBox from '../components/PerDayBox.jsx';
 
 function SearchResult() {
   return (
@@ -39,24 +40,24 @@ function SearchResult() {
         </div>
 
         <div class="w-full flex gap-4">
-          <div class="p-2 bg-green-200 w-[40%] h-[100vh] rounded-lg flex flex-col items-center justify-center">
-            <div className="mb-2 bg-white w-full h-[60%] rounded-lg flex items-center justify-center">
+          <div class="p-2 bg-white w-[40%] h-[100vh] rounded-lg flex flex-col items-center justify-center shadow-lg">
+            <div className="mb-2 bg-gray-200 w-full h-[60%] rounded-lg flex items-center justify-center">
               Pictures of destination
             </div>
-            <div className="mb-2 bg-white w-full h-[25%] rounded-lg flex">
+            <div className="mb-2 bg-gray-200 w-full h-[25%] rounded-lg flex">
               <div>
                 <h1 className="m-2">Destination title</h1>
                 <p className="m-2">discription</p>
               </div>
             </div>
-            <div className="bg-white w-full h-[15%] rounded-lg flex items-center justify-center">
+            <div className="bg-gray-200 w-full h-[15%] rounded-lg flex items-center justify-center">
               Q&A
             </div>
           </div>
 
-          <div class="bg-red-400 w-[60%] h-[100vh] p-3 rounded-lg flex flex-col">
-            <p>Travel Cost:</p>
+          <div class="w-[60%] h-[100vh] rounded-lg flex flex-col">
             <CostBox1 />
+            <PerDayBox />
           </div>
         </div>
       </div>
