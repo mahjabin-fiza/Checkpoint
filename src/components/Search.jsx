@@ -1,4 +1,5 @@
 import Dropdown1 from './Dropdown1.jsx';
+import Card from './Card.jsx';
 import Counter from './Counter.jsx';
 import Budget_DD from './Budget_DD.jsx';
 import MyImage from '.././assets/8592434717_8023296e12_b.jpg';
@@ -20,15 +21,9 @@ function Search() {
 
         <div className="w-full max-w-4xl mx-auto shadow-md flex gap-2 bg-white/60 flex items-center px-2 py-1 relative z-10 rounded-lg">
           <div className="grid grid-cols-5 gap-2 flex-1">
-            <Dropdown1
-              options={['Dhaka', "Cox's Bazar"]}
-              defaultText="Destination"
-            />
+            <Card defaultText="Enter" title="From" />
 
-            <Dropdown1
-              options={['Dhaka', "Cox's Bazar"]}
-              defaultText="Destination"
-            />
+            <Card defaultText="Enter" title="To" />
 
             <Counter defaultText="Traveler(s)" />
 

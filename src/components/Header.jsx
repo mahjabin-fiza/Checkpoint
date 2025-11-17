@@ -5,7 +5,7 @@ import SearchResult from '../pages/SearchResult.jsx';
 
 function Header() {
   return (
-    <header className="w-full px-14 py-7">
+    <header className="w-full px-14 py-7 bg-white">
       <div className="max-w-8xl mx-auto flex items-center justify-between">
         <h1 className="text-4xl font-bold text-[#4B3A2D]">Checkpoint</h1>
 
