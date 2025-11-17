@@ -5,7 +5,7 @@ import Dropdown1 from '../components/Dropdown1.jsx';
 import Counter from '../components/Counter.jsx';
 import Budget_DD from '../components/Budget_DD.jsx';
 import Search from '../components/Search.jsx';
-import costBox1 from '../components/costBox1.jsx';
+import CostBox1 from '../components/costBox1.jsx';
 
 function SearchResult() {
   return (
@@ -54,8 +54,9 @@ function SearchResult() {
             </div>
           </div>
 
-          <div class="bg-red-400 w-[60%] h-[100vh] rounded-lg flex flex-col items-center justify-center">
-            <costBox1 />
+          <div class="bg-red-400 w-[60%] h-[100vh] p-3 rounded-lg flex flex-col">
+            <p>Travel Cost:</p>
+            <CostBox1 />
           </div>
         </div>
       </div>
