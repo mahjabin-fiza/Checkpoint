@@ -8,19 +8,37 @@ import Search from '../components/Search.jsx';
 import CostBox1 from '../components/costBox1.jsx';
 import PerDayBox from '../components/PerDayBox.jsx';
 import SearchBar from '../components/SearchBar.jsx';
+import { useLocation } from 'react-router-dom';
 
 function SearchResult() {
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+
+  const from = query.get('from') || '';
+  const to = query.get('to') || '';
+  const travelers = query.get('travelers') || '';
+  const duration = query.get('duration') || '';
+  const budget = query.get('budget') || '';
+
   return (
     <>
       <Header />
+      <div className="py-2"></div>
+      <SearchBar
+        initialFrom={from}
+        initialTo={to}
+        initialTravelers={Number(travelers)}
+        initialDuration={Number(duration)}
+        initialBudget={Number(budget)}
+      />
 
-      <SearchBar />
-
-      <div class="bg-gray-200 w-full h-full relative flex flex-col items-center py-4 px-16">
-        <div class="bg-blue-400 w-[50%] h-[15%] rounded-lg mb-4 flex items-center justify-center">
-          <div>
-            <h1>Cost Summery:</h1>
-            <h1>Cost Summery:</h1>
+      <div class="w-full h-full relative flex flex-col items-center py-4 px-16">
+        <div class="bg-white w-[50%] h-[15%] p-3 flex flex-col rounded-lg mb-4 shadow-lg">
+          <h1 className="font-semibold">Cost Summery:</h1>
+          <div className="w-full flex justify-between items-center">
+            <h1>Travel Cost:</h1>
+            <h1>Hotel:</h1>
+            <h1>Recreation:</h1>
           </div>
         </div>
 
@@ -31,7 +49,7 @@ function SearchResult() {
             </div>
             <div className="mb-2 bg-gray-200 w-full h-[25%] rounded-lg flex">
               <div>
-                <h1 className="m-2">hi</h1>
+                <h1 className="m-2 text-xl font-semibold">{to}</h1>
                 <p className="m-2">discription</p>
               </div>
             </div>
@@ -41,8 +59,14 @@ function SearchResult() {
           </div>
 
           <div class="w-[60%] h-[100vh] rounded-lg flex flex-col">
-            <CostBox1 />
-            <PerDayBox />
+            <CostBox1 travelers={Number(travelers)} />
+            {Array.from({ length: duration }).map((_, index) => (
+              <PerDayBox
+                key={index}
+                day={index + 1}
+                travelers={Number(travelers)}
+              />
+            ))}
           </div>
         </div>
       </div>

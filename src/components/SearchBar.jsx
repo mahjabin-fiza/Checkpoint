@@ -3,28 +3,80 @@ import Dropdown1 from './Dropdown1.jsx';
 import Card from './Card.jsx';
 import Counter from './Counter.jsx';
 import Budget_DD from './Budget_DD.jsx';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
-function SearchBar() {
+function SearchBar({
+  initialFrom = '',
+  initialTo = '',
+  initialTravelers = 1,
+  initialDuration = 1,
+  initialBudget = '',
+}) {
+  const navigate = useNavigate();
+
+  const [from, setFrom] = useState(initialFrom);
+  const [to, setTo] = useState(initialTo);
+  const [travelers, setTravelers] = useState(initialTravelers);
+  const [duration, setDuration] = useState(initialDuration);
+  const [budget, setBudget] = useState(initialBudget);
+
+  const handleSearch = () => {
+    const query = new URLSearchParams({
+      from,
+      to,
+      travelers,
+      duration,
+      budget,
+    }).toString();
+
+    navigate(`/Search_Result?${query}`);
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto shadow-md flex gap-2 bg-white/60 flex items-center px-2 py-1 relative z-10 rounded-lg">
       <div className="grid grid-cols-5 gap-2 flex-1">
-        <Card defaultText="Enter" title="From" />
+        <Card
+          defaultText="Enter"
+          title="From"
+          value={from}
+          onChange={setFrom}
+          initialValue={from}
+        />
 
-        <Card defaultText="Enter" title="To" />
+        <Card
+          defaultText="Enter"
+          title="To"
+          value={to}
+          onChange={setTo}
+          initialValue={to}
+        />
 
-        <Counter title="Traveler(s)" />
+        <Counter
+          title="Traveler(s)"
+          value={travelers}
+          onChange={setTravelers}
+        />
 
-        <Counter title="Duration (Day)" />
+        <Counter
+          title="Duration (Day)"
+          value={duration}
+          onChange={setDuration}
+        />
 
-        <Budget_DD defaultText="Budget" />
+        <Budget_DD
+          title="Budget"
+          value={budget}
+          onChange={setBudget}
+          initialValue={budget}
+        />
       </div>
-
-      <Link to="/Search_Result">
-        <button class="px-4 py-2 shadow-md border border-2 border-transparent bg-[#A88B68] font-semibold text-white w-28 h-16 rounded-lg hover:bg-[#87A87C]/10 hover:text-[#4B3A2D] hover:border-[#4B3A2D] hover:scale-105 transition duration-300 ease-in-out relative z-10">
-          Search
-        </button>
-      </Link>
+      <button
+        onClick={handleSearch}
+        className="px-4 py-2 shadow-md border border-2 border-transparent bg-[#A88B68] font-semibold text-white w-28 h-16 rounded-lg hover:bg-[#87A87C]/10 hover:text-[#4B3A2D] hover:border-[#4B3A2D] hover:scale-105 transition duration-300 ease-in-out relative z-10"
+      >
+        Search
+      </button>
     </div>
   );
 }

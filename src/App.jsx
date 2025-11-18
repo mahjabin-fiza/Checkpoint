@@ -7,13 +7,15 @@ import Signin from './pages/Signin.jsx';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Homepage />} />
-        <Route path="/Search_Result" element={<SearchResult />} />
-        <Route path="/Signin" element={<Signin />} />
-      </Routes>
-    </BrowserRouter>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route path="/Search_Result" element={<SearchResult />} />
+          <Route path="/Signin" element={<Signin />} />
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 

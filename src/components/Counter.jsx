@@ -1,11 +1,15 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const Counter = ({ title = 'title' }) => {
-  const [count, setCount] = useState(1);
+const Counter = ({ title = 'title', value = 1, onChange }) => {
+  const [count, setCount] = useState(value);
 
   const increment = () => setCount(count + 1);
   const decrement = () => setCount(count > 1 ? count - 1 : 1);
+
+  useEffect(() => {
+    if (onChange) onChange(count);
+  }, [count, onChange]);
 
   return (
     <div>

@@ -3,10 +3,19 @@ import { useState, useRef, useEffect } from 'react';
 import districtsName from '.././data/districtsName';
 import SearchResult from '../pages/SearchResult';
 
-const Card = ({ title = 'title', defaultText }) => {
+const Card = ({
+  title = 'title',
+  defaultText,
+  onChange,
+  initialValue = '',
+}) => {
+  const [query, setQuery] = useState(initialValue);
   const [isOpen, setOpen] = useState(false);
-  const [query, setQuery] = useState('');
   const [showAll, setShowAll] = useState(false);
+
+  useEffect(() => {
+    if (onChange) onChange(query);
+  }, [query, onChange]);
 
   const filtered = showAll
     ? districtsName
@@ -60,10 +69,10 @@ const Card = ({ title = 'title', defaultText }) => {
             onClick={toggleDropdown}
             className="flex-shrink-0"
           >
-            <div className="inline-flex items-center justify-center h-10 w-10">
+            <div className="inline-flex items-center justify-center h-10 w-4">
               <button type="button" className="p-3">
                 <svg
-                  className={`w-4 h-4 text-[#4B3A2D] transform transition-transform duration-300 ${
+                  className={`w-3 h-3 text-[#4B3A2D] transform transition-transform duration-300 ${
                     isOpen ? 'rotate-180' : 'rotate-0'
                   }`}
                   fill="none"
@@ -111,4 +120,3 @@ const Card = ({ title = 'title', defaultText }) => {
 };
 
 export default Card;
-//<SearchResult result={defaultText} />
