@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 function Signin() {
   return (
     <>
-      <Header />
+      <div className="w-full h-full items-center justify-center">hi</div>
     </>
   );
 }

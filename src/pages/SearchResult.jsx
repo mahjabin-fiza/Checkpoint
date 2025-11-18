@@ -7,29 +7,14 @@ import Budget_DD from '../components/Budget_DD.jsx';
 import Search from '../components/Search.jsx';
 import CostBox1 from '../components/costBox1.jsx';
 import PerDayBox from '../components/PerDayBox.jsx';
+import SearchBar from '../components/SearchBar.jsx';
 
 function SearchResult() {
   return (
     <>
       <Header />
 
-      <div className="w-full max-w-4xl mx-auto shadow-md flex gap-2 bg-white/80 flex items-center mt-4 px-2 py-1 relative z-10 rounded-lg">
-        <div className="grid grid-cols-5 gap-2 flex-1">
-          <Card defaultText="Enter" title="From" />
-
-          <Card defaultText="Enter" title="To" />
-
-          <Counter defaultText="Traveler(s)" />
-
-          <Counter defaultText="Duration" />
-
-          <Budget_DD defaultText="Budget" />
-        </div>
-
-        <button class="px-4 py-2 shadow-md border border-2 border-transparent bg-[#A88B68] font-semibold text-white w-28 h-16 rounded-lg hover:bg-[#87A87C]/10 hover:text-[#4B3A2D] hover:border-[#4B3A2D] hover:scale-105 transition duration-300 ease-in-out relative z-10">
-          Search
-        </button>
-      </div>
+      <SearchBar />
 
       <div class="bg-gray-200 w-full h-full relative flex flex-col items-center py-4 px-16">
         <div class="bg-blue-400 w-[50%] h-[15%] rounded-lg mb-4 flex items-center justify-center">
@@ -46,7 +31,7 @@ function SearchResult() {
             </div>
             <div className="mb-2 bg-gray-200 w-full h-[25%] rounded-lg flex">
               <div>
-                <h1 className="m-2">Destination title</h1>
+                <h1 className="m-2">hi</h1>
                 <p className="m-2">discription</p>
               </div>
             </div>

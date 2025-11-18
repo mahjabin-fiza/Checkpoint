@@ -10,7 +10,6 @@ function Homepage() {
       <>
         <Header />
         <Search />
-        <Card />
       </>
     </div>
   );
