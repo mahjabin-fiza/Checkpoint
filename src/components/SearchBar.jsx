@@ -58,11 +58,7 @@ function SearchBar({
           onChange={setTravelers}
         />
 
-        <Counter
-          title="Duration (Day)"
-          value={duration}
-          onChange={setDuration}
-        />
+        <Counter title="Duration" value={duration} onChange={setDuration} />
 
         <Budget_DD
           title="Budget"

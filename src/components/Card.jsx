@@ -8,6 +8,7 @@ const Card = ({
   defaultText,
   onChange,
   initialValue = '',
+  className,
 }) => {
   const [query, setQuery] = useState(initialValue);
   const [isOpen, setOpen] = useState(false);
@@ -44,7 +45,7 @@ const Card = ({
       <div>
         <div
           ref={dropdownRef}
-          className="flex items-center w-full px-2 py-2 text-sm bg-white border border-[#CCC3AF] rounded-xl text-gray-700 shadow-sm hover:border-[#A88B68] transition"
+          className={`flex items-center w-full px-2 py-2 text-sm bg-white border border-[#CCC3AF] rounded-xl text-gray-700 shadow-sm hover:border-[#A88B68] transition ${className || ''}`}
         >
           <div className="flex-1">
             <p className="text-xs text-[#9C9087]">{title}</p>

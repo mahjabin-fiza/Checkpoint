@@ -3,27 +3,39 @@ import Button2 from './Button2.jsx';
 import Signin from '../pages/Signin.jsx';
 import SearchResult from '../pages/SearchResult.jsx';
 import { Link } from 'react-router-dom';
+import ProfileDropdown from './ProfileDropdown.jsx';
 
 function Header() {
   return (
-    <header className="w-full px-14 py-7 bg-white">
+    <header className="w-full px-14 py-6 bg-white">
       <div className="max-w-8xl mx-auto flex items-center justify-between">
         <Link to="/">
           <h1 className="text-4xl font-bold text-[#4B3A2D]">Checkpoint</h1>
         </Link>
 
-        <div className="flex flex-wrap space-x-2">
-          <button className="px-3 py-1.5 rounded text-sm font-medium hover:bg-[#D6E9D6] transition duration-300 ease-in-out">
+        <div className="flex flex-wrap space-x-1 items-center">
+          <Link
+            to="/"
+            className="px-5 py-3 rounded text-sm font-medium hover:bg-[#D6E9D6] transition duration-300 ease-in-out"
+          >
             Home
-          </button>
-          <button className="px-3 py-1.5 rounded text-sm font-medium hover:bg-[#D6E9D6] transition ease-in-out">
-            About
-          </button>
-          <button className="px-3 py-1.5 rounded text-sm font-medium hover:bg-[#D6E9D6] transition ease-in-out">
-            Contact
-          </button>
-          <Button1 text="Register" />
-          <Button1 text="Sign In" to="/Signin" />
+          </Link>
+          <Link
+            to="/Restaurant"
+            className="px-5 py-3 rounded text-sm font-medium hover:bg-[#D6E9D6] transition duration-300 ease-in-out"
+          >
+            Restuarant
+          </Link>
+          <Link
+            to="/Hotel"
+            className="px-5 py-3 rounded text-sm font-medium hover:bg-[#D6E9D6] transition duration-300 ease-in-out"
+          >
+            Hotel
+          </Link>
+          <div className="px-4">
+            {/* <Button1 text="Sign In" to="/Signin" /> */}
+            <ProfileDropdown />
+          </div>
         </div>
       </div>
     </header>
