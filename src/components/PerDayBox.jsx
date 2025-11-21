@@ -1,9 +1,12 @@
 import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 
-const PerDayBox = ({ day, travelers }) => {
+const PerDayBox = ({ day, travelers, hotelCost, foodCost, duration }) => {
   const [open, setOpen] = useState(false);
   const contentRef = useRef(null);
+
+  const hotel = Math.ceil(hotelCost / duration);
+  const food = Math.ceil((foodCost / duration) * travelers);
 
   useEffect(() => {
     const el = contentRef.current;
@@ -25,7 +28,7 @@ const PerDayBox = ({ day, travelers }) => {
   }, [open]);
   return (
     <>
-      <p className="pt-2 pb-1">Day - {day}</p>
+      <p className="">Day - {day}</p>
       <div className="p-3 bg-white w-full rounded-lg justify-center shadow-lg">
         <div className="flex flex-col bg-gray-200 rounded">
           <div className="w-full flex justify-between items-center">
@@ -51,7 +54,7 @@ const PerDayBox = ({ day, travelers }) => {
                 </button>
               </div>
             </div>
-            <div className="p-2 rounded">cost</div>
+            <div className="p-2 rounded">{hotel.toLocaleString('en-BD')}</div>
           </div>
           <div
             ref={contentRef}
@@ -68,7 +71,9 @@ const PerDayBox = ({ day, travelers }) => {
               <div className="pb-2 px-2 rounded">Food</div>
               <div className="pb-2 px-2 rounded">x {travelers}</div>
             </div>
-            <div className="pb-2 px-2 rounded">cost</div>
+            <div className="pb-2 px-2 rounded">
+              {food.toLocaleString('en-BD')}
+            </div>
           </div>
         </div>
       </div>

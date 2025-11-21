@@ -9,6 +9,8 @@ import CostBox1 from '../components/costBox1.jsx';
 import PerDayBox from '../components/PerDayBox.jsx';
 import SearchBar from '../components/SearchBar.jsx';
 import { useLocation } from 'react-router-dom';
+import RecreationBox from '../components/RecreationBox.jsx';
+import TotalBox from '../components/TotalBox.jsx';
 
 function SearchResult() {
   const location = useLocation();
@@ -42,31 +44,44 @@ function SearchResult() {
           </div>
         </div>
 
-        <div class="w-full flex gap-4">
-          <div class="p-2 bg-white w-[40%] h-[100vh] rounded-lg flex flex-col items-center justify-center shadow-lg">
-            <div className="mb-2 bg-gray-200 w-full h-[60%] rounded-lg flex items-center justify-center">
-              Pictures of destination
-            </div>
-            <div className="mb-2 bg-gray-200 w-full h-[25%] rounded-lg flex">
-              <div>
-                <h1 className="m-2 text-xl font-semibold">{to}</h1>
-                <p className="m-2">discription</p>
+        <div class="flex gap-4">
+          <div class="w-[400px] h-[100vh] rounded-lg flex flex-col">
+            <p className="text-lg font-bold">{to}</p>
+            <div className="w-full h-full bg-white p-2 rounded-lg flex flex-col gap-2 shadow-lg">
+              <div className="bg-gray-200 w-full h-[60%] rounded-lg flex items-center justify-center">
+                Pictures of destination
               </div>
-            </div>
-            <div className="bg-gray-200 w-full h-[15%] rounded-lg flex items-center justify-center">
-              Q&A
+              <div className="bg-gray-200 w-full h-[25%] rounded-lg flex">
+                <div>
+                  <p className="m-2">discription</p>
+                </div>
+              </div>
+              <div className="bg-gray-200 w-full h-[15%] rounded-lg flex items-center justify-center">
+                Q&A
+              </div>
             </div>
           </div>
 
-          <div class="w-[60%] h-[100vh] rounded-lg flex flex-col">
-            <CostBox1 travelers={Number(travelers)} />
+          <div class="max-w-[600px] h-[100vh] rounded-lg flex flex-col gap-2">
+            <CostBox1
+              to={to}
+              from={from}
+              travelers={Number(travelers)}
+              Total={Number(budget)}
+              duration={Number(duration)}
+            />
             {Array.from({ length: duration }).map((_, index) => (
               <PerDayBox
                 key={index}
                 day={index + 1}
                 travelers={Number(travelers)}
+                hotelCost={Number(budget) * 0.4}
+                foodCost={Number(budget) * 0.1}
+                duration={Number(duration)}
               />
             ))}
+            <RecreationBox />
+            <TotalBox />
           </div>
         </div>
       </div>
