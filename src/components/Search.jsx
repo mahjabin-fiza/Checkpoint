@@ -10,7 +10,7 @@ function Search() {
   return (
     <section class="flex items-center justify-center bg-cover bg-center py-5 px-14">
       <div
-        class="max-w-8xl w-full rounded-lg py-12 px-28 shadow-md flex flex-col justify-between h-[400px] bg-cover bg-center relative"
+        class="max-w-6xl w-full rounded-lg py-12 px-28 shadow-md flex flex-col justify-between h-[400px] bg-cover bg-center relative"
         style={{ backgroundImage: `url(${MyImage})` }}
       >
         <div className="absolute inset-0 bg-[#F5F2EB]/50 rounded-lg"></div>

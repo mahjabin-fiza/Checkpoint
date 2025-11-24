@@ -10,7 +10,7 @@ const Budget_DD = ({ title = 'select', initialValue = '', onChange }) => {
 
   return (
     <>
-      <div className="flex items-center w-full px-2 py-1 text-sm bg-white border border-[#CCC3AF] rounded-xl text-gray-700 shadow-sm hover:border-[#A88B68] transition">
+      <div className="max-w-[100px] flex items-center px-2 py-1 text-sm bg-white border border-[#CCC3AF] rounded-xl text-gray-700 shadow-sm hover:border-[#A88B68] transition">
         <div className="flex-1">
           <p className="text-xs text-[#9C9087]">{title}</p>
           <div className="relative flex-1">

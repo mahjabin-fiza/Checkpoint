@@ -7,6 +7,7 @@ import Signin from './pages/Signin.jsx';
 import Hotel from './pages/Hotel.jsx';
 import Restaurant from './pages/Restaurant.jsx';
 import UserProfile from './pages/UserProfile.jsx';
+import SignUp from './pages/SignUp.jsx';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/Hotel" element={<Hotel />} />
           <Route path="/Restaurant" element={<Restaurant />} />
           <Route path="?user_profile" element={<UserProfile />} />
+          <Route path="/sign_up" element={<SignUp />} />
         </Routes>
       </BrowserRouter>
     </>

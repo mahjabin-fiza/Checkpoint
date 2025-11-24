@@ -5,6 +5,7 @@ import Counter from './Counter.jsx';
 import Budget_DD from './Budget_DD.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import Duration from './Duration.jsx';
 
 function SearchBar({
   initialFrom = '',
@@ -34,42 +35,36 @@ function SearchBar({
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto shadow-md flex gap-2 bg-white/60 flex items-center px-2 py-1 relative z-10 rounded-lg">
-      <div className="grid grid-cols-5 gap-2 flex-1">
-        <Card
-          defaultText="Enter"
-          title="From"
-          value={from}
-          onChange={setFrom}
-          initialValue={from}
-        />
+    <div className="max-w-4xl gap-2 mx-auto shadow-md bg-white/60 flex flex-wrap items-center px-2 py-1 relative z-10 rounded-lg">
+      <Card
+        defaultText="Enter"
+        title="From"
+        value={from}
+        onChange={setFrom}
+        initialValue={from}
+      />
 
-        <Card
-          defaultText="Enter"
-          title="To"
-          value={to}
-          onChange={setTo}
-          initialValue={to}
-        />
+      <Card
+        defaultText="Enter"
+        title="To"
+        value={to}
+        onChange={setTo}
+        initialValue={to}
+      />
 
-        <Counter
-          title="Traveler(s)"
-          value={travelers}
-          onChange={setTravelers}
-        />
+      <Counter title="Traveler(s)" value={travelers} onChange={setTravelers} />
 
-        <Counter title="Duration" value={duration} onChange={setDuration} />
+      <Duration title="Duration" value={duration} onChange={setDuration} />
 
-        <Budget_DD
-          title="Budget"
-          value={budget}
-          onChange={setBudget}
-          initialValue={budget}
-        />
-      </div>
+      <Budget_DD
+        title="Budget"
+        value={budget}
+        onChange={setBudget}
+        initialValue={budget}
+      />
       <button
         onClick={handleSearch}
-        className="px-4 py-2 shadow-md border border-2 border-transparent bg-[#A88B68] font-semibold text-white w-28 h-16 rounded-lg hover:bg-[#87A87C]/10 hover:text-[#4B3A2D] hover:border-[#4B3A2D] hover:scale-105 transition duration-300 ease-in-out relative z-10"
+        className="shadow-md border border-2 border-transparent bg-[#A88B68] font-semibold text-white w-28 h-16 rounded-lg hover:bg-[#87A87C]/10 hover:text-[#4B3A2D] hover:border-[#4B3A2D] hover:scale-105 transition duration-300 ease-in-out relative z-10"
       >
         Search
       </button>

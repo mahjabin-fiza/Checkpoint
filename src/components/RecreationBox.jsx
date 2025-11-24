@@ -89,18 +89,18 @@ function RecreationBox() {
                   type="text"
                   value={plan}
                   onChange={(e) => setPlan(e.target.value)}
-                  className="w-[25%] py-1 px-2 bg-gray-200 rounded"
+                  className="w-[25%] py-1 px-2 bg-gray-200 rounded focus:outline-none"
                 />
                 <div className="">Budget: </div>
                 <input
                   type="text"
                   value={budget}
                   onChange={(e) => setBudget(e.target.value)}
-                  className="w-[12%] py-1 px-2 bg-gray-200 rounded"
+                  className="w-[12%] py-1 px-2 bg-gray-200 rounded focus:outline-none"
                 />
                 <button
                   onClick={handleAdd}
-                  className="px-4 py-1 rounded text-sm text-green-400 rounded border border-green-400 border-2 items-center hover:bg-green-400 hover:text-white"
+                  className="px-4 py-1 rounded text-sm text-green-400 rounded border border-green-400 border-2 items-center hover:bg-green-400 hover:text-white transition duration-300 ease-in-out"
                 >
                   Add
                 </button>

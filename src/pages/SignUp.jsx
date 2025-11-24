@@ -6,7 +6,7 @@ import Button1 from '../components/Button1.jsx';
 import Button2 from '../components/Button2.jsx';
 import { Link } from 'react-router-dom';
 
-function Signin() {
+function SignUp() {
   return (
     <>
       <div
@@ -14,14 +14,26 @@ function Signin() {
         style={{ backgroundImage: `url(${MyImage})` }}
       >
         <div className="absolute inset-0 bg-[#F5F2EB]/50 rounded-lg"></div>
-        <div className="w-[350px] h-[450px] rounded-lg flex flex-col items-center justify-start">
+        <div className="w-[400px] h-[680px] rounded-lg flex flex-col items-center justify-start">
           <h1 className="text-3xl font-bold mb-3 text-center relative z-10 text-[#4B3A2D]">
-            Sign in
+            Sign Up
           </h1>
 
-          <div className="p-12 bg-white w-full h-[85%] relative rounded-lg flex items-start justify-center shadow-lg">
-            <div className="pt-12 w-[100%] h-[70%] rounded flex items-center justify-center">
+          <div className="p-12 pt-2 bg-white w-full h-[95%] relative rounded-lg flex items-start justify-center shadow-lg">
+            <div className="w-[100%] h-[100%] rounded flex items-center justify-center">
               <div className="w-full flex flex-col gap-4">
+                <label className="text-[#4B3A2D]">Name:</label>
+                <input
+                  type="email"
+                  placeholder="Name"
+                  className="border-0 border-b-2 border-gray-300 px-3 pb-1 focus:outline-none focus:border-[#A88B68] focus:ring-0"
+                />
+                <label className="text-[#4B3A2D]">Location:</label>
+                <input
+                  type="email"
+                  placeholder="Location"
+                  className="border-0 border-b-2 border-gray-300 px-3 pb-1 focus:outline-none focus:border-[#A88B68] focus:ring-0"
+                />
                 <label className="text-[#4B3A2D]">Email:</label>
                 <input
                   type="email"
@@ -29,6 +41,12 @@ function Signin() {
                   className="border-0 border-b-2 border-gray-300 px-3 pb-1 focus:outline-none focus:border-[#A88B68] focus:ring-0"
                 />
                 <label className="text-[#4B3A2D]">Password:</label>
+                <input
+                  type="password"
+                  placeholder="Password"
+                  className="border-0 border-b-2 border-gray-300 px-3 pb-1 focus:outline-none focus:border-[#A88B68] focus:ring-0"
+                />
+                <label className="text-[#4B3A2D]">Repeat Password:</label>
                 <input
                   type="password"
                   placeholder="Password"
@@ -60,4 +78,4 @@ function Signin() {
   );
 }
 
-export default Signin;
+export default SignUp;
