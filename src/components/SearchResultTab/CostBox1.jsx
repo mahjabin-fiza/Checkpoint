@@ -1,13 +1,17 @@
 import React from 'react';
 import TravelType from './TravelType';
 import CostBoxInside from './CostBoxInside';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const CostBox1 = ({ travelers, from, to, Total, duration }) => {
+const CostBox1 = ({ travelers, from, to, Total, duration, onValueChange }) => {
   const [travel1, setTravel1] = useState(0);
   const [travel2, setTravel2] = useState(0);
 
   const total = travel1 + travel2;
+
+  useEffect(() => {
+    if (onValueChange) onValueChange(total);
+  }, [total, onValueChange]);
 
   return (
     <>
@@ -23,7 +27,7 @@ const CostBox1 = ({ travelers, from, to, Total, duration }) => {
             from={from}
             travelers={travelers}
             duration={duration}
-            Total={Total * 0.5}
+            Total={Total / (travelers * 2)}
             onTravelChange={setTravel1}
           />
 
@@ -36,7 +40,7 @@ const CostBox1 = ({ travelers, from, to, Total, duration }) => {
             from={from}
             travelers={travelers}
             duration={duration}
-            Total={Total * 0.5}
+            Total={Total / (travelers * 2)}
             onTravelChange={setTravel2}
           />
         </div>

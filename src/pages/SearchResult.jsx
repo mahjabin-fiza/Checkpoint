@@ -20,6 +20,22 @@ function SearchResult() {
   const query = new URLSearchParams(location.search);
   const [popupOpen, setPopupOpen] = useState(false);
 
+  const [costBoxTotal, setCostBoxTotal] = useState(0);
+  const [planTotal, setPlanTotal] = useState(0);
+  const [perDayBox, setPerDayBox] = useState([]);
+
+  const totalPerDay = perDayBox.reduce((sum, val) => sum + Number(val || 0), 0);
+
+  const handlePerDayValue = (index, value) => {
+    setPerDayBox((prev) => {
+      const current = prev[index];
+      if (current === value) return prev; // no change => no re-render
+      const next = [...prev];
+      next[index] = value;
+      return next;
+    });
+  };
+
   const from = query.get('from') || '';
   const to = query.get('to') || '';
   const travelers = query.get('travelers') || '';
@@ -79,6 +95,7 @@ function SearchResult() {
               travelers={Number(travelers)}
               Total={Number(budget * 0.35)}
               duration={Number(duration)}
+              onValueChange={setCostBoxTotal}
             />
 
             {Array.from({ length: duration }).map((_, index) => (
@@ -86,16 +103,38 @@ function SearchResult() {
                 key={index}
                 day={index + 1}
                 travelers={Number(travelers)}
-                hotelCost={Number(budget) * 0.4}
-                foodCost={Number(budget) * 0.1}
+                hotelCost={
+                  (Number(budget) * 0.4) /
+                  (Number(duration) * Math.ceil(Number(travelers) / 2)) //budget = (total*o.4) / ((people/2)*days)
+                }
+                foodCost={
+                  (Number(budget) * 0.1) /
+                  (Number(duration) * Math.ceil(Number(travelers))) //budget = (total*o.4) / ((people/2)*days)
+                }
                 duration={Number(duration)}
                 from={from}
                 to={to}
+                onValueChange={(value) => handlePerDayValue(index, value)}
               />
             ))}
 
-            <RecreationBox />
-            <TotalBox />
+            <RecreationBox
+              cost={
+                Number(budget) - (Number(totalPerDay) + Number(costBoxTotal)) >
+                0
+                  ? Number(budget) -
+                    (Number(totalPerDay) + Number(costBoxTotal))
+                  : 0
+              }
+              onValueChange={setPlanTotal}
+            />
+            <div>{totalPerDay}</div>
+            <TotalBox
+              budget={Number(budget)}
+              calculatedCost={
+                planTotal + Number(totalPerDay) + Number(costBoxTotal)
+              }
+            />
           </div>
         </div>
       </div>

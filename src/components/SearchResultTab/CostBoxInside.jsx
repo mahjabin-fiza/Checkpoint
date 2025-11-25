@@ -39,9 +39,9 @@ function CostBoxInside({ travelers, from, to, Total, onTravelChange }) {
       Total < options.find((o) => o.id === 'air').cost
     )
       return options.find((o) => o.id === 'train');
-    if (Total < options.find((o) => o.id === 'bus').cost)
+    if (Total <= options.find((o) => o.id === 'bus').cost)
       return options.find((o) => o.id === 'bus');
-    if (Total > options.find((o) => o.id === 'air').cost)
+    if (Total >= options.find((o) => o.id === 'air').cost)
       return options.find((o) => o.id === 'air');
     return options.find((o) => o.id === 'bus');
   };

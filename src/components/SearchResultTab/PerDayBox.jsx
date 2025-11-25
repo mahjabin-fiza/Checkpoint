@@ -1,6 +1,8 @@
 import React from 'react';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import HotelPopUp from './HotelPopUp';
+import SlideDropDown from '../SlideDropDown';
+import Arrow from '../Arrow';
 
 const PerDayBox = ({
   from,
@@ -9,95 +11,151 @@ const PerDayBox = ({
   travelers,
   hotelCost,
   foodCost,
-  duration,
+  onValueChange,
 }) => {
-  const [open, setOpen] = useState(false);
-  const [popupOpen, setPopupOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState([]);
-  const contentRef = useRef(null);
+  const options = [
+    {
+      id: '3',
+      mode: '3 stars',
+      cost: 3000,
+      count: 0,
+    },
+    {
+      id: '4',
+      mode: '4 stars',
+      cost: 7000,
+      count: 0,
+    },
+    {
+      id: '5',
+      mode: '5 stars',
+      cost: 10000,
+      count: 0,
+    },
+  ];
 
-  const hotel = Math.ceil(hotelCost / duration);
-  const food = Math.ceil((foodCost / duration) * travelers);
+  const getInitialOption = () => {
+    if (!Number.isFinite(hotelCost))
+      return { ...options[0], count: Math.ceil(travelers / 2) };
 
-  useEffect(() => {
-    const el = contentRef.current;
-    if (!el) return;
-    if (open) {
-      el.style.height = el.scrollHeight + 'px';
-    } else {
-      el.style.height = '0px';
+    // Find the option with the closest cost to hotelCost
+    let closestOption = options[0];
+    let minDiff = Math.abs(hotelCost - options[0].cost);
+
+    for (let opt of options) {
+      const diff = Math.abs(hotelCost - opt.cost);
+      if (diff < minDiff) {
+        closestOption = opt;
+        minDiff = diff;
+      }
     }
-  }, [open]);
+
+    return { ...closestOption, count: Math.ceil(travelers / 2) };
+  };
+
+  const [open, setOpen] = useState(false);
+  const [openDropdowns, setOpenDropdowns] = useState({});
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(() =>
+    getInitialOption()
+  );
+
+  const [isCustomSelected, setCustomSelected] = useState(false);
 
   useEffect(() => {
-    const onResize = () => {
-      const element = contentRef.current;
-      if (open && element) element.style.height = element.scrollHeight + 'px';
-    };
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, [open]);
+    if (!isCustomSelected) {
+      setSelectedOption(getInitialOption());
+    }
+  }, [hotelCost]);
+
+  const hotel = useMemo(() => {
+    if (!selectedOption) return 0;
+
+    if (Array.isArray(selectedOption)) {
+      return selectedOption.reduce(
+        (acc, opt) => acc + (opt.cost || 0) * (opt.count || 0),
+        0
+      );
+    } else {
+      // single option: use its cost × count
+      return (selectedOption.cost || 0) * (selectedOption.count || 1);
+    }
+  }, [selectedOption]);
+
+  const food = useMemo(
+    () => Math.ceil(foodCost * travelers),
+    [foodCost, travelers]
+  );
+
+  const total = hotel + food;
+
+  useEffect(() => {
+    if (onValueChange) onValueChange(total);
+  }, [total, onValueChange]);
+
   return (
     <>
       <p className="">Day - {day}</p>
       <div className="p-3 bg-white w-full rounded-lg justify-center shadow-lg">
         <div className="flex flex-col bg-gray-200 rounded">
-          {selectedOption.length === 0 ? (
+          {!selectedOption ||
+          (Array.isArray(selectedOption) && selectedOption.length === 0) ? (
+            <div className="w-full bg-gray-300 items-center">
+              <p>None</p>
+            </div>
+          ) : Array.isArray(selectedOption) ? (
             <>
-              <div className="w-full bg-gray-300 items-center">
-                <p>None</p>
+              <div className="w-full bg-gray-300 p-2">
+                {selectedOption.map((c) => (
+                  <div key={c.id}>
+                    <div className="w-full bg-gray-300 flex justify-between items-center">
+                      <div className="flex">
+                        <div className="px-1 text-sm flex items-center">
+                          <div className="font-bold ml-2">{c.mode}</div>
+                          <Arrow
+                            onClick={() =>
+                              setOpenDropdowns((prev) => ({
+                                ...prev,
+                                [c.id]: !prev[c.id],
+                              }))
+                            }
+                            isOpen={openDropdowns[c.id]}
+                            className="text-sm font-semibold hover:underline"
+                          />
+                        </div>
+                      </div>
+                      <dic className="">{c.cost * c.count}</dic>
+                    </div>
+
+                    <SlideDropDown room={c.count} isOpen={openDropdowns[c.id]}>
+                      {/* Dropdown content (currently empty) */}
+                    </SlideDropDown>
+                  </div>
+                ))}
               </div>
             </>
           ) : (
-            selectedOption.map((c) => (
-              <>
-                <div
-                  key={c.id}
-                  className="w-full bg-gray-300 flex justify-between items-center"
-                >
-                  <div className="flex">
-                    <div className="px-1 text-sm flex items-center">
-                      <p className="font-bold ml-2">{c.mode}</p>
-                      <button
-                        onClick={() => setOpen((s) => !s)}
-                        aria-expanded={open}
-                      >
-                        <svg
-                          className={`w-3 h-3 text-[#4B3A2D] transform transition-transform duration-300 ${
-                            open ? 'rotate-180' : 'rotate-0'
-                          }`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="p-2 rounded">
-                    {hotel.toLocaleString('en-BD')}
+            <>
+              <div
+                className="w-full bg-gray-300 flex justify-between items-center"
+                key={selectedOption.id}
+              >
+                <div className="flex">
+                  <div className="px-1 text-sm flex items-center">
+                    <p className="font-bold ml-2">{selectedOption.mode}</p>
+                    <Arrow onClick={() => setOpen(!open)} isOpen={open} />
                   </div>
                 </div>
 
-                <div
-                  ref={contentRef}
-                  className="mb-2 mx-2 overflow-hidden transition-[height] duration-300 ease-in-out"
-                  style={{ height: '0px' }}
-                >
-                  <div className="w-full rounded">
-                    <p className="p-2">expanded travel option</p>
-                    <div className="p-4">more</div>
-                  </div>
+                <div className="p-2 rounded">
+                  {hotel.toLocaleString('en-BD')}
                 </div>
-              </>
-            ))
+              </div>
+
+              <div>
+                <SlideDropDown room={Math.ceil(travelers / 2)} isOpen={open} />
+              </div>
+            </>
           )}
           <button
             onClick={() => setPopupOpen(true)}
@@ -109,7 +167,13 @@ const PerDayBox = ({
             <HotelPopUp
               onClose={(selectedArray) => {
                 setPopupOpen(false);
-                if (selectedArray) setSelectedOption(selectedArray);
+                if (!selectedArray) return;
+                if (Array.isArray(selectedArray)) {
+                  setSelectedOption(selectedArray);
+                } else {
+                  setSelectedOption(selectedArray);
+                }
+                setCustomSelected(true);
               }}
               travelers={travelers}
               from={from}

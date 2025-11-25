@@ -2,24 +2,27 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import Button2 from '../Button2.jsx';
 
-function HotelPopUp({ onClose, travelers, value = 1, onChange }) {
-  const options = [
+function HotelPopUp({ onClose }) {
+  const [options, setOptions] = useState([
     {
       id: '3',
       mode: '3 stars',
-      cost: 0,
+      cost: 3000,
+      count: 0,
     },
     {
       id: '4',
       mode: '4 stars',
-      cost: 0,
+      cost: 7000,
+      count: 0,
     },
     {
       id: '5',
       mode: '5 stars',
-      cost: 0,
+      cost: 9000,
+      count: 0,
     },
-  ];
+  ]);
   const [selectedOption, setSelectedOption] = useState([]);
 
   const isSelected = (id) => selectedOption.some((s) => s.id === id);
@@ -33,19 +36,31 @@ function HotelPopUp({ onClose, travelers, value = 1, onChange }) {
     }
   };
 
-  const [count, setCount] = useState(value);
+  const increment = (id) => {
+    setOptions((prev) =>
+      prev.map((opt) =>
+        opt.id === id ? { ...opt, count: opt.count + 1 } : opt
+      )
+    );
+  };
 
-  const increment = () => setCount(count + 1);
-  const decrement = () => setCount(count > 1 ? count - 1 : 1);
-
-  useEffect(() => {
-    if (onChange) onChange(count);
-  }, [count, onChange]);
+  const decrement = (id) => {
+    setOptions((prev) =>
+      prev.map((opt) =>
+        opt.id === id ? { ...opt, count: Math.max(0, opt.count - 1) } : opt
+      )
+    );
+  };
 
   const handleDone = () => {
-    if (selectedOption) {
-      onClose(selectedOption);
-    }
+    if (!selectedOption) return;
+
+    const updatedSelected = selectedOption.map((sel) => {
+      const fullOpt = options.find((o) => o.id === sel.id);
+      return fullOpt ? { ...sel, count: fullOpt.count } : sel;
+    });
+
+    onClose(updatedSelected);
   };
 
   useEffect(() => {
@@ -88,14 +103,14 @@ function HotelPopUp({ onClose, travelers, value = 1, onChange }) {
                         <p>Room: </p>
                         <div className="ml-2 flex rounded bg-gray-200 gap-2">
                           <button
-                            onClick={decrement}
+                            onClick={() => decrement(opt.id)}
                             className="px-2 hover:bg-gray-300 rounded-l"
                           >
                             -
                           </button>
-                          <div className="">{count}</div>
+                          <div className="">{opt.count}</div>
                           <button
-                            onClick={increment}
+                            onClick={() => increment(opt.id)}
                             className="px-2 hover:bg-gray-300 rounded-r"
                           >
                             +
@@ -106,12 +121,12 @@ function HotelPopUp({ onClose, travelers, value = 1, onChange }) {
                       <div className="flex justify-between">
                         <div className="flex">
                           <p className="bg-gray-100 p-1 rounded">
-                            Aprox. Cost: 3000 Tk
+                            Aprox. Cost: {opt.cost} Tk
                           </p>
-                          <p className="px-3 py-1">x {travelers}</p>
+                          <p className="px-3 py-1">x {opt.count}</p>
                         </div>
                         <div>
-                          <p className="">9000 Tk</p>
+                          <p className="">{opt.cost * opt.count} Tk</p>
                         </div>
                       </div>
                       <div className="w-full flex justify-center items-center"></div>

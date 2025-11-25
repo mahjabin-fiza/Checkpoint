@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 
-function RecreationBox() {
+function RecreationBox({ cost, onValueChange }) {
   const [plan, setPlan] = useState('');
   const [budget, setBudget] = useState('');
   const [saved, setSaved] = useState([]);
@@ -9,7 +9,7 @@ function RecreationBox() {
   const numericBudget = Number(budget);
 
   const handleAdd = () => {
-    if (!plan && !budget) return;
+    if (!plan && !numericBudget) return;
     setSaved((prev) => [
       ...prev,
       { id: Date.now(), plan, budget: numericBudget },
@@ -23,9 +23,14 @@ function RecreationBox() {
   };
 
   const totalBudget = saved.reduce((sum, item) => sum + item.budget, 0);
+  const remaining = Number(cost) - totalBudget;
 
   const [open, setOpen] = useState(false);
   const contentRef = useRef(null);
+
+  useEffect(() => {
+    if (onValueChange) onValueChange(totalBudget);
+  }, [totalBudget, onValueChange]);
 
   useEffect(() => {
     const el = contentRef.current;
@@ -48,37 +53,42 @@ function RecreationBox() {
 
   return (
     <>
-      <p>Others</p>
+      <div className="mt-5 flex items-center">
+        <p
+          className={`mr-1 font-bold ${remaining < 0 ? 'text-red-700' : 'text-green-700'}`}
+        >
+          {remaining.toLocaleString('en-BD')} Tk -{' '}
+        </p>
+        <p className="text-sm">budget left for others</p>
+      </div>
       <div className="p-1 bg-white w-full rounded-lg justify-center shadow-lg">
         <div className="w-full flex justify-between items-center">
-          <div className="flex">
-            <div className="px-2 rounded text-xs py-2 font-semibold">
-              Add your plans for the trip
-            </div>
-            <div className="px-2 text-sm flex items-center">
-              <button onClick={() => setOpen((s) => !s)} aria-expanded={open}>
-                <svg
-                  className={`w-3 h-3 text-[#4B3A2D] transform transition-transform duration-300 ${
-                    open ? 'rotate-180' : 'rotate-0'
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
+          <button
+            onClick={() => setOpen((s) => !s)}
+            aria-expanded={open}
+            className="font-semibold flex items-center gap-2 py-1 px-2"
+          >
+            Add your plans for the trip
+            <svg
+              className={`w-3 h-3 text-[#4B3A2D] transform transition-transform duration-300 ${
+                open ? 'rotate-180' : 'rotate-0'
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </button>
         </div>
         <div
           ref={contentRef}
-          className="mb-2 mx-2 overflow-hidden transition-[height] duration-300 ease-in-out"
+          className="pt-1 mb-2 mx-2 overflow-hidden transition-[height] duration-300 ease-in-out"
           style={{ height: '0px' }}
         >
           <div className="w-full rounded">
@@ -120,7 +130,7 @@ function RecreationBox() {
                       </button>
                       <div className="flex justify-between bg-gray-200 p-2 rounded-lg w-full items-center">
                         <div>{item.plan}</div>
-                        <div>{item.budget}</div>
+                        <div>{item.budget.toLocaleString('en-BD')}</div>
                       </div>
                     </div>
                   ))}
@@ -130,7 +140,7 @@ function RecreationBox() {
         {saved.length !== 0 ? (
           <p className="flex justify-end">
             <p className="px-3">Total -</p>
-            <div className="px-4">{totalBudget}</div>
+            <div className="px-4">{totalBudget.toLocaleString('en-BD')}</div>
           </p>
         ) : null}
       </div>
