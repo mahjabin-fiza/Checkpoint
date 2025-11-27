@@ -13,7 +13,7 @@ export const useHotelPrices = () => {
 
     try {
       // Local development URL
-      const API_URL = "http://localhost:5000/api/hotelPrices";
+      const API_URL = "http://localhost:5001/api/hotelPrices";
 
       const response = await fetch(
         `${API_URL}?location=${encodeURIComponent(location)}&checkin=${checkin}&checkout=${checkout}`
