@@ -18,20 +18,20 @@ const PerDayBox = ({
   const options = [
     {
       id: '3',
-      mode: '3 stars',
+      mode: 'Low Range',
       cost: 3000,
       count: 0,
     },
     {
       id: '4',
-      mode: '4 stars',
+      mode: 'Medium Range',
       cost: 7000,
       count: 0,
     },
     {
-      id: '5',
-      mode: '5 stars',
-      cost: 10000,
+      id: '0',
+      mode: 'Manually Added',
+      cost: 0,
       count: 0,
     },
   ];
@@ -58,31 +58,32 @@ const PerDayBox = ({
   const [open, setOpen] = useState(false);
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [popupOpen, setPopupOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(() =>
-    getInitialOption()
-  );
+const [selectedOption, setSelectedOption] = useState(() => {
+  const initial = getInitialOption();
+  return Array.isArray(initial) ? initial : [initial];
+});
+
 
   const [isCustomSelected, setCustomSelected] = useState(false);
 
-  useEffect(() => {
-    if (!isCustomSelected) {
-      setSelectedOption(getInitialOption());
-    }
-  }, [hotelCost]);
+useEffect(() => {
+  if (!isCustomSelected) {
+    const initial = getInitialOption();
+    setSelectedOption(Array.isArray(initial) ? initial : [initial]);
+  }
+}, [hotelCost]);
 
-  const hotel = useMemo(() => {
-    if (!selectedOption) return 0;
 
-    if (Array.isArray(selectedOption)) {
-      return selectedOption.reduce(
-        (acc, opt) => acc + (opt.cost || 0) * (opt.count || 0),
-        0
-      );
-    } else {
-      // single option: use its cost × count
-      return (selectedOption.cost || 0) * (selectedOption.count || 1);
-    }
-  }, [selectedOption]);
+const hotel = useMemo(() => {
+  if (!selectedOption || selectedOption.length === 0) return 0;
+
+  return selectedOption.reduce((acc, opt) => {
+    const cost = opt.cost ?? 0;
+    const count = opt.count ?? 1;
+    return acc + cost * count;
+  }, 0);
+}, [selectedOption]);
+
 
   const food = useMemo(
     () => Math.ceil(foodCost * travelers),
@@ -107,34 +108,39 @@ const PerDayBox = ({
             </div>
           ) : Array.isArray(selectedOption) ? (
             <>
-              <div className="w-full bg-gray-300 p-2">
-                {selectedOption.map((c) => (
-                  <div key={c.id}>
-                    <div className="w-full bg-gray-300 flex justify-between items-center">
-                      <div className="flex">
-                        <div className="px-1 text-sm flex items-center">
-                          <div className="font-bold ml-2">{c.mode}</div>
-                          <Arrow
-                            onClick={() =>
-                              setOpenDropdowns((prev) => ({
-                                ...prev,
-                                [c.id]: !prev[c.id],
-                              }))
-                            }
-                            isOpen={openDropdowns[c.id]}
-                            className="text-sm font-semibold hover:underline"
-                          />
-                        </div>
-                      </div>
-                      <dic className="">{c.cost * c.count}</dic>
-                    </div>
+<div className="w-full bg-gray-300 p-2">
+  {selectedOption.map((c) => (
+    <div key={c.id}>
+      <div className="w-full bg-gray-300 flex justify-between items-center">
+        <div className="flex">
+          <div className="px-1 text-sm flex items-center">
+            <div className="font-bold ml-2">{c.mode ?? 'Unknown'}</div>
+            {c.id !== '0' && (
+              <Arrow
+                onClick={() =>
+                  setOpenDropdowns((prev) => ({
+                    ...prev,
+                    [c.id]: !prev[c.id],
+                  }))
+                }
+                isOpen={openDropdowns[c.id]}
+                className="text-sm font-semibold hover:underline"
+              />
+            )}
+          </div>
+        </div>
+        <div className="px-2">{c.id === '0'
+            ? Number(c.cost ?? 0).toLocaleString('en-BD') // manual option
+            : ((c.cost ?? 0) * (c.count ?? 1)).toLocaleString('en-BD')}
+        </div>
+      </div>
 
-                    <SlideDropDown room={c.count} isOpen={openDropdowns[c.id]}>
-                      {/* Dropdown content (currently empty) */}
-                    </SlideDropDown>
-                  </div>
-                ))}
-              </div>
+      {c.id !== '0' && (
+        <SlideDropDown room={c.count ?? 1} isOpen={openDropdowns[c.id]} />
+      )}
+    </div>
+  ))}
+  </div>
             </>
           ) : (
             <>
@@ -180,14 +186,15 @@ const PerDayBox = ({
               travelers={travelers}
               from={from}
               to={to}
+              initialSelected={selectedOption}
             />
           )}
           <div className="w-full flex justify-between items-center">
             <div className="flex">
-              <div className="pb-2 px-2 rounded">Food</div>
+              <div className="pb-2 px-4 rounded">Food</div>
               <div className="pb-2 px-2 rounded">x {travelers}</div>
             </div>
-            <div className="pb-2 px-2 rounded">
+            <div className="pb-2 px-4 rounded">
               {food.toLocaleString('en-BD')}
             </div>
           </div>
