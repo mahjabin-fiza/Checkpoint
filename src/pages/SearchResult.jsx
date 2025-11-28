@@ -39,8 +39,23 @@ function SearchResult() {
   const from = query.get('from') || '';
   const to = query.get('to') || '';
   const travelers = query.get('travelers') || '';
-  const duration = query.get('duration') || '';
+  const start = query.get('dateStart') || '';
+  const end = query.get('dateEnd') || '';
   const budget = query.get('budget') || '';
+
+  const startDate = new Date(start);
+const endDate = new Date(end);
+
+const duration =
+  start && end
+    ? Math.max(0, Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1)
+    : 0;
+
+  const addDays = (date, days) => {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result.toISOString().split('T')[0]; // YYYY-MM-DD
+};
 
   return (
     <>
@@ -50,11 +65,13 @@ function SearchResult() {
           initialFrom={from}
           initialTo={to}
           initialTravelers={Number(travelers)}
-          initialDuration={Number(duration)}
+          initialStart={start}
+          initialEnd={end}
           initialBudget={Number(budget)}
         />
       </div>
 
+      <div>{start} - {end} - {duration}</div>
       <div class="w-full h-full relative flex flex-col items-center py-4 px-16">
         <div class="bg-white w-[50%] h-[15%] p-3 flex flex-col rounded-lg mb-4 shadow-lg">
           <h1 className="font-semibold">Cost Summery:</h1>
@@ -102,6 +119,7 @@ function SearchResult() {
               <PerDayBox
                 key={index}
                 day={index + 1}
+                perDate={addDays(start, index)}
                 travelers={Number(travelers)}
                 hotelCost={
                   (Number(budget) * 0.4) /

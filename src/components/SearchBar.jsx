@@ -6,12 +6,14 @@ import Budget_DD from './Budget_DD.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Duration from './Duration.jsx';
+import Duration2 from './Duration2.jsx';
 
 function SearchBar({
   initialFrom = '',
   initialTo = '',
   initialTravelers = 1,
-  initialDuration = 1,
+  initialStart = '',
+  initialEnd = '',
   initialBudget = '',
 }) {
   const navigate = useNavigate();
@@ -19,7 +21,8 @@ function SearchBar({
   const [from, setFrom] = useState(initialFrom);
   const [to, setTo] = useState(initialTo);
   const [travelers, setTravelers] = useState(initialTravelers);
-  const [duration, setDuration] = useState(initialDuration);
+  const [dateStart, setDateStart] = useState(initialStart);
+  const [dateEnd, setDateEnd] = useState(initialEnd);
   const [budget, setBudget] = useState(initialBudget);
 
   const handleSearch = () => {
@@ -27,7 +30,8 @@ function SearchBar({
       from,
       to,
       travelers,
-      duration,
+      dateStart,
+      dateEnd,
       budget,
     }).toString();
 
@@ -54,7 +58,9 @@ function SearchBar({
 
       <Counter title="Traveler(s)" value={travelers} onChange={setTravelers} />
 
-      <Duration title="Duration" value={duration} onChange={setDuration} />
+      <Duration title="Duration" value={dateStart} onChange={setDateStart} />
+
+      <Duration2 title="Duration" value={dateEnd} onChange={setDateEnd} />
 
       <Budget_DD
         title="Budget"

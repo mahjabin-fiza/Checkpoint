@@ -130,7 +130,7 @@ const HotelSearch = () => {
                     fontWeight: "bold",
                     color: "#008009"
                   }}>
-                    ${hotel.price}
+                    {Math.ceil(hotel.price*122)} BDT
                   </p>
                 </div>
               </div>

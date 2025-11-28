@@ -15,7 +15,7 @@ const Budget_DD = ({ title = 'select', initialValue = '', onChange }) => {
           <p className="text-xs text-[#9C9087]">{title}</p>
           <div className="relative flex-1">
             <input
-              type="number"
+              type="text"
               placeholder="Enter"
               value={bValue}
               onChange={(e) => setBValue(e.target.value)}

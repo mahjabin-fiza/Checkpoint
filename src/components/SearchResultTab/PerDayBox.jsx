@@ -8,10 +8,12 @@ const PerDayBox = ({
   from,
   to,
   day,
+  perDate,
   travelers,
   hotelCost,
   foodCost,
   onValueChange,
+  date,
 }) => {
   const options = [
     {
@@ -95,7 +97,7 @@ const PerDayBox = ({
 
   return (
     <>
-      <p className="">Day - {day}</p>
+      <p className="">Day - {day} - {perDate}</p>
       <div className="p-3 bg-white w-full rounded-lg justify-center shadow-lg">
         <div className="flex flex-col bg-gray-200 rounded">
           {!selectedOption ||

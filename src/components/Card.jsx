@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import districtsName from '.././data/districtsName';
-import SearchResult from '../pages/SearchResult';
 
 const Card = ({
   title = 'title',
