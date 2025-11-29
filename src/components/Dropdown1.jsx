@@ -36,11 +36,7 @@ const Dropdown1 = ({ options, title = 'tittle', defaultText }) => {
           </div>
         </div>
 
-        <div
-          ref={dropdownRef}
-          onClick={toggleDropdown}
-          className="flex-shrink-0"
-        >
+        <div ref={dropdownRef} onClick={toggleDropdown} className="flex-shrink-0">
           <div className="inline-flex items-center justify-center h-10 w-10">
             <button type="button" className="p-3">
               <svg

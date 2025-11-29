@@ -38,42 +38,24 @@ const ProfileDropdown = ({ text = 'profile', className }) => {
             stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </button>
 
         {isOpen && (
           <div className="absolute right-0 top-full mt-2 w-auto min-w-[150px] text-sm bg-gray-50 border border-[#CCC3AF] rounded-lg shadow-lg z-[9999] overflow-auto">
             {/* Example dropdown items */}
-            <Link
-              to="/user_profile"
-              className="block w-full text-left px-3 py-2 hover:bg-gray-200"
-            >
+            <Link to="/user_profile" className="block w-full text-left px-3 py-2 hover:bg-gray-200">
               profile
             </Link>
-            <Link
-              to="/user_profile"
-              className="block w-full text-left px-3 py-2 hover:bg-gray-200"
-            >
+            <Link to="/user_profile" className="block w-full text-left px-3 py-2 hover:bg-gray-200">
               Saved Budget Plan
             </Link>
-            <Link
-              to="/user_profile"
-              className="block w-full text-left px-3 py-2 hover:bg-gray-200"
-            >
+            <Link to="/user_profile" className="block w-full text-left px-3 py-2 hover:bg-gray-200">
               Wishlist
             </Link>
-            <button className="w-full text-left px-3 py-2 hover:bg-gray-200">
-              settings
-            </button>
-            <button className="w-full text-left px-3 py-2 hover:bg-gray-200">
-              sign out
-            </button>
+            <button className="w-full text-left px-3 py-2 hover:bg-gray-200">settings</button>
+            <button className="w-full text-left px-3 py-2 hover:bg-gray-200">sign out</button>
           </div>
         )}
       </div>

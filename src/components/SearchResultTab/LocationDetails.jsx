@@ -12,9 +12,7 @@ function LocationDetails({ onClose }) {
   return (
     <div className="p-16 fixed inset-0 flex items-center justify-center bg-black/50 z-50">
       <div className="w-full h-full bg-white p-4 flex flex-col justify-between rounded-lg shadow-lg w-[50%]">
-        <h2 className="text-lg font-semibold mb-2 text-center">
-          Travel Options
-        </h2>
+        <h2 className="text-lg font-semibold mb-2 text-center">Travel Options</h2>
 
         <div className="h-full flex gap-2 p-5 justify-between gap-2">
           <div className="flex flex-col bg-blue-200">

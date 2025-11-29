@@ -7,7 +7,7 @@ function Hotel() {
   return (
     <>
       <Header />
-      <HotelSearch/>
+      <HotelSearch />
       <div className="ml-16 mt-4 w-40 h-14">
         <Card title="Location" className="" />
       </div>

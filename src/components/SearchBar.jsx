@@ -40,34 +40,17 @@ function SearchBar({
 
   return (
     <div className="max-w-4xl gap-2 mx-auto shadow-md bg-white/60 flex flex-wrap items-center px-2 py-1 relative z-10 rounded-lg">
-      <Card
-        defaultText="Enter"
-        title="From"
-        value={from}
-        onChange={setFrom}
-        initialValue={from}
-      />
+      <Card defaultText="Enter" title="From" value={from} onChange={setFrom} initialValue={from} />
 
-      <Card
-        defaultText="Enter"
-        title="To"
-        value={to}
-        onChange={setTo}
-        initialValue={to}
-      />
+      <Card defaultText="Enter" title="To" value={to} onChange={setTo} initialValue={to} />
 
       <Counter title="Traveler(s)" value={travelers} onChange={setTravelers} />
 
-      <Duration title="Duration" value={dateStart} onChange={setDateStart} />
+      <Duration title="Start" value={dateStart} onChange={setDateStart} />
 
-      <Duration2 title="Duration" value={dateEnd} onChange={setDateEnd} />
+      <Duration2 title="End" value={dateEnd} onChange={setDateEnd} />
 
-      <Budget_DD
-        title="Budget"
-        value={budget}
-        onChange={setBudget}
-        initialValue={budget}
-      />
+      <Budget_DD title="Budget" value={budget} onChange={setBudget} initialValue={budget} />
       <button
         onClick={handleSearch}
         className="shadow-md border border-2 border-transparent bg-[#A88B68] font-semibold text-white w-28 h-16 rounded-lg hover:bg-[#87A87C]/10 hover:text-[#4B3A2D] hover:border-[#4B3A2D] hover:scale-105 transition duration-300 ease-in-out relative z-10"

@@ -37,7 +37,6 @@ function SlideDropDown({ isOpen, room }) {
     >
       <div className="p-3 flex flex-col text-sm gap-2">
         <div>Rooms: {room} (maximum 2 people per room)</div>
-        <div>Available Hotel within this range:</div>
       </div>
     </div>
   );

@@ -2,13 +2,7 @@ import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import districtsName from '.././data/districtsName';
 
-const Card = ({
-  title = 'title',
-  defaultText,
-  onChange,
-  initialValue = '',
-  className,
-}) => {
+const Card = ({ title = 'title', defaultText, onChange, initialValue = '', className }) => {
   const [query, setQuery] = useState(initialValue);
   const [isOpen, setOpen] = useState(false);
   const [showAll, setShowAll] = useState(false);
@@ -19,9 +13,7 @@ const Card = ({
 
   const filtered = showAll
     ? districtsName
-    : districtsName.filter((d) =>
-        d.toLowerCase().includes(query.toLowerCase())
-      );
+    : districtsName.filter((d) => d.toLowerCase().includes(query.toLowerCase()));
 
   const dropdownRef = useRef(null);
 
@@ -64,19 +56,13 @@ const Card = ({
             />
           </div>
 
-          <div
-            ref={dropdownRef}
-            onClick={toggleDropdown}
-            className="flex-shrink-0"
-          ></div>
+          <div ref={dropdownRef} onClick={toggleDropdown} className="flex-shrink-0"></div>
         </div>
 
         {isOpen ? (
           <div className="absolute w-auto min-w-[200px] max-h-60 overflow-y-auto mt-2 bg-gray-50 border border-[#CCC3AF] rounded-lg shadow-lg z-10">
             {filtered.length === 0 ? (
-              <div className="p-2 text-gray-500 bg-gray-50">
-                No results found
-              </div>
+              <div className="p-2 text-gray-500 bg-gray-50">No results found</div>
             ) : (
               filtered.map((districtsName) => (
                 <div

@@ -50,15 +50,11 @@ function ProfileTab() {
                 <input
                   type="text"
                   value={userInfo.name}
-                  onChange={(e) =>
-                    setUserInfo({ ...userInfo, name: e.target.value })
-                  }
+                  onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
                   className={`w-full max-w-[300px] px-4 py-2 border-0 border-b-2 border-black bg-white rounded-t-lg focus:outline-none focus:border-[#A88B68] focus:ring-0`}
                 />
               ) : (
-                <div
-                  className={`px-4 py-2 border-0 border-b-2 border-transparent`}
-                >
+                <div className={`px-4 py-2 border-0 border-b-2 border-transparent`}>
                   {userInfo.name}
                 </div>
               )}
@@ -70,15 +66,11 @@ function ProfileTab() {
                 <input
                   type="email"
                   value={userInfo.email}
-                  onChange={(e) =>
-                    setUserInfo({ ...userInfo, email: e.target.value })
-                  }
+                  onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
                   className={`w-full max-w-[300px] px-4 py-2 border-0 border-b-2 border-black bg-white rounded-t-lg focus:outline-none focus:border-[#A88B68] focus:ring-0`}
                 />
               ) : (
-                <div
-                  className={`px-4 py-2 border-0 border-b-2 border-transparent`}
-                >
+                <div className={`px-4 py-2 border-0 border-b-2 border-transparent`}>
                   {userInfo.email}
                 </div>
               )}
@@ -89,15 +81,11 @@ function ProfileTab() {
                 <input
                   type="text"
                   value={userInfo.phone}
-                  onChange={(e) =>
-                    setUserInfo({ ...userInfo, phone: e.target.value })
-                  }
+                  onChange={(e) => setUserInfo({ ...userInfo, phone: e.target.value })}
                   className={`w-full max-w-[300px] px-4 py-2 border-0 border-b-2 border-black bg-white rounded-t-lg focus:outline-none focus:border-[#A88B68] focus:ring-0`}
                 />
               ) : (
-                <div
-                  className={`px-4 py-2 border-0 border-b-2 border-transparent`}
-                >
+                <div className={`px-4 py-2 border-0 border-b-2 border-transparent`}>
                   {userInfo.phone}
                 </div>
               )}
@@ -108,15 +96,11 @@ function ProfileTab() {
                 <input
                   type="text"
                   value={userInfo.location}
-                  onChange={(e) =>
-                    setUserInfo({ ...userInfo, location: e.target.value })
-                  }
+                  onChange={(e) => setUserInfo({ ...userInfo, location: e.target.value })}
                   className={`w-full max-w-[285px] px-4 py-2 border-0 border-b-2 border-black bg-white rounded-t-lg focus:outline-none focus:border-[#A88B68] focus:ring-0`}
                 />
               ) : (
-                <div
-                  className={`px-4 py-2 border-0 border-b-2 border-transparent`}
-                >
+                <div className={`px-4 py-2 border-0 border-b-2 border-transparent`}>
                   {userInfo.location}
                 </div>
               )}

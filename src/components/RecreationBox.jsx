@@ -10,10 +10,7 @@ function RecreationBox({ cost, onValueChange }) {
 
   const handleAdd = () => {
     if (!plan && !numericBudget) return;
-    setSaved((prev) => [
-      ...prev,
-      { id: Date.now(), plan, budget: numericBudget },
-    ]);
+    setSaved((prev) => [...prev, { id: Date.now(), plan, budget: numericBudget }]);
     setPlan('');
     setBudget('');
   };
@@ -54,9 +51,7 @@ function RecreationBox({ cost, onValueChange }) {
   return (
     <>
       <div className="mt-5 flex items-center">
-        <p
-          className={`mr-1 font-bold ${remaining < 0 ? 'text-red-700' : 'text-green-700'}`}
-        >
+        <p className={`mr-1 font-bold ${remaining < 0 ? 'text-red-700' : 'text-green-700'}`}>
           {remaining.toLocaleString('en-BD')} Tk -{' '}
         </p>
         <p className="text-sm">budget left for others</p>
@@ -120,10 +115,7 @@ function RecreationBox({ cost, onValueChange }) {
                 ? null
                 : saved.map((item) => (
                     <div key={item.id} className="flex">
-                      <button
-                        onClick={() => handleRemove(item.id)}
-                        className="text-xs px-1 py-1"
-                      >
+                      <button onClick={() => handleRemove(item.id)} className="text-xs px-1 py-1">
                         <div className="h-6 w-6 text-red-400 rounded border border-red-400 border-2 items-center hover:bg-red-400 hover:text-white">
                           -
                         </div>

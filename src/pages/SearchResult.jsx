@@ -1,19 +1,13 @@
-import React from 'react';
-import Card from '../components/Card.jsx';
+import React, { useEffect, useMemo, useState } from 'react';
 import Header from '../components/Header.jsx';
-import Dropdown1 from '../components/Dropdown1.jsx';
-import Counter from '../components/Counter.jsx';
-import Budget_DD from '../components/Budget_DD.jsx';
-import Search from '../components/Search.jsx';
 import CostBox1 from '../components/SearchResultTab/CostBox1.jsx';
 import PerDayBox from '../components/SearchResultTab/PerDayBox.jsx';
 import SearchBar from '../components/SearchBar.jsx';
 import { useLocation } from 'react-router-dom';
 import RecreationBox from '../components/RecreationBox.jsx';
 import TotalBox from '../components/TotalBox.jsx';
-import TravelType from '../components/SearchResultTab/TravelType.jsx';
 import LocationDetails from '../components/SearchResultTab/LocationDetails.jsx';
-import { useState } from 'react';
+import { useHotelContext } from '../context/HotelContext';
 
 function SearchResult() {
   const location = useLocation();
@@ -23,6 +17,7 @@ function SearchResult() {
   const [costBoxTotal, setCostBoxTotal] = useState(0);
   const [planTotal, setPlanTotal] = useState(0);
   const [perDayBox, setPerDayBox] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const totalPerDay = perDayBox.reduce((sum, val) => sum + Number(val || 0), 0);
 
@@ -44,18 +39,81 @@ function SearchResult() {
   const budget = query.get('budget') || '';
 
   const startDate = new Date(start);
-const endDate = new Date(end);
+  const endDate = new Date(end);
 
-const duration =
-  start && end
-    ? Math.max(0, Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1)
-    : 0;
+  const duration =
+    start && end ? Math.max(0, Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1) : 0;
 
-  const addDays = (date, days) => {
-  const result = new Date(date);
-  result.setDate(result.getDate() + days);
-  return result.toISOString().split('T')[0]; // YYYY-MM-DD
-};
+  const { fetchHotels } = useHotelContext();
+  const [hotelCategories, setHotelCategories] = useState({
+    low: { hotels: [], avg: 0, range: [0, 0] },
+    medium: { hotels: [], avg: 0, range: [0, 0] },
+    high: { hotels: [], avg: 0, range: [0, 0] },
+  });
+
+  useEffect(() => {
+    if (!to || !start || !end) return;
+
+    setLoading(true);
+
+    const startDateObj = new Date(start);
+    const endDateObj = new Date(end);
+    const midDate = new Date(startDateObj.getTime() + (endDateObj - startDateObj) / 2);
+    const checkin = midDate.toISOString().split('T')[0];
+    const checkout = new Date(midDate.getTime() + 1 * 24 * 60 * 60 * 1000) // next day
+      .toISOString()
+      .split('T')[0];
+
+    fetchHotels(to, checkin, checkout)
+      .then((result) => {
+        const data = result.data; // API returns { data, fromCache }
+        console.log('API data:', data);
+
+        // Ensure hotels array exists
+        const hotelsArray = Array.isArray(data.hotels) ? data.hotels : [];
+
+        // Convert all prices to BDT
+        const hotels = hotelsArray.map((h) => ({
+          name: h.name,
+          priceBDT: h.price ? Math.ceil(h.price * 122) : 0,
+        }));
+
+        console.log('Mapped hotels with BDT:', hotels);
+
+        // Categorize using fixed thresholds
+        const categorize = (arr, min, max) => {
+          const filtered = arr.filter((h) => h.priceBDT >= min && h.priceBDT <= max);
+          if (!filtered.length) return { hotels: [], avg: 0, range: [0, 0] };
+          const prices = filtered.map((h) => h.priceBDT);
+          const avg = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
+          const minPrice = Math.min(...prices);
+          const maxPrice = Math.max(...prices);
+          return { hotels: filtered, avg, range: [minPrice, maxPrice] };
+        };
+
+        const lowCategory = categorize(hotels, 0, 3000);
+        const mediumCategory = categorize(hotels, 3000, 10000);
+        const highCategory = categorize(hotels, 10000, Infinity);
+
+        // Log categories for debugging
+        console.log('Low hotels (<3000 BDT):', lowCategory.hotels, 'Avg:', lowCategory.avg);
+        console.log(
+          'Medium hotels (3000-10000 BDT):',
+          mediumCategory.hotels,
+          'Avg:',
+          mediumCategory.avg
+        );
+        console.log('High hotels (>10000 BDT):', highCategory.hotels, 'Avg:', highCategory.avg);
+
+        setHotelCategories({
+          low: lowCategory,
+          medium: mediumCategory,
+          high: highCategory,
+        });
+      })
+      .catch((err) => console.error('Hotel fetch error:', err))
+      .finally(() => setLoading(false));
+  }, [to, start, end, fetchHotels]);
 
   return (
     <>
@@ -71,14 +129,22 @@ const duration =
         />
       </div>
 
-      <div>{start} - {end} - {duration}</div>
+
       <div class="w-full h-full relative flex flex-col items-center py-4 px-16">
+        {/* Loading Overlay */}
+        {loading && (
+          <div className="absolute inset-0 z-50 flex justify-center bg-white/50 backdrop-blur-sm">
+            <p className="px-4 py-5 font-bold text-black animate-pulse">
+              Loading...
+            </p>
+          </div>
+        )}
         <div class="bg-white w-[50%] h-[15%] p-3 flex flex-col rounded-lg mb-4 shadow-lg">
           <h1 className="font-semibold">Cost Summery:</h1>
           <div className="w-full flex justify-between items-center">
-            <h1>Travel Cost:</h1>
-            <h1>Hotel:</h1>
-            <h1>Recreation:</h1>
+            <h1>Travel: {Number(costBoxTotal).toLocaleString('en-BD')}</h1>
+            <h1>Hotel & Food: {Number(totalPerDay).toLocaleString('en-BD')}</h1>
+            <h1>Recreation: {planTotal.toLocaleString('en-BD')}</h1>
           </div>
         </div>
 
@@ -95,9 +161,7 @@ const duration =
                     ditails
                   </button>
                 </div>
-                {popupOpen && (
-                  <LocationDetails onClose={() => setPopupOpen(false)} />
-                )}
+                {popupOpen && <LocationDetails onClose={() => setPopupOpen(false)} />}
               </div>
               <div className="bg-gray-200 w-full h-[15%] rounded-lg flex items-center justify-center">
                 Q&A
@@ -119,39 +183,34 @@ const duration =
               <PerDayBox
                 key={index}
                 day={index + 1}
-                perDate={addDays(start, index)}
+                start={start}
+                end={end}
                 travelers={Number(travelers)}
                 hotelCost={
-                  (Number(budget) * 0.4) /
-                  (Number(duration) * Math.ceil(Number(travelers) / 2)) //budget = (total*o.4) / ((people/2)*days)
+                  (Number(budget) * 0.4) / (Number(duration) * Math.ceil(Number(travelers) / 2)) //budget = (total*o.4) / ((people/2)*days)
                 }
                 foodCost={
-                  (Number(budget) * 0.1) /
-                  (Number(duration) * Math.ceil(Number(travelers))) //budget = (total*o.4) / ((people/2)*days)
+                  (Number(budget) * 0.1) / (Number(duration) * Math.ceil(Number(travelers))) //budget = (total*o.4) / ((people/2)*days)
                 }
                 duration={Number(duration)}
                 from={from}
                 to={to}
                 onValueChange={(value) => handlePerDayValue(index, value)}
+                hotelCategories={hotelCategories}
               />
             ))}
 
             <RecreationBox
               cost={
-                Number(budget) - (Number(totalPerDay) + Number(costBoxTotal)) >
-                0
-                  ? Number(budget) -
-                    (Number(totalPerDay) + Number(costBoxTotal))
+                Number(budget) - (Number(totalPerDay) + Number(costBoxTotal)) > 0
+                  ? Number(budget) - (Number(totalPerDay) + Number(costBoxTotal))
                   : 0
               }
               onValueChange={setPlanTotal}
             />
-            <div>{totalPerDay}</div>
             <TotalBox
               budget={Number(budget)}
-              calculatedCost={
-                planTotal + Number(totalPerDay) + Number(costBoxTotal)
-              }
+              calculatedCost={planTotal + Number(totalPerDay) + Number(costBoxTotal)}
             />
           </div>
         </div>

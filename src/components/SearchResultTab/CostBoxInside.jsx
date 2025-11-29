@@ -78,11 +78,7 @@ function CostBoxInside({ travelers, from, to, Total, onTravelChange }) {
             <p>Mode: </p>
             <p className="font-bold ml-2">{selectedTravel.mode}</p>
 
-            <button
-              onClick={() => setOpen((s) => !s)}
-              aria-expanded={open}
-              className="ml-1"
-            >
+            <button onClick={() => setOpen((s) => !s)} aria-expanded={open} className="ml-1">
               <svg
                 className={`w-3 h-3 text-[#4B3A2D] transform transition-transform duration-300 ${
                   open ? 'rotate-180' : 'rotate-0'

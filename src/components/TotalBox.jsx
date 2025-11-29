@@ -12,8 +12,10 @@ function TotalBox({ calculatedCost, budget }) {
             {calculatedCost.toLocaleString('en-BD')}
           </p>
         </div>
-        <div className="p-1 bg-gray-200 w-full rounded-b-lg justify-center shadow-lg">
-          <p className="p-3">comment</p>
+        <div className="p-1 bg-gray-200 w-full rounded-b-lg flex justify-end items-center shadow-lg">
+          <div>
+          {calculatedCost > budget ? (<p className="p-3 text-sm font-semibold text-red-800">Oh no! Exceeded your budget</p>) : (<p className="p-3 text-sm font-semibold text-green-800">Great! it's within your budget</p>)}
+          </div>
         </div>
       </div>
     </>
