@@ -23,7 +23,7 @@ function HotelPopUp({ onClose, initialSelected = [], travelers, hotelCategories 
       mode: p.mode,
       count: p.count ?? (p.id === '0' ? 0 : Math.ceil(travelers / 2)),
       cost: p.cost ?? 0,
-      manualCost: p.manualCost ?? (p.id === '0' ? p.cost ?? 0 : undefined),
+      manualCost: p.manualCost ?? (p.id === '0' ? (p.cost ?? 0) : undefined),
     }));
 
     setOptions((prev) =>
@@ -55,7 +55,6 @@ function HotelPopUp({ onClose, initialSelected = [], travelers, hotelCategories 
           if (opt.mode === 'Low Range') avgCost = hotelCategories?.low?.avg || 2000;
           else if (opt.mode === 'Medium Range') avgCost = hotelCategories?.medium?.avg || 5000;
           else if (opt.mode === 'High Range') avgCost = hotelCategories?.high?.avg || 10000;
-
         }
         setSelectedOption((prev) => [...prev, { ...opt, count: opt.count, cost: avgCost }]);
       }
@@ -80,7 +79,6 @@ function HotelPopUp({ onClose, initialSelected = [], travelers, hotelCategories 
     );
   };
 
-
   useEffect(() => {
     setSelectedOption((prevSelected) =>
       prevSelected.map((sel) => {
@@ -89,15 +87,15 @@ function HotelPopUp({ onClose, initialSelected = [], travelers, hotelCategories 
 
         let avgCost = match.cost ?? 0;
         if (hotelCategories) {
-  if (sel.mode === 'Low Range') avgCost = hotelCategories.low?.avg || 2000;
-  else if (sel.mode === 'Medium Range') avgCost = hotelCategories.medium?.avg || 5000;
-  else if (sel.mode === 'High Range') avgCost = hotelCategories.high?.avg || 10000;
-}
+          if (sel.mode === 'Low Range') avgCost = hotelCategories.low?.avg || 2000;
+          else if (sel.mode === 'Medium Range') avgCost = hotelCategories.medium?.avg || 5000;
+          else if (sel.mode === 'High Range') avgCost = hotelCategories.high?.avg || 10000;
+        }
 
         return {
           ...sel,
           count: match.count,
-          cost: sel.id === '0' ? sel.manualCost ?? 0 : avgCost,
+          cost: sel.id === '0' ? (sel.manualCost ?? 0) : avgCost,
           manualCost: sel.manualCost,
         };
       })
@@ -160,7 +158,8 @@ function HotelPopUp({ onClose, initialSelected = [], travelers, hotelCategories 
                       type="checkbox"
                       checked={isSelected(opt.id)}
                       onChange={() => toggle(opt)}
-                      className={`mt-3 mx-2 w-3 h-3 appearance-none rounded-full border-2 border-[#4B3A2D] checked:bg-[#76916c] checked:border-transparent cursor-pointer ${isManualSelected && opt.id !== '0' ? 'opacity-40' : ''}`}/>
+                      className={`mt-3 mx-2 w-3 h-3 appearance-none rounded-full border-2 border-[#4B3A2D] checked:bg-[#76916c] checked:border-transparent cursor-pointer ${isManualSelected && opt.id !== '0' ? 'opacity-40' : ''}`}
+                    />
                     <div className="w-full flex flex-col border border-gray-300 rounded p-1">
                       <div className="flex justify-between">
                         <div>
@@ -169,9 +168,19 @@ function HotelPopUp({ onClose, initialSelected = [], travelers, hotelCategories 
                         <div className="flex">
                           <p>Room: </p>
                           <div className="ml-2 flex rounded bg-gray-200 gap-2">
-                            <button onClick={() => decrement(opt.id)} className="px-2 hover:bg-gray-300 rounded-l">-</button>
+                            <button
+                              onClick={() => decrement(opt.id)}
+                              className="px-2 hover:bg-gray-300 rounded-l"
+                            >
+                              -
+                            </button>
                             <div className="">{opt.count}</div>
-                            <button onClick={() => increment(opt.id)} className="px-2 hover:bg-gray-300 rounded-r">+</button>
+                            <button
+                              onClick={() => increment(opt.id)}
+                              className="px-2 hover:bg-gray-300 rounded-r"
+                            >
+                              +
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -193,7 +202,9 @@ function HotelPopUp({ onClose, initialSelected = [], travelers, hotelCategories 
                           {hotelsInCategory.length ? (
                             <div className="flex flex-wrap gap-1.5">
                               {hotelsInCategory.map((h) => (
-                                <p key={h.name} className="text-xs bg-blue-100 rounded">{h.name}</p>
+                                <p key={h.name} className="text-xs bg-blue-100 rounded">
+                                  {h.name}
+                                </p>
                               ))}
                             </div>
                           ) : (
@@ -209,10 +220,21 @@ function HotelPopUp({ onClose, initialSelected = [], travelers, hotelCategories 
                       type="checkbox"
                       checked={isSelected(opt.id)}
                       onChange={() => toggle(opt)}
-                      className={`mt-3 mx-2 w-3 h-3 appearance-none rounded-full border-2 border-[#4B3A2D] checked:bg-red-900 checked:border-transparent cursor-pointer ${isManualSelected && opt.id !== '0' ? 'opacity-40' : ''}`}/>
+                      className={`mt-3 mx-2 w-3 h-3 appearance-none rounded-full border-2 border-[#4B3A2D] checked:bg-red-900 checked:border-transparent cursor-pointer ${isManualSelected && opt.id !== '0' ? 'opacity-40' : ''}`}
+                    />
                     <div className="w-full flex border border-gray-300 rounded p-3">
                       <p className="font-semibold">Add Cost manually:</p>
-                      <input type="number" value={opt.manualCost ?? ''} onChange={(e) => { const val = parseInt(e.target.value) || 0; setOptions((prev) => prev.map((o) => (o.id === '0' ? { ...o, manualCost: val } : o)) ); }} className="w-[80px] text-sm ml-2 px-2 bg-gray-200 rounded focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-moz-number-field]:appearance-textfield" />
+                      <input
+                        type="number"
+                        value={opt.manualCost ?? ''}
+                        onChange={(e) => {
+                          const val = parseInt(e.target.value) || 0;
+                          setOptions((prev) =>
+                            prev.map((o) => (o.id === '0' ? { ...o, manualCost: val } : o))
+                          );
+                        }}
+                        className="w-[80px] text-sm ml-2 px-2 bg-gray-200 rounded focus:outline-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-moz-number-field]:appearance-textfield"
+                      />
                       <p className="ml-2">Tk</p>
                     </div>
                   </div>

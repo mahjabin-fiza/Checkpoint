@@ -22,18 +22,28 @@ const PerDayBox = ({
   ];
 
   const getInitialOption = () => {
-    if (!Number.isFinite(hotelCost)) return { ...optionsTemplate[0], count: Math.ceil(travelers / 2) };
+    // build options (same as before) but exclude manual option when auto-choosing
+    const autoOptions = optionsTemplate.filter((o) => o.id !== '0');
 
-    let closestOption = optionsTemplate[0];
-    let minDiff = Math.abs(hotelCost - optionsTemplate[0].cost);
+    // If hotelCost isn't a finite number, default to Low Range
+    if (!Number.isFinite(hotelCost)) {
+      return { ...autoOptions[0], count: Math.ceil(travelers / 2) };
+    }
 
-    for (let opt of optionsTemplate) {
+    // Find closest among only the real categories
+    let closestOption = autoOptions[0];
+    let minDiff = Math.abs(hotelCost - closestOption.cost);
+
+    for (let opt of autoOptions) {
       const diff = Math.abs(hotelCost - opt.cost);
       if (diff < minDiff) {
         closestOption = opt;
         minDiff = diff;
       }
     }
+
+    // Defensive: if for some reason closestOption is missing, fallback to low
+    if (!closestOption) return { ...autoOptions[0], count: Math.ceil(travelers / 2) };
 
     return { ...closestOption, count: Math.ceil(travelers / 2) };
   };
@@ -51,7 +61,7 @@ const PerDayBox = ({
   // Hotel cost total
   const hotel = useMemo(() => {
     return selectedOption.reduce((acc, opt) => {
-      const costPerRoom = opt.id === '0' ? opt.manualCost ?? 0 : opt.cost ?? 0;
+      const costPerRoom = opt.id === '0' ? (opt.manualCost ?? 0) : (opt.cost ?? 0);
       return acc + costPerRoom * (opt.count ?? 1);
     }, 0);
   }, [selectedOption]);
@@ -96,7 +106,9 @@ const PerDayBox = ({
                         : ((c.cost ?? 0) * (c.count ?? 1)).toLocaleString('en-BD')}
                     </div>
                   </div>
-                  {c.id !== '0' && <SlideDropDown room={c.count ?? 1} isOpen={openDropdowns[c.id]} />}
+                  {c.id !== '0' && (
+                    <SlideDropDown room={c.count ?? 1} isOpen={openDropdowns[c.id]} />
+                  )}
                 </div>
               ))}
             </div>
