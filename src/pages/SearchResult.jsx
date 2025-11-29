@@ -51,69 +51,59 @@ function SearchResult() {
     high: { hotels: [], avg: 0, range: [0, 0] },
   });
 
-  useEffect(() => {
-    if (!to || !start || !end) return;
+useEffect(() => {
+  if (!to || !start || !end) return;
 
-    setLoading(true);
+  setLoading(true);
 
-    const startDateObj = new Date(start);
-    const endDateObj = new Date(end);
-    const midDate = new Date(startDateObj.getTime() + (endDateObj - startDateObj) / 2);
-    const checkin = midDate.toISOString().split('T')[0];
-    const checkout = new Date(midDate.getTime() + 1 * 24 * 60 * 60 * 1000) // next day
-      .toISOString()
-      .split('T')[0];
+  const startDateObj = new Date(start);
+  const endDateObj = new Date(end);
+  const midDate = new Date(startDateObj.getTime() + (endDateObj - startDateObj) / 2);
+  const checkin = midDate.toISOString().split('T')[0];
+  const checkout = new Date(midDate.getTime() + 1 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .split('T')[0];
 
-    fetchHotels(to, checkin, checkout)
-      .then((result) => {
-        const data = result.data; // API returns { data, fromCache }
-        console.log('API data:', data);
+  fetchHotels(to, checkin, checkout)
+    .then((result) => {
+      const data = result.data;
+      const hotelsArray = Array.isArray(data.hotels) ? data.hotels : [];
+      const hotels = hotelsArray.map((h) => ({
+        name: h.name,
+        priceBDT: h.price ? Math.ceil(h.price * 122) : 0,
+      }));
 
-        // Ensure hotels array exists
-        const hotelsArray = Array.isArray(data.hotels) ? data.hotels : [];
+      const categorize = (arr, min, max) => {
+        const filtered = arr.filter((h) => h.priceBDT >= min && h.priceBDT <= max);
+        if (!filtered.length) return { hotels: [], avg: 0, range: [0, 0] };
+        const prices = filtered.map((h) => h.priceBDT);
+        const avg = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
+        const minPrice = Math.min(...prices);
+        const maxPrice = Math.max(...prices);
+        return { hotels: filtered, avg, range: [minPrice, maxPrice] };
+      };
 
-        // Convert all prices to BDT
-        const hotels = hotelsArray.map((h) => ({
-          name: h.name,
-          priceBDT: h.price ? Math.ceil(h.price * 122) : 0,
-        }));
+      const lowCategory = categorize(hotels, 0, 3000);
+      const mediumCategory = categorize(hotels, 3000, 10000);
+      const highCategory = categorize(hotels, 10000, Infinity);
 
-        console.log('Mapped hotels with BDT:', hotels);
-
-        // Categorize using fixed thresholds
-        const categorize = (arr, min, max) => {
-          const filtered = arr.filter((h) => h.priceBDT >= min && h.priceBDT <= max);
-          if (!filtered.length) return { hotels: [], avg: 0, range: [0, 0] };
-          const prices = filtered.map((h) => h.priceBDT);
-          const avg = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length);
-          const minPrice = Math.min(...prices);
-          const maxPrice = Math.max(...prices);
-          return { hotels: filtered, avg, range: [minPrice, maxPrice] };
-        };
-
-        const lowCategory = categorize(hotels, 0, 3000);
-        const mediumCategory = categorize(hotels, 3000, 10000);
-        const highCategory = categorize(hotels, 10000, Infinity);
-
-        // Log categories for debugging
-        console.log('Low hotels (<3000 BDT):', lowCategory.hotels, 'Avg:', lowCategory.avg);
-        console.log(
-          'Medium hotels (3000-10000 BDT):',
-          mediumCategory.hotels,
-          'Avg:',
-          mediumCategory.avg
-        );
-        console.log('High hotels (>10000 BDT):', highCategory.hotels, 'Avg:', highCategory.avg);
-
-        setHotelCategories({
-          low: lowCategory,
-          medium: mediumCategory,
-          high: highCategory,
-        });
-      })
-      .catch((err) => console.error('Hotel fetch error:', err))
-      .finally(() => setLoading(false));
-  }, [to, start, end, fetchHotels]);
+      // **Apply defaults if avg is zero**
+      setHotelCategories({
+        low: { ...lowCategory, avg: lowCategory.avg || 2000, range: lowCategory.range[1] ? lowCategory.range : [2000, 3000] },
+        medium: { ...mediumCategory, avg: mediumCategory.avg || 5000, range: mediumCategory.range[1] ? mediumCategory.range : [5000, 10000] },
+        high: { ...highCategory, avg: highCategory.avg || 10000, range: highCategory.range[1] ? highCategory.range : [10000, 30000] },
+      });
+    })
+    .catch(() => {
+      // **Offline fallback**
+      setHotelCategories({
+        low: { hotels: [], avg: 2000, range: [2000, 3000] },
+        medium: { hotels: [], avg: 5000, range: [5000, 10000] },
+        high: { hotels: [], avg: 10000, range: [10000, 30000] },
+      });
+    })
+    .finally(() => setLoading(false));
+}, [to, start, end, fetchHotels]);
 
   return (
     <>

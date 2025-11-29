@@ -52,9 +52,10 @@ function HotelPopUp({ onClose, initialSelected = [], travelers, hotelCategories 
       } else {
         let avgCost = opt.cost;
         if (hotelCategories) {
-          if (opt.mode === 'Low Range') avgCost = hotelCategories.low?.avg ?? avgCost;
-          else if (opt.mode === 'Medium Range') avgCost = hotelCategories.medium?.avg ?? avgCost;
-          else if (opt.mode === 'High Range') avgCost = hotelCategories.high?.avg ?? avgCost;
+          if (opt.mode === 'Low Range') avgCost = hotelCategories?.low?.avg || 2000;
+          else if (opt.mode === 'Medium Range') avgCost = hotelCategories?.medium?.avg || 5000;
+          else if (opt.mode === 'High Range') avgCost = hotelCategories?.high?.avg || 10000;
+
         }
         setSelectedOption((prev) => [...prev, { ...opt, count: opt.count, cost: avgCost }]);
       }
@@ -79,7 +80,7 @@ function HotelPopUp({ onClose, initialSelected = [], travelers, hotelCategories 
     );
   };
 
-  // Sync selectedOption with options and hotelCategories
+
   useEffect(() => {
     setSelectedOption((prevSelected) =>
       prevSelected.map((sel) => {
@@ -88,10 +89,10 @@ function HotelPopUp({ onClose, initialSelected = [], travelers, hotelCategories 
 
         let avgCost = match.cost ?? 0;
         if (hotelCategories) {
-          if (sel.mode === 'Low Range') avgCost = hotelCategories.low?.avg ?? avgCost;
-          else if (sel.mode === 'Medium Range') avgCost = hotelCategories.medium?.avg ?? avgCost;
-          else if (sel.mode === 'High Range') avgCost = hotelCategories.high?.avg ?? avgCost;
-        }
+  if (sel.mode === 'Low Range') avgCost = hotelCategories.low?.avg || 2000;
+  else if (sel.mode === 'Medium Range') avgCost = hotelCategories.medium?.avg || 5000;
+  else if (sel.mode === 'High Range') avgCost = hotelCategories.high?.avg || 10000;
+}
 
         return {
           ...sel,
@@ -134,19 +135,19 @@ function HotelPopUp({ onClose, initialSelected = [], travelers, hotelCategories 
           if (hotelCategories) {
             if (opt.mode === 'Low Range') {
               hotelsInCategory = hotelCategories.low?.hotels || [];
-              avgCost = hotelCategories.low?.avg || avgCost;
-              lowest = hotelCategories.low?.range?.[0] || lowest;
-              highest = hotelCategories.low?.range?.[1] || highest;
+              avgCost = hotelCategories.low?.avg || 2000;
+              lowest = hotelCategories.low?.range?.[0] || 0;
+              highest = hotelCategories.low?.range?.[1] || 2000;
             } else if (opt.mode === 'Medium Range') {
               hotelsInCategory = hotelCategories.medium?.hotels || [];
-              avgCost = hotelCategories.medium?.avg || avgCost;
-              lowest = hotelCategories.medium?.range?.[0] || lowest;
-              highest = hotelCategories.medium?.range?.[1] || highest;
+              avgCost = hotelCategories.medium?.avg || 5000;
+              lowest = hotelCategories.medium?.range?.[0] || 5000;
+              highest = hotelCategories.medium?.range?.[1] || 10000;
             } else if (opt.mode === 'High Range') {
               hotelsInCategory = hotelCategories.high?.hotels || [];
-              avgCost = hotelCategories.high?.avg || avgCost;
-              lowest = hotelCategories.high?.range?.[0] || lowest;
-              highest = hotelCategories.high?.range?.[1] || highest;
+              avgCost = hotelCategories.high?.avg || 10000;
+              lowest = hotelCategories.high?.range?.[0] || 10000;
+              highest = hotelCategories.high?.range?.[1] || 30000;
             }
           }
 
