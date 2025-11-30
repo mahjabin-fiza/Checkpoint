@@ -1,9 +1,9 @@
 import Button1 from './Button1.jsx';
 import Button2 from './Button2.jsx';
 import Signin from '../pages/Signin.jsx';
+import SearchResult from '../pages/SearchResult.jsx';
 import { Link } from 'react-router-dom';
 import ProfileDropdown from './ProfileDropdown.jsx';
-import HotelSearch from './HotelSearch.jsx';
 
 function Header() {
   return (

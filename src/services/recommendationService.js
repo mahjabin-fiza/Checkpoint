@@ -1,12 +1,7 @@
-import { db } from "../firebase";
-import {
-  collection,
-  addDoc,
-  getDocs,
-  serverTimestamp
-} from "firebase/firestore";
+import { db } from '../firebase';
+import { collection, addDoc, getDocs, serverTimestamp } from 'firebase/firestore';
 
-const recommendationsRef = collection(db, "recommendations");
+const recommendationsRef = collection(db, 'recommendations');
 
 // CREATE recommendation entry
 export const createRecommendation = async (data) => {
@@ -16,5 +11,5 @@ export const createRecommendation = async (data) => {
 // READ all recommendations
 export const getAllRecommendations = async () => {
   const snapshot = await getDocs(recommendationsRef);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 };
