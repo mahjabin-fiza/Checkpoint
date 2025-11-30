@@ -25,7 +25,8 @@ yarn-error.log*
 .vercel
 
 
-.env
+
 
 admin/serviceAccount.json
-serviceAccount.json
+admin/*.json
+*.env
