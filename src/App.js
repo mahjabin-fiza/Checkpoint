@@ -4,7 +4,7 @@ import './App.css';
 import Header from './components/Header';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Homepage from './pages/homepage.jsx';
+import Homepage from './pages/Homepage.jsx';
 import SearchResult from './pages/SearchResult.jsx';
 import Signin from './pages/Signin.jsx';
 import Hotel from './pages/Hotel.jsx';
