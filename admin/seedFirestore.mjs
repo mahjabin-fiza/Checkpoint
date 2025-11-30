@@ -6,18 +6,17 @@
  * ------------------------------------
  */
 
-import admin from "firebase-admin";
+import dotenv from "dotenv";
+dotenv.config();
+
+
+import admin from "./firebaseAdmin.js";
 import fs from "fs";
+import path from "path";
 
-// Load service account
-const serviceAccount = JSON.parse(
-  fs.readFileSync("./admin/serviceAccount.json", "utf8")
-);
 
-// Initialize Admin SDK
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
+
+
 
 const db = admin.firestore();
 
