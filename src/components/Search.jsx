@@ -1,14 +1,14 @@
 import Dropdown1 from './Dropdown1.jsx';
 import Card from './Card.jsx';
 import Counter from './Counter.jsx';
-import Budget_DD from './Budget_DD.jsx';
+import Budget_DD from './Budget.jsx';
 import MyImage from '.././assets/8592434717_8023296e12_b.jpg';
 import { Link } from 'react-router-dom';
 import SearchBar from './SearchBar.jsx';
 
 function Search() {
   return (
-    <section class="flex items-center justify-center bg-cover bg-center py-5 px-14">
+    <section class="flex items-center justify-center bg-cover bg-center">
       <div
         class="max-w-6xl w-full rounded-lg py-12 px-28 shadow-md flex flex-col justify-between h-[400px] bg-cover bg-center relative"
         style={{ backgroundImage: `url(${MyImage})` }}

@@ -16,7 +16,7 @@ const Duration2 = ({ value = '', onChange }) => {
 
   return (
     <div>
-      <div className="max-w-[200px] flex text-sm bg-white border border-[#CCC3AF] rounded-l rounded-xl text-gray-700 shadow-sm hover:border-[#A88B68] transition">
+      <div className="max-w-[200px] flex text-sm bg-white border border-[#CCC3AF] rounded-r-xl text-gray-700 shadow-sm hover:border-[#A88B68] transition">
         <div className="flex flex-col gap-2 py-1 px-2 border-[#CCC3AF]">
           <div>
             <p className="text-xs text-[#9C9087]">End</p>

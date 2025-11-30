@@ -2,7 +2,7 @@ import React from 'react';
 import Dropdown1 from './Dropdown1.jsx';
 import Card from './Card.jsx';
 import Counter from './Counter.jsx';
-import Budget_DD from './Budget_DD.jsx';
+import Budget from './Budget.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Duration from './Duration.jsx';
@@ -46,11 +46,12 @@ function SearchBar({
 
       <Counter title="Traveler(s)" value={travelers} onChange={setTravelers} />
 
+      <div className='flex'>
       <Duration title="Start" value={dateStart} onChange={setDateStart} />
-
       <Duration2 title="End" value={dateEnd} onChange={setDateEnd} />
+      </div>
 
-      <Budget_DD title="Budget" value={budget} onChange={setBudget} initialValue={budget} />
+      <Budget title="Budget" value={budget} onChange={setBudget} initialValue={budget} />
       <button
         onClick={handleSearch}
         className="shadow-md border border-2 border-transparent bg-[#A88B68] font-semibold text-white w-28 h-16 rounded-lg hover:bg-[#87A87C]/10 hover:text-[#4B3A2D] hover:border-[#4B3A2D] hover:scale-105 transition duration-300 ease-in-out relative z-10"
