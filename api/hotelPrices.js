@@ -23,7 +23,7 @@ export default async function handler(req, res) {
     const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
     const BOOKING_HOST = process.env.BOOKING_HOST;
 
-    // 1) Get Destination ID
+   
     const locUrl = `https://${BOOKING_HOST}/locations/auto-complete?text=${encodeURIComponent(
       location
     )}&languagecode=en-us`;

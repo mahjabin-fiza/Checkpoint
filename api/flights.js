@@ -1,9 +1,6 @@
-console.log("RAPIDAPI_KEY LOADED =", process.env.RAPIDAPI_KEY);
-console.log("AIRSCRAPER_HOST =", process.env.AIRSCRAPER_HOST);
+console.log(">>> USING flights.js FROM THIS EXACT FILE:", import.meta.url);
 
 import fetch from "node-fetch";
-
-// Firebase
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 
@@ -25,45 +22,63 @@ export default async function flights(req, res) {
 
     if (!from || !to || !date) {
       return res.status(400).json({
-        error: "from, to, date are required"
+        error: "from, to, date required"
       });
     }
 
-    const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY;
+    const KEY = process.env.RAPIDAPI_KEY;
     const HOST = process.env.AIRSCRAPER_HOST;
 
-  const url = `https://${HOST}/v1/flights/search-browse?origin=${from}&destination=${to}&date=${date}`;
+    // 🔍 STEP 1 — Convert FROM (IATA → SkyId + EntityId)
+    const fromUrl = `https://${HOST}/api/v1/flights/searchAirport?query=${from}`;
+    const fromRes = await fetch(fromUrl, {
+      headers: {
+        "X-RapidAPI-Key": KEY,
+        "X-RapidAPI-Host": HOST
+      }
+    });
+    const fromData = await fromRes.json();
+    console.log("FROM AIRPORT LOOKUP RAW:", fromData);
+    const fromInfo = fromData.data?.[0];
 
-console.log("SkyScrapper URL:", url);
+    // 🔍 STEP 2 — Convert TO (IATA → SkyId + EntityId)
+    const toUrl = `https://${HOST}/api/v1/flights/searchAirport?query=${to}`;
+    const toRes = await fetch(toUrl, {
+      headers: {
+        "X-RapidAPI-Key": KEY,
+        "X-RapidAPI-Host": HOST
+      }
+    });
+    const toData = await toRes.json();
+    console.log("TO AIRPORT LOOKUP RAW:", toData);  // <-- ADD THIS
+    const toInfo = toData.data?.[0];
 
-const response = await fetch(url, {
-  method: "GET",
-  headers: {
-    "X-RapidAPI-Key": RAPIDAPI_KEY,
-    "X-RapidAPI-Host": HOST
-  }
-});
+    if (!fromInfo || !toInfo) {
+      return res.json({ flights: [], error: "Invalid airport code" });
+    }
 
-const text = await response.text();
-let data;
-try {
-  data = JSON.parse(text);
-} catch (e) {
-  console.log("RAW RESPONSE:", text);
-  return res.status(500).json({ error: "Invalid JSON from SkyScrapper", raw: text });
-}
+    // ✈️ STEP 3 — Fetch actual flight prices
+    const priceUrl = `https://${HOST}/api/v1/flights/searchFlights?originSkyId=${fromInfo.skyId}-sky&destinationSkyId=${toInfo.skyId}-sky&originEntityId=${fromInfo.entityId}&destinationEntityId=${toInfo.entityId}&date=${date}`;
+    const priceRes = await fetch(priceUrl, {
+      headers: {
+        "X-RapidAPI-Key": KEY,
+        "X-RapidAPI-Host": HOST
+      }
+    });
+    const priceData = await priceRes.json();
+    console.log("RAW PRICE RESPONSE:", priceData);
 
-const flights =
-  data?.itineraries?.map((i) => ({
-    price: i.price?.amount,
-    currency: i.price?.currency,
-    departure: i.legs?.[0]?.departure,
-    arrival: i.legs?.[0]?.arrival,
-    airline: i.legs?.[0]?.airlineName,
-    airlineCode: i.legs?.[0]?.airlineCode,
-    duration: i.legs?.[0]?.duration,
-    bookingUrl: i.bookingUrl
-  })) || [];
+
+    const flights = priceData.flights?.map(f => ({
+      airline: f.airlineName,
+      flightNumber: f.flightNumber,
+      price: f.price?.amount,
+      currency: f.price?.currency,
+      departure: f.departure,
+      arrival: f.arrival,
+      duration: f.duration,
+      bookingUrl: f.bookingUrl
+    })) || [];
 
     const result = {
       from,
@@ -74,12 +89,12 @@ const flights =
       timestamp: Date.now()
     };
 
-    // Save to Firestore
     await addDoc(collection(db, "flightSearches"), result);
 
-    return res.json(result);
+    res.json(result);
+
   } catch (err) {
-    console.error("FLIGHT PRICE ERROR:", err);
+    console.error("FLIGHT API ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 }

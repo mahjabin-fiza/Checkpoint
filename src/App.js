@@ -27,19 +27,18 @@
 
 import React from 'react';
 import HotelSearch from './components/HotelSearch';
+import Homepage from './pages/Homepage.jsx';
 import './App.css';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <header style={{ backgroundColor: '#282c34', padding: '20px', color: 'white', textAlign: 'center' }}>
-        <h1>Smart Travel Planner</h1>
-      </header>
-      
-      <main style={{ padding: '20px' }}>
-        <HotelSearch />
-      </main>
-    </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+        </Routes>
+      </BrowserRouter>
+
   );
 }
 
