@@ -8,7 +8,7 @@ function Homepage() {
     <div>
       <>
         <Header />
-        <div className='p-7 flex flex-col gap-7'>
+        <div className='p-7 flex flex-col gap-7 bg-grey-500'>
           <div><Search /></div>
           <div><Features /></div>
         </div>
