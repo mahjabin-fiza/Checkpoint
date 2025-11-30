@@ -1,15 +1,17 @@
 import React from 'react';
 import Header from '../components/Header.jsx';
 import Search from '../components/Search.jsx';
-import Card from '../components/Card.jsx';
-import { Link } from 'react-router-dom';
+import Features from '../components/Features.jsx';
 
 function Homepage() {
   return (
     <div>
       <>
         <Header />
-        <Search />
+        <div className='p-7 flex flex-col gap-7'>
+          <div><Search /></div>
+          <div><Features /></div>
+        </div>
       </>
     </div>
   );
