@@ -10,6 +10,7 @@ import LocationDetails from '../components/SearchResultTab/LocationDetails.jsx';
 import { useHotelContext } from '../context/HotelContext';
 import Button1 from '../components/Button1.jsx';
 import SavedPlanPop from '../components/UserProfile/SavedPlanPop.jsx';
+import DestinationBox from '../components/SearchResultTab/DestinationBox.jsx';
 
 function SearchResult() {
   const location = useLocation();
@@ -152,22 +153,7 @@ function SearchResult() {
         <div class="flex gap-4">
           <div class="w-[350px] h-[850px] rounded-lg flex flex-col">
             <p className="text-lg font-bold">{to}</p>
-            <div className="w-full h-full bg-white p-2 rounded-lg flex flex-col gap-2 shadow-lg">
-              <div className="bg-gray-200 w-full h-[65%] rounded-lg flex items-center justify-center">
-                Pictures of destination
-              </div>
-              <div className="bg-gray-200 w-full h-[20%] rounded-lg flex">
-                <div>
-                  <button onClick={() => setPopupOpen(true)} className="m-2">
-                    details
-                  </button>
-                </div>
-                {popupOpen && <LocationDetails onClose={() => setPopupOpen(false)} />}
-              </div>
-              <div className="bg-gray-200 w-full h-[15%] rounded-lg flex items-center justify-center">
-                Q&A
-              </div>
-            </div>
+            <DestinationBox/>
             <div className="scale-95 py-6 flex items-end justify-end">
               <div>
                 <Button1 text="save plan" />
