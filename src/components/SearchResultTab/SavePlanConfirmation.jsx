@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Button1 from '../Button1';
 import Button2 from '../Button2';
 
 const SavePlanConfirmation = ({ isOpen, onClose, onSave, existingPlans = [], currentPlan }) => {
@@ -7,6 +6,11 @@ const SavePlanConfirmation = ({ isOpen, onClose, onSave, existingPlans = [], cur
   const [tripTitle, setTripTitle] = useState('');
   const [selectedPlanId, setSelectedPlanId] = useState(null);
   const [error, setError] = useState('');
+  const plans = Array.from({ length: 20 }, (_, i) => ({
+    id: i + 1,
+    title: `Plan ${i + 1}`,
+    days: '10 days left',
+  }));
 
   if (!isOpen) return null;
 
@@ -121,26 +125,40 @@ const SavePlanConfirmation = ({ isOpen, onClose, onSave, existingPlans = [], cur
 
         {step === 'update' && (
           <>
-            <div className="w-[600px] bg-white px-3 p-1 rounded-lg shadow-lg">
-                <div className="flex justify-end">
-                  <button
-                    onClick={() => {
-                      setStep('choose');
-                      setTripTitle('');
-                      setSelectedPlanId(null);
-                      onClose();
-                    }}
-                    className="text-xs hover:font-bold py-1"
-                  >
-                    ✕
-                  </button>
-                </div>
+            <div className="w-[640px] bg-white px-3 p-1 rounded-lg shadow-lg">
+              <div className="flex justify-end">
+                <button
+                  onClick={() => {
+                    setStep('choose');
+                    setTripTitle('');
+                    setSelectedPlanId(null);
+                    onClose();
+                  }}
+                  className="text-xs hover:font-bold py-1"
+                >
+                  ✕
+                </button>
+              </div>
               <div className="bg-white flex flex-col gap-5">
                 <div>
                   <h2 className="text-xl font-bold text-center">Update Existing Plan</h2>
                 </div>
-                <div className='h-[200px]'>
-                  {existingPlans.length === 0 ? (
+                <div className="h-[320px] px-5">
+                  <div className="w-full h-[320px] rounded overflow-y-auto">
+                    <div className="flex flex-wrap gap-4">
+                      {plans.map((plan) => (
+                        <div
+                          key={plan.id}
+                          className="w-44 h-24 bg-gray-100 flex-shrink-0 rounded-lg shadow p-3 flex flex-col justify-between scale-100 hover:scale-105 transition duration-300 ease-in-out"
+                        >
+                          <div className="font-semibold text-sm break-words">{plan.title}</div>
+                          <div className="text-xs text-gray-500">{plan.days}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* {existingPlans.length === 0 ? (
                     <p>No saved plans available to update.</p>
                   ) : (
                     <select
@@ -155,7 +173,7 @@ const SavePlanConfirmation = ({ isOpen, onClose, onSave, existingPlans = [], cur
                         </option>
                       ))}
                     </select>
-                  )}
+                  )} */}
                 </div>
 
                 <div className="flex justify-between px-5 mb-4">

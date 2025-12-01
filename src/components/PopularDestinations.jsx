@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export default function PopularDestinations() {
   const [destinations, setDestinations] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/destinations")
+      .get('http://localhost:5000/api/destinations')
       .then((res) => {
-        console.log("DESTINATIONS:", res.data);   // 👈 debug log
+        console.log('DESTINATIONS:', res.data); // 👈 debug log
         setDestinations(res.data);
       })
       .catch((error) => {
-        console.error("API ERROR:", error);
+        console.error('API ERROR:', error);
       });
   }, []);
 
@@ -29,7 +29,7 @@ export default function PopularDestinations() {
             className="relative rounded-2xl shadow-lg overflow-hidden hover:scale-105 transition-transform duration-300 cursor-pointer bg-white"
           >
             <img
-              src={d.pictures?.[0]}      // 👈 VERY IMPORTANT
+              src={d.pictures?.[0]} // 👈 VERY IMPORTANT
               alt={d.name}
               className="w-full h-48 object-cover"
             />

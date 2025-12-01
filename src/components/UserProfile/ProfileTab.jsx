@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
-import Button2 from "../Button2";
-import Button3 from "../Button3";
-import { auth, db } from "../../firebase";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
+import React, { useState, useEffect } from 'react';
+import Button2 from '../Button2';
+import Button3 from '../Button3';
+import { auth, db } from '../../firebase';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 function ProfileTab() {
   const [edit, setEdit] = useState(false);
   const [userInfo, setUserInfo] = useState({
-    name: "",
-    email: "",
-    location: "",
+    name: '',
+    email: '',
+    location: '',
   });
   const [backupInfo, setBackupInfo] = useState({});
 
@@ -18,16 +18,16 @@ function ProfileTab() {
       const currentUser = auth.currentUser;
       if (!currentUser) return;
 
-      const userDocRef = doc(db, "users", currentUser.uid);
+      const userDocRef = doc(db, 'users', currentUser.uid);
       const userSnap = await getDoc(userDocRef);
 
       if (userSnap.exists()) {
         const data = userSnap.data();
 
         setUserInfo({
-          name: data.name || "",
+          name: data.name || '',
           email: data.email || currentUser.email,
-          location: data.location || "",
+          location: data.location || '',
         });
       }
     };
@@ -49,7 +49,7 @@ function ProfileTab() {
     const currentUser = auth.currentUser;
     if (!currentUser) return;
 
-    const userDocRef = doc(db, "users", currentUser.uid);
+    const userDocRef = doc(db, 'users', currentUser.uid);
 
     try {
       await updateDoc(userDocRef, {
@@ -59,12 +59,12 @@ function ProfileTab() {
       });
 
       // Update localStorage for header
-      localStorage.setItem("user", JSON.stringify(userInfo));
+      localStorage.setItem('user', JSON.stringify(userInfo));
 
-      alert("Profile updated successfully!");
+      alert('Profile updated successfully!');
     } catch (err) {
-      console.error("Error updating profile:", err);
-      alert("Failed to update profile.");
+      console.error('Error updating profile:', err);
+      alert('Failed to update profile.');
     }
 
     setEdit(false);
@@ -88,7 +88,6 @@ function ProfileTab() {
       {/* Main profile fields */}
       <div className="w-full h-[70%] flex flex-col justify-between">
         <div className="flex flex-col px-10 py-6 gap-2 bg-gray-100 rounded-lg">
-
           {/* Name */}
           <div className="flex gap-4 items-center">
             <div>Name:</div>
@@ -96,9 +95,7 @@ function ProfileTab() {
               <input
                 type="text"
                 value={userInfo.name}
-                onChange={(e) =>
-                  setUserInfo({ ...userInfo, name: e.target.value })
-                }
+                onChange={(e) => setUserInfo({ ...userInfo, name: e.target.value })}
                 className="w-full max-w-[300px] px-4 py-2 border-b-2 border-black bg-white focus:outline-none focus:border-[#A88B68]"
               />
             ) : (
@@ -113,9 +110,7 @@ function ProfileTab() {
               <input
                 type="email"
                 value={userInfo.email}
-                onChange={(e) =>
-                  setUserInfo({ ...userInfo, email: e.target.value })
-                }
+                onChange={(e) => setUserInfo({ ...userInfo, email: e.target.value })}
                 className="w-full max-w-[300px] px-4 py-2 border-b-2 border-black bg-white focus:outline-none focus:border-[#A88B68]"
               />
             ) : (
@@ -130,9 +125,7 @@ function ProfileTab() {
               <input
                 type="text"
                 value={userInfo.location}
-                onChange={(e) =>
-                  setUserInfo({ ...userInfo, location: e.target.value })
-                }
+                onChange={(e) => setUserInfo({ ...userInfo, location: e.target.value })}
                 className="w-full max-w-[285px] px-4 py-2 border-b-2 border-black bg-white focus:outline-none focus:border-[#A88B68]"
               />
             ) : (

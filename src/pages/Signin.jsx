@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import { auth } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { getUserById } from "../services/userService";
-import { useNavigate, Link } from "react-router-dom";
-import MyImage from "../assets/sylhet-tours-sightseeing-in-bangladesh-2.jpg";
-import Button1 from "../components/Button1";
+import React, { useState } from 'react';
+import { auth } from '../firebase';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { getUserById } from '../services/userService';
+import { useNavigate, Link } from 'react-router-dom';
+import MyImage from '../assets/sylhet-tours-sightseeing-in-bangladesh-2.jpg';
+import Button1 from '../components/Button1';
 
 function Signin() {
   const navigate = useNavigate();
 
   const [login, setLogin] = useState({
-    email: "",
-    password: ""
+    email: '',
+    password: '',
   });
 
   const handleChange = (e) => {
@@ -21,7 +21,7 @@ function Signin() {
   const handleSignin = async () => {
     const { email, password } = login;
 
-    if (!email || !password) return alert("Please fill all fields");
+    if (!email || !password) return alert('Please fill all fields');
 
     try {
       // Authenticate
@@ -32,11 +32,11 @@ function Signin() {
       const userData = await getUserById(user.uid);
 
       // Save session
-      localStorage.setItem("user", JSON.stringify(userData));
+      localStorage.setItem('user', JSON.stringify(userData));
 
-      navigate("/");
+      navigate('/');
     } catch (error) {
-      alert("Invalid email or password");
+      alert('Invalid email or password');
     }
   };
 

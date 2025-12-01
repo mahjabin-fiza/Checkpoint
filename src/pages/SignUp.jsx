@@ -1,20 +1,20 @@
-import React, { useState } from "react";
-import { auth } from "../firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { createUser } from "../services/userService";
-import { useNavigate } from "react-router-dom";
-import MyImage from "../assets/sylhet-tours-sightseeing-in-bangladesh-2.jpg";
-import Button1 from "../components/Button1";
+import React, { useState } from 'react';
+import { auth } from '../firebase';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUser } from '../services/userService';
+import { useNavigate } from 'react-router-dom';
+import MyImage from '../assets/sylhet-tours-sightseeing-in-bangladesh-2.jpg';
+import Button1 from '../components/Button1';
 
 function SignUp() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    name: "",
-    location: "",
-    email: "",
-    password: "",
-    repeatPassword: "",
+    name: '',
+    location: '',
+    email: '',
+    password: '',
+    repeatPassword: '',
   });
 
   const handleChange = (e) => {
@@ -24,19 +24,13 @@ function SignUp() {
   const handleSignup = async () => {
     const { name, location, email, password, repeatPassword } = formData;
 
-    if (!name || !location || !email || !password)
-      return alert("Please fill out all fields.");
+    if (!name || !location || !email || !password) return alert('Please fill out all fields.');
 
-    if (password !== repeatPassword)
-      return alert("Passwords do not match!");
+    if (password !== repeatPassword) return alert('Passwords do not match!');
 
     try {
       // Create account with Firebase Auth
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
       // Save user in Firestore
@@ -47,9 +41,9 @@ function SignUp() {
       });
 
       // Save session
-      localStorage.setItem("user", JSON.stringify({ uid: user.uid, name }));
+      localStorage.setItem('user', JSON.stringify({ uid: user.uid, name }));
 
-      navigate("/"); // go home
+      navigate('/'); // go home
     } catch (err) {
       alert(err.message);
     }
@@ -80,7 +74,12 @@ function SignUp() {
             <input name="password" type="password" onChange={handleChange} className="border-b" />
 
             <label>Repeat Password:</label>
-            <input name="repeatPassword" type="password" onChange={handleChange} className="border-b" />
+            <input
+              name="repeatPassword"
+              type="password"
+              onChange={handleChange}
+              className="border-b"
+            />
 
             <div className="flex justify-between mt-2">
               <Button1 text="Cancel" to="/" />

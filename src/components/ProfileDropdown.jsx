@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
-const ProfileDropdown = ({ text = "Profile", className }) => {
+const ProfileDropdown = ({ text = 'Profile', className }) => {
   const [isOpen, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -14,8 +14,8 @@ const ProfileDropdown = ({ text = "Profile", className }) => {
       }
     };
 
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
   return (
@@ -23,13 +23,13 @@ const ProfileDropdown = ({ text = "Profile", className }) => {
       <button
         onClick={toggleDropdown}
         className={`bg-white flex justify-between items-center max-w-[120px] px-2 py-1 rounded text-[#4B3A2D] font-semibold border border-[#4B3A2D] border-2 shadow-md transition duration-300 ease-in-out ${
-          className || ""
+          className || ''
         }`}
       >
         <div className="text-center flex-1 px-2 py-1">{text}</div>
         <svg
           className={`w-3 h-3 text-[#4B3A2D] transform transition-transform duration-300 ${
-            isOpen ? "rotate-180" : "rotate-0"
+            isOpen ? 'rotate-180' : 'rotate-0'
           }`}
           fill="none"
           stroke="currentColor"
@@ -41,7 +41,6 @@ const ProfileDropdown = ({ text = "Profile", className }) => {
 
       {isOpen && (
         <div className="absolute right-0 top-full mt-2 w-auto min-w-[150px] text-sm bg-gray-50 border border-[#CCC3AF] rounded-lg shadow-lg z-[9999] overflow-auto">
-
           {/* Profile */}
           <Link
             to="/user_profile"

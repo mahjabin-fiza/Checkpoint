@@ -20,6 +20,7 @@ function SearchResult() {
   const [popSave, setPopSave] = useState(false);
   const [savedPlans, setSavedPlans] = useState([]);
   const [savePlanOpen, setSavePlanOpen] = useState(false);
+  const [currentPlanData, setCurrentPlanData] = useState({});
 
   const [costBoxTotal, setCostBoxTotal] = useState({
     total: 0,
@@ -201,6 +202,30 @@ function SearchResult() {
               </div>
             </div>
           </div>
+
+          <SavePlanConfirmation
+            isOpen={savePlanOpen}
+            onClose={() => setSavePlanOpen(false)}
+            onSave={(plan) => {
+              console.log('Plan to save:', plan);
+              setSavePlanOpen(false);
+            }}
+            currentPlan={{
+              from,
+              to,
+              travelers: Number(travelers),
+              start,
+              end,
+              budget: Number(budget),
+              travel: costBoxTotal.total,
+              fromCost: costBoxTotal.travel1,
+              toCost: costBoxTotal.travel2,
+              totalPerDay,
+              planTotal,
+              perDayBox,
+              savedPlans,
+            }}
+          />
 
           {popSave && <SavedPlanPop onClose={() => setPopSave(false)} />}
 

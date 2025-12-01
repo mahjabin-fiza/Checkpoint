@@ -8,7 +8,7 @@ import Hotel from './pages/Hotel.jsx';
 import Restaurant from './pages/Restaurant.jsx';
 import UserProfile from './pages/UserProfile.jsx';
 import SignUp from './pages/SignUp.jsx';
-import SignOut from "./pages/SignOut";
+import SignOut from './pages/SignOut';
 
 function App() {
   return (

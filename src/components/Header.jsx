@@ -1,13 +1,13 @@
-import Button1 from "./Button1.jsx";
-import { Link } from "react-router-dom";
-import ProfileDropdown from "./ProfileDropdown.jsx";
-import { useEffect, useState } from "react";
+import Button1 from './Button1.jsx';
+import { Link } from 'react-router-dom';
+import ProfileDropdown from './ProfileDropdown.jsx';
+import { useEffect, useState } from 'react';
 
 function Header() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem("user");
+    const stored = localStorage.getItem('user');
     if (stored) setUser(JSON.parse(stored));
   }, []);
 

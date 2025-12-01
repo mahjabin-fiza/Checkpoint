@@ -1,9 +1,7 @@
-
-
-import { useEffect } from "react";
-import { signOut } from "firebase/auth";
-import { auth } from "../firebase";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from 'react';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
+import { useNavigate } from 'react-router-dom';
 
 function SignOut() {
   const navigate = useNavigate();
@@ -14,23 +12,21 @@ function SignOut() {
         // Firebase logout
         await signOut(auth);
       } catch (err) {
-        console.error("Firebase logout error:", err);
+        console.error('Firebase logout error:', err);
       }
 
       // Remove user session
-      localStorage.removeItem("user");
+      localStorage.removeItem('user');
 
       // Redirect home
-      navigate("/");
+      navigate('/');
     };
 
     doLogout();
   }, [navigate]);
 
   return (
-    <div className="w-screen h-screen flex items-center justify-center text-lg">
-      Signing out...
-    </div>
+    <div className="w-screen h-screen flex items-center justify-center text-lg">Signing out...</div>
   );
 }
 

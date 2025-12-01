@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import Header from "../components/Header.jsx";
-import Search from "../components/Search.jsx";
-import Features from "../components/Features.jsx";
-import PopularDestinations from "../components/PopularDestinations";
-import TrendingDeals from "../components/TrendingDeals";
-import WhyChooseUs from "../components/WhyChooseUs";
+import React, { useEffect, useState } from 'react';
+import Header from '../components/Header.jsx';
+import Search from '../components/Search.jsx';
+import Features from '../components/Features.jsx';
+import PopularDestinations from '../components/PopularDestinations.jsx';
+import TrendingDeals from '../components/TrendingDeals.jsx';
+import WhyChooseUs from '../components/WhyChooseUs.jsx';
 
 function Homepage() {
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     // This forces the page to refresh UI when user logs in
-    const stored = localStorage.getItem("user");
+    const stored = localStorage.getItem('user');
     setRefresh(!!stored);
   }, []);
 
