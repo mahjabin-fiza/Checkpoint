@@ -2,9 +2,9 @@ import React from 'react';
 import Header from '../components/Header.jsx';
 import Search from '../components/Search.jsx';
 import Features from '../components/Features.jsx';
-import PopularDestinations from "../components/PopularDestinations";
-import TrendingDeals from "../components/TrendingDeals";
-import WhyChooseUs from "../components/WhyChooseUs";
+import PopularDestinations from "../components/PopularDestinations.jsx";
+import TrendingDeals from "../components/TrendingDeals.jsx";
+import WhyChooseUs from "../components/WhyChooseUs.jsx";
 
 
 function Homepage() {
