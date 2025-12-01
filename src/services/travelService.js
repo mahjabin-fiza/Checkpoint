@@ -1,15 +1,8 @@
 // src/services/travelService.js
 // React-side Firestore Client SDK
 
-import { db } from "../firebase"; 
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where
-} from "firebase/firestore";
+import { db } from '../firebase';
+import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 
 /**
  * ----------------------------
@@ -19,13 +12,13 @@ import {
 
 // ✓ Fetch all routes (DAC → all cities)
 export async function getAllRoutes() {
-  const snapshot = await getDocs(collection(db, "routes"));
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  const snapshot = await getDocs(collection(db, 'routes'));
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 }
 
 // ✓ Fetch route by ID (ex: "DAC-CXB")
 export async function getRouteById(routeId) {
-  const ref = doc(db, "routes", routeId);
+  const ref = doc(db, 'routes', routeId);
   const snap = await getDoc(ref);
   if (!snap.exists()) return null;
   return { id: snap.id, ...snap.data() };
@@ -35,9 +28,9 @@ export async function getRouteById(routeId) {
 // Example: getRoute("Dhaka", "Sylhet")
 export async function getRoute(fromCity, toCity) {
   const q = query(
-    collection(db, "routes"),
-    where("from", "==", fromCity),
-    where("to", "==", toCity)
+    collection(db, 'routes'),
+    where('from', '==', fromCity),
+    where('to', '==', toCity)
   );
 
   const snapshot = await getDocs(q);
@@ -47,12 +40,9 @@ export async function getRoute(fromCity, toCity) {
 
 // ✓ Filter routes by price range (for budgeting)
 export function filterRoutesByBudget(routes, maxBudget) {
-  return routes.filter(route => {
+  return routes.filter((route) => {
     const minCost =
-      route.flightPriceMin ||
-      route.busPriceMin ||
-      route.trainPriceMin ||
-      route.carPricePerDayMin;
+      route.flightPriceMin || route.busPriceMin || route.trainPriceMin || route.carPricePerDayMin;
 
     return minCost <= maxBudget;
   });
@@ -65,13 +55,13 @@ export function filterRoutesByBudget(routes, maxBudget) {
  */
 
 export async function getAllDestinations() {
-  const snapshot = await getDocs(collection(db, "destinations"));
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  const snapshot = await getDocs(collection(db, 'destinations'));
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 }
 
 // ✓ Fetch destination info by airport code (ex: "CXB")
 export async function getDestinationByCode(code) {
-  const q = query(collection(db, "destinations"), where("code", "==", code));
+  const q = query(collection(db, 'destinations'), where('code', '==', code));
   const snapshot = await getDocs(q);
 
   if (snapshot.empty) return null;
@@ -81,7 +71,7 @@ export async function getDestinationByCode(code) {
 
 // ✓ Fetch destination by name (ex: "Cox's Bazar")
 export async function getDestinationByName(name) {
-  const q = query(collection(db, "destinations"), where("name", "==", name));
+  const q = query(collection(db, 'destinations'), where('name', '==', name));
   const snapshot = await getDocs(q);
 
   if (snapshot.empty) return null;
@@ -104,7 +94,6 @@ export async function getFullTravelPlan(from, to) {
 
   return {
     ...route,
-    destination
+    destination,
   };
 }
-

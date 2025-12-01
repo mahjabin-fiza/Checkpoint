@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 
-function RecreationBox({ cost, onValueChange }) {
+function RecreationBox({ cost, onValueChange, onPlansChange }) {
   const [plan, setPlan] = useState('');
   const [budget, setBudget] = useState('');
   const [saved, setSaved] = useState([]);
@@ -24,6 +24,10 @@ function RecreationBox({ cost, onValueChange }) {
 
   const [open, setOpen] = useState(false);
   const contentRef = useRef(null);
+
+  useEffect(() => {
+    if (onPlansChange) onPlansChange(saved);
+  }, [saved, onPlansChange]);
 
   useEffect(() => {
     if (onValueChange) onValueChange(totalBudget);
@@ -130,10 +134,10 @@ function RecreationBox({ cost, onValueChange }) {
           </div>
         </div>
         {saved.length !== 0 ? (
-          <p className="flex justify-end">
+          <div className="flex justify-end">
             <p className="px-3">Total -</p>
             <div className="px-4">{totalBudget.toLocaleString('en-BD')}</div>
-          </p>
+          </div>
         ) : null}
       </div>
     </>

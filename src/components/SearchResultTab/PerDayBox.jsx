@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import HotelPopUp from './HotelPopUp';
 import SlideDropDown from '../SlideDropDown';
 import Arrow from '../Arrow';
@@ -13,7 +13,6 @@ const PerDayBox = ({
   onValueChange,
   hotelCategories,
 }) => {
-  // Options template
   const optionsTemplate = [
     { id: '3', mode: 'Low Range', cost: hotelCategories?.low?.avg ?? 2000, count: 1 },
     { id: '4', mode: 'Medium Range', cost: hotelCategories?.medium?.avg ?? 5000, count: 1 },
@@ -22,15 +21,12 @@ const PerDayBox = ({
   ];
 
   const getInitialOption = () => {
-    // build options (same as before) but exclude manual option when auto-choosing
     const autoOptions = optionsTemplate.filter((o) => o.id !== '0');
 
-    // If hotelCost isn't a finite number, default to Low Range
     if (!Number.isFinite(hotelCost)) {
       return { ...autoOptions[0], count: Math.ceil(travelers / 2) };
     }
 
-    // Find closest among only the real categories
     let closestOption = autoOptions[0];
     let minDiff = Math.abs(hotelCost - closestOption.cost);
 
@@ -42,7 +38,6 @@ const PerDayBox = ({
       }
     }
 
-    // Defensive: if for some reason closestOption is missing, fallback to low
     if (!closestOption) return { ...autoOptions[0], count: Math.ceil(travelers / 2) };
 
     return { ...closestOption, count: Math.ceil(travelers / 2) };
@@ -53,12 +48,10 @@ const PerDayBox = ({
   const [openDropdowns, setOpenDropdowns] = useState({});
   const [isCustomSelected, setCustomSelected] = useState(false);
 
-  // Reset if hotelCost/hotelCategories change and not custom
   useEffect(() => {
     if (!isCustomSelected) setSelectedOption([getInitialOption()]);
   }, [hotelCost, hotelCategories]);
 
-  // Hotel cost total
   const hotel = useMemo(() => {
     return selectedOption.reduce((acc, opt) => {
       const costPerRoom = opt.id === '0' ? (opt.manualCost ?? 0) : (opt.cost ?? 0);
@@ -69,9 +62,33 @@ const PerDayBox = ({
   const food = useMemo(() => Math.ceil(foodCost * travelers), [foodCost, travelers]);
   const total = hotel + food;
 
+  const lastPayloadRef = useRef('');
+
   useEffect(() => {
-    if (onValueChange) onValueChange(total);
-  }, [total, onValueChange]);
+    if (!onValueChange) return;
+
+    const payload = {
+      total,
+      hotel,
+      food,
+      hotels: selectedOption.map((s) => ({
+        id: s.id,
+        mode: s.mode,
+        count: s.count ?? 1,
+        cost: s.id === '0' ? Number(s.manualCost ?? 0) : Number(s.cost ?? 0),
+        manualCost: s.manualCost ?? null,
+      })),
+      day,
+    };
+
+    const payloadStr = JSON.stringify(payload);
+
+    if (lastPayloadRef.current === payloadStr) return;
+
+    lastPayloadRef.current = payloadStr;
+
+    onValueChange(payload);
+  }, [total, hotel, food, selectedOption, onValueChange, day]);
 
   return (
     <>

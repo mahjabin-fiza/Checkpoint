@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Homepage from './pages/Homepage.jsx'
+import Homepage from './pages/Homepage.jsx';
 import SearchResult from './pages/SearchResult.jsx';
 import Signin from './pages/Signin.jsx';
 import Hotel from './pages/Hotel.jsx';

@@ -46,9 +46,9 @@ function SearchBar({
 
       <Counter title="Traveler(s)" value={travelers} onChange={setTravelers} />
 
-      <div className='flex'>
-      <Duration title="Start" value={dateStart} onChange={setDateStart} />
-      <Duration2 title="End" value={dateEnd} onChange={setDateEnd} />
+      <div className="flex">
+        <Duration title="Start" value={dateStart} onChange={setDateStart} />
+        <Duration2 title="End" value={dateEnd} onChange={setDateEnd} />
       </div>
 
       <Budget title="Budget" value={budget} onChange={setBudget} initialValue={budget} />

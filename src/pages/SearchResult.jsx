@@ -11,24 +11,40 @@ import { useHotelContext } from '../context/HotelContext';
 import Button1 from '../components/Button1.jsx';
 import SavedPlanPop from '../components/UserProfile/SavedPlanPop.jsx';
 import DestinationBox from '../components/SearchResultTab/DestinationBox.jsx';
+import SavePlanConfirmation from '../components/SearchResultTab/SavePlanConfirmation.jsx';
 
 function SearchResult() {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
   const [popupOpen, setPopupOpen] = useState(false);
   const [popSave, setPopSave] = useState(false);
+  const [savedPlans, setSavedPlans] = useState([]);
+  const [savePlanOpen, setSavePlanOpen] = useState(false);
 
-  const [costBoxTotal, setCostBoxTotal] = useState(0);
+  const [costBoxTotal, setCostBoxTotal] = useState({
+    total: 0,
+    travel1: 0,
+    travel2: 0,
+  });
   const [planTotal, setPlanTotal] = useState(0);
   const [perDayBox, setPerDayBox] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const totalPerDay = perDayBox.reduce((sum, val) => sum + Number(val || 0), 0);
+  const totalPerDay = perDayBox.reduce((sum, val) => sum + Number(val?.total || 0), 0);
+  const hotelPerDays = perDayBox.reduce((s, v) => s + Number(v?.hotelTotal || 0), 0);
+  const foodPerDays = perDayBox.reduce((s, v) => s + Number(v?.foodTotal || 0), 0);
 
   const handlePerDayValue = (index, value) => {
     setPerDayBox((prev) => {
       const current = prev[index];
-      if (current === value) return prev; // no change => no re-render
+      if (
+        current &&
+        current.total === value.total &&
+        current.hotel === value.hotel &&
+        current.foodTotal === value.food
+      ) {
+        return prev;
+      }
       const next = [...prev];
       next[index] = value;
       return next;
@@ -121,6 +137,28 @@ function SearchResult() {
       .finally(() => setLoading(false));
   }, [to, start, end, fetchHotels]);
 
+  const handleSavePlan = () => {
+    const demoPlan = {
+      id: `plan_${Date.now()}`,
+      from,
+      to,
+      travelers: Number(travelers) || 0,
+      start,
+      end,
+      budget: Number(budget) || 0,
+      travel: costBoxTotal.total,
+      fromCost: costBoxTotal.travel1,
+      toCost: costBoxTotal.travel2,
+      totalPerDay,
+      planTotal,
+      perDayBox,
+      savedPlans,
+      createdAt: new Date().toISOString(),
+    };
+
+    console.log('Demo saved plan payload:', demoPlan);
+  };
+
   return (
     <>
       <Header />
@@ -144,7 +182,7 @@ function SearchResult() {
         <div class="bg-white w-[50%] h-[15%] p-3 flex flex-col rounded-lg mb-4 shadow-lg">
           <h1 className="font-semibold">Cost Summery:</h1>
           <div className="w-full flex justify-between items-center">
-            <h1>Travel: {Number(costBoxTotal).toLocaleString('en-BD')}</h1>
+            <h1>Travel: {Number(costBoxTotal.total).toLocaleString('en-BD')}</h1>
             <h1>Hotel & Food: {Number(totalPerDay).toLocaleString('en-BD')}</h1>
             <h1>Recreation: {planTotal.toLocaleString('en-BD')}</h1>
           </div>
@@ -153,10 +191,10 @@ function SearchResult() {
         <div class="flex gap-4">
           <div class="w-[350px] h-[850px] rounded-lg flex flex-col">
             <p className="text-lg font-bold">{to}</p>
-            <DestinationBox/>
+            <DestinationBox />
             <div className="scale-95 py-6 flex items-end justify-end">
               <div>
-                <Button1 text="save plan" />
+                <Button1 text="Save Plan" onClick={() => setSavePlanOpen(true)} />
               </div>
               <div>
                 <Button1 onClick={() => setPopSave(true)} text="show" />
@@ -199,18 +237,42 @@ function SearchResult() {
 
             <RecreationBox
               cost={
-                Number(budget) - (Number(totalPerDay) + Number(costBoxTotal)) > 0
-                  ? Number(budget) - (Number(totalPerDay) + Number(costBoxTotal))
+                Number(budget) - (Number(totalPerDay) + Number(costBoxTotal.total)) > 0
+                  ? Number(budget) - (Number(totalPerDay) + Number(costBoxTotal.total))
                   : 0
               }
               onValueChange={setPlanTotal}
+              onPlansChange={setSavedPlans}
             />
             <TotalBox
               budget={Number(budget)}
-              calculatedCost={planTotal + Number(totalPerDay) + Number(costBoxTotal)}
+              calculatedCost={planTotal + Number(totalPerDay) + Number(costBoxTotal.total)}
             />
           </div>
         </div>
+        <SavePlanConfirmation
+          isOpen={savePlanOpen}
+          onClose={() => setSavePlanOpen(false)}
+          onSave={(plan) => {
+            console.log('Plan to save:', plan); // For now, just log it
+            setSavePlanOpen(false);
+          }}
+          currentPlan={{
+            from,
+            to,
+            travelers: Number(travelers),
+            start,
+            end,
+            budget: Number(budget),
+            travel: costBoxTotal.total,
+            fromCost: costBoxTotal.travel1,
+            toCost: costBoxTotal.travel2,
+            totalPerDay,
+            planTotal,
+            perDayBox,
+            savedPlans,
+          }}
+        />
       </div>
     </>
   );

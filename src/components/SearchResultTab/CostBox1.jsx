@@ -10,8 +10,13 @@ const CostBox1 = ({ travelers, from, to, Total, duration, onValueChange }) => {
   const total = travel1 + travel2;
 
   useEffect(() => {
-    if (onValueChange) onValueChange(total);
-  }, [total, onValueChange]);
+    if (onValueChange)
+      onValueChange({
+        total,
+        travel1,
+        travel2,
+      });
+  }, [total, travel1, travel2, onValueChange]);
 
   return (
     <>

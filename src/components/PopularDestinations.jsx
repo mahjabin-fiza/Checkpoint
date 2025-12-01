@@ -1,21 +1,21 @@
-import React from "react";
+import React from 'react';
 
 const destinations = [
   {
     name: "Cox's Bazar",
-    image: "https://images.pexels.com/photos/163167/beach-sea-sunset-sunrise-163167.jpeg"
+    image: 'https://images.pexels.com/photos/163167/beach-sea-sunset-sunrise-163167.jpeg',
   },
   {
-    name: "Sylhet",
-    image: "https://images.pexels.com/photos/1293124/pexels-photo-1293124.jpeg"
+    name: 'Sylhet',
+    image: 'https://images.pexels.com/photos/1293124/pexels-photo-1293124.jpeg',
   },
   {
-    name: "Bandarban",
-    image: "https://images.pexels.com/photos/1470407/pexels-photo-1470407.jpeg"
+    name: 'Bandarban',
+    image: 'https://images.pexels.com/photos/1470407/pexels-photo-1470407.jpeg',
   },
   {
-    name: "Chittagong",
-    image: "https://images.pexels.com/photos/460376/pexels-photo-460376.jpeg"
+    name: 'Chittagong',
+    image: 'https://images.pexels.com/photos/460376/pexels-photo-460376.jpeg',
   },
 ];
 
@@ -33,16 +33,14 @@ export default function PopularDestinations() {
             className="relative rounded-2xl shadow-lg overflow-hidden 
                        hover:scale-105 transition-transform duration-300 cursor-pointer bg-white"
           >
-            <img
-              src={d.image}
-              alt={d.name}
-              className="w-full h-48 object-cover"
-            />
+            <img src={d.image} alt={d.name} className="w-full h-48 object-cover" />
 
-            <div className="absolute bottom-0 w-full 
+            <div
+              className="absolute bottom-0 w-full 
                             bg-[#4B3A2D]/85 
                             text-white px-4 py-2 
-                            text-lg font-medium">
+                            text-lg font-medium"
+            >
               {d.name}
             </div>
           </div>
