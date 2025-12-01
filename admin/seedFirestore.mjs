@@ -43,8 +43,8 @@ const routes = [
     carPricePerDayMax: 60,
     averageDuration: "1h 10m",
     destinationPictures: [
-      "/mnt/data/a648d0fb-a1c7-4643-99e9-7430d7598985.jpeg",
-      "https://images.unsplash.com/photo-1506629082955-511b1f7b4b00"
+      "https://images.unsplash.com/photo-1506629082955-511b1f7b4b00?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1519823551278-64ac92734fb1?auto=format&fit=crop&w=1200&q=80"
     ],
     destinationDetails: "Cox's Bazar: the world's longest natural sea beach.",
     popularAttractions: ["Longest Beach", "Himchari", "Inani Beach"]
@@ -66,8 +66,8 @@ const routes = [
     carPricePerDayMax: 55,
     averageDuration: "1h 5m",
     destinationPictures: [
-      "https://images.unsplash.com/photo-1546571500-3c9b5f7d2d0c",
-      "https://images.unsplash.com/photo-1546607605-4d3d6b1e8830"
+      "https://images.unsplash.com/photo-1546571500-3c9b5f7d2d0c?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1546607605-4d3d6b1e8830?auto=format&fit=crop&w=1200&q=80"
     ],
     destinationDetails: "Chittagong is the main port city of Bangladesh.",
     popularAttractions: ["Patenga Beach", "Foy's Lake", "Karnaphuli River"]
@@ -89,8 +89,8 @@ const routes = [
     carPricePerDayMax: 70,
     averageDuration: "1h 10m",
     destinationPictures: [
-      "https://images.unsplash.com/photo-1549187774-b4a13515b1b3",
-      "https://images.unsplash.com/photo-1505765051673-8a2a7a8f4f1b"
+      "https://images.unsplash.com/photo-1549187774-b4a13515b1b3?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1505765051673-8a2a7a8f4f1b?auto=format&fit=crop&w=1200&q=80"
     ],
     destinationDetails: "Sylhet: land of tea gardens and green hills.",
     popularAttractions: ["Tea Gardens", "Jaflong", "Ratargul"]
@@ -112,8 +112,8 @@ const routes = [
     carPricePerDayMax: 55,
     averageDuration: "1h 15m",
     destinationPictures: [
-      "https://images.unsplash.com/photo-1546195643-0e2b2ff2b7f6",
-      "https://images.unsplash.com/photo-1504215680853-026ed2a45def"
+      "https://images.unsplash.com/photo-1546195643-0e2b2ff2b7f6?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1504215680853-026ed2a45def?auto=format&fit=crop&w=1200&q=80"
     ],
     destinationDetails: "Rajshahi: famous for mango orchards and historic temples.",
     popularAttractions: ["Puthia Temples", "Varendra Museum"]
@@ -135,8 +135,8 @@ const routes = [
     carPricePerDayMax: 50,
     averageDuration: "1h 20m",
     destinationPictures: [
-      "https://images.unsplash.com/photo-1543352634-1e05b3d8c4f3",
-      "https://images.unsplash.com/photo-1526483360413-1c1dbe9b8dc4"
+      "https://images.unsplash.com/photo-1543352634-1e05b3d8c4f3?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1526483360413-1c1dbe9b8dc4?auto=format&fit=crop&w=1200&q=80"
     ],
     destinationDetails: "Jessore is a key hub for southwest Bangladesh.",
     popularAttractions: ["Local Markets", "Cultural Sites"]
@@ -158,8 +158,8 @@ const routes = [
     carPricePerDayMax: 50,
     averageDuration: "1h 10m",
     destinationPictures: [
-      "https://images.unsplash.com/photo-1519817650390-64a93db511d2",
-      "https://images.unsplash.com/photo-1524169358660-7a25e9adf4f9"
+      "https://images.unsplash.com/photo-1519817650390-64a93db511d2?auto=format&fit=crop&w=1200&q=80",
+      "https://images.unsplash.com/photo-1524169358660-7a25e9adf4f9?auto=format&fit=crop&w=1200&q=80"
     ],
     destinationDetails: "Saidpur connects Rangpur and northern Bangladesh.",
     popularAttractions: ["Rail Junction", "Local Bazaars"]
@@ -172,8 +172,7 @@ const destinations = [
     name: "Cox's Bazar",
     code: "CXB",
     pictures: [
-      "/mnt/data/a648d0fb-a1c7-4643-99e9-7430d7598985.jpeg",
-      "https://images.unsplash.com/photo-1506629082955-511b1f7b4b00"
+      "https://images.unsplash.com/photo-1506629082955-511b1f7b4b00?auto=format&fit=crop&w=1200&q=80"
     ],
     description: "Cox's Bazar: the world's longest natural sea beach.",
     popularAttractions: ["Longest Beach", "Himchari", "Inani Beach"]
@@ -183,7 +182,9 @@ const destinations = [
     id: "Chittagong",
     name: "Chittagong",
     code: "CGP",
-    pictures: ["https://images.unsplash.com/photo-1546571500-3c9b5f7d2d0c"],
+    pictures: [
+      "https://images.unsplash.com/photo-1546571500-3c9b5f7d2d0c?auto=format&fit=crop&w=1200&q=80"
+    ],
     description: "Chittagong is the main port city of Bangladesh.",
     popularAttractions: ["Patenga Beach", "Foy's Lake", "Karnaphuli River"]
   },
@@ -192,7 +193,9 @@ const destinations = [
     id: "Sylhet",
     name: "Sylhet",
     code: "ZYL",
-    pictures: ["https://images.unsplash.com/photo-1549187774-b4a13515b1b3"],
+    pictures: [
+      "https://images.unsplash.com/photo-1549187774-b4a13515b1b3?auto=format&fit=crop&w=1200&q=80"
+    ],
     description: "Sylhet: tea gardens, hills, and natural beauty.",
     popularAttractions: ["Tea Gardens", "Jaflong", "Ratargul"]
   },
@@ -201,7 +204,9 @@ const destinations = [
     id: "Rajshahi",
     name: "Rajshahi",
     code: "RJH",
-    pictures: ["https://images.unsplash.com/photo-1546195643-0e2b2ff2b7f6"],
+    pictures: [
+      "https://images.unsplash.com/photo-1546195643-0e2b2ff2b7f6?auto=format&fit=crop&w=1200&q=80"
+    ],
     description: "Rajshahi: mango orchards and archaeology.",
     popularAttractions: ["Puthia Temples", "Varendra Museum"]
   },
@@ -210,7 +215,9 @@ const destinations = [
     id: "Dhaka",
     name: "Dhaka",
     code: "DAC",
-    pictures: ["https://images.unsplash.com/photo-1508057198894-247b23fe5ade"],
+    pictures: [
+      "https://images.unsplash.com/photo-1508057198894-247b23fe5ade?auto=format&fit=crop&w=1200&q=80"
+    ],
     description: "Dhaka is the fast-paced capital city.",
     popularAttractions: ["Lalbagh Fort", "Ahsan Manzil"]
   },
@@ -219,7 +226,9 @@ const destinations = [
     id: "Jessore",
     name: "Jessore",
     code: "JSR",
-    pictures: ["https://images.unsplash.com/photo-1543352634-1e05b3d8c4f3"],
+    pictures: [
+      "https://images.unsplash.com/photo-1543352634-1e05b3d8c4f3?auto=format&fit=crop&w=1200&q=80"
+    ],
     description: "Jessore: gateway to Khulna region.",
     popularAttractions: ["Markets", "Cultural Sites"]
   },
@@ -228,7 +237,9 @@ const destinations = [
     id: "Saidpur",
     name: "Saidpur",
     code: "SPD",
-    pictures: ["https://images.unsplash.com/photo-1519817650390-64a93db511d2"],
+    pictures: [
+      "https://images.unsplash.com/photo-1519817650390-64a93db511d2?auto=format&fit=crop&w=1200&q=80"
+    ],
     description: "Saidpur: northern travel hub.",
     popularAttractions: ["Rail Junction", "Local Markets"]
   }

@@ -8,6 +8,7 @@ import Hotel from './pages/Hotel.jsx';
 import Restaurant from './pages/Restaurant.jsx';
 import UserProfile from './pages/UserProfile.jsx';
 import SignUp from './pages/SignUp.jsx';
+import SignOut from "./pages/SignOut";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/Restaurant" element={<Restaurant />} />
           <Route path="?user_profile" element={<UserProfile />} />
           <Route path="/sign_up" element={<SignUp />} />
+          <Route path="/signout" element={<SignOut />} />
         </Routes>
       </BrowserRouter>
     </>

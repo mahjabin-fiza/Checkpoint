@@ -1,40 +1,33 @@
-import { db } from '../firebase';
+import { db } from "../firebase";
 import {
-  collection,
   doc,
-  addDoc,
+  setDoc,
   getDoc,
-  getDocs,
   updateDoc,
   deleteDoc,
   serverTimestamp,
-} from 'firebase/firestore';
+} from "firebase/firestore";
 
-const usersRef = collection(db, 'users');
-
-// CREATE
-export const createUser = async (userData) => {
-  await addDoc(usersRef, {
+// CREATE USER using UID from Firebase Auth
+export const createUser = async (uid, userData) => {
+  await setDoc(doc(db, "users", uid), {
     ...userData,
     createdAt: serverTimestamp(),
   });
 };
 
-export const getAllUsers = async () => {
-  const snapshot = await getDocs(usersRef);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+// READ USER
+export const getUserById = async (uid) => {
+  const userDoc = await getDoc(doc(db, "users", uid));
+  return userDoc.exists() ? { id: uid, ...userDoc.data() } : null;
 };
 
-export const getUserById = async (id) => {
-  const userDoc = await getDoc(doc(db, 'users', id));
-  return userDoc.exists() ? { id: userDoc.id, ...userDoc.data() } : null;
+// UPDATE USER
+export const updateUser = async (uid, updatedData) => {
+  await updateDoc(doc(db, "users", uid), updatedData);
 };
 
-export const updateUser = async (id, updatedData) => {
-  const userDoc = doc(db, 'users', id);
-  await updateDoc(userDoc, updatedData);
-};
-
-export const deleteUser = async (id) => {
-  await deleteDoc(doc(db, 'users', id));
+// DELETE USER
+export const deleteUser = async (uid) => {
+  await deleteDoc(doc(db, "users", uid));
 };
