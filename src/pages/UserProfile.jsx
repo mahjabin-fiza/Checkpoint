@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Header from "../components/Header";
 import ProfileTab from "../components/UserProfile/ProfileTab";
+import Settings from "../components/UserProfile/Settings";
 import { Link } from "react-router-dom";
 
 function UserProfile() {
@@ -73,8 +74,8 @@ function UserProfile() {
 
             {activeTab === "profile" && <ProfileTab />}
             {activeTab === "budgetPlan" && <p>Budget</p>}
-            {activeTab === "settings" && <p>Settings</p>}
-            {activeTab === "sign_out" && <p>Signing out...</p>}
+            {activeTab === 'settings' && <Settings />}
+
 
           </div>
         </div>
