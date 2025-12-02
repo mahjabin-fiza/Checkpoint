@@ -11,6 +11,7 @@ import {
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import Button2 from '../Button2';
 import Button3 from '../Button3';
+import Button1 from '../Button1';
 
 function Settings() {
   const user = auth.currentUser;
@@ -115,52 +116,76 @@ function Settings() {
   };
 
   return (
-    <div className="w-full h-full bg-white p-10">
-      <h2 className="text-2xl font-bold mb-5">Settings</h2>
+    <div className="w-full h-full bg-white p-3 justify-between">
+      <div>
+        <h2 className="text-2xl font-bold">Settings</h2>
 
-      {/* CHANGE USERNAME */}
-      <div className="mb-8 p-5 bg-gray-100 rounded-lg">
-        <h3 className="font-semibold mb-2">Change Username</h3>
-        <input
-          type="text"
-          placeholder="New Username"
-          className="border p-2 rounded w-full max-w-md"
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-        />
-        <div className="mt-3 w-[120px]">
-          <Button2 text="Update" onClick={handleNameChange} />
+        <div className="flex flex-col gap-4 px-6">
+          <div className="p-5 rounded-lg flex flex-col gap-1">
+            <div>
+              <h3 className="font-semibold">Change Username</h3>
+            </div>
+            <div className="flex gap-8">
+              <div>
+                <input
+                  type="text"
+                  placeholder="New Username"
+                  className="p-2 w-full max-w-md border-b-2 border-black bg-white focus:outline-none focus:border-[#A88B68]"
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
+                />
+              </div>
+              <div className="w-[100px]">
+                <Button1 text="Update" onClick={handleNameChange} />
+              </div>
+            </div>
+          </div>
+
+          <div className="p-5 rounded-lg flex flex-col gap-1">
+            <div>
+              <h3 className="font-semibold">Change Password</h3>
+            </div>
+            <div className="flex gap-8">
+              <div className="flex flex-col">
+                <div>
+                  <input
+                    type="password"
+                    placeholder="New Password"
+                    className="p-2 w-full max-w-md border-b-2 border-black bg-white focus:outline-none focus:border-[#A88B68]"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <input
+                    type="password"
+                    placeholder="Confirm Password"
+                    className="p-2 w-full max-w-md border-b-2 border-black bg-white focus:outline-none focus:border-[#A88B68]"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="flex items-end justify-end">
+                <div className="w-[100px]">
+                  <Button1 text="Change" onClick={handlePasswordChange} />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* CHANGE PASSWORD */}
-      <div className="mb-8 p-5 bg-gray-100 rounded-lg">
-        <h3 className="font-semibold mb-2">Change Password</h3>
-        <input
-          type="password"
-          placeholder="New Password"
-          className="border p-2 rounded w-full max-w-md"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Confirm Password"
-          className="border p-2 rounded w-full max-w-md mt-2"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
-        <div className="mt-3 w-[150px]">
-          <Button2 text="Change Password" onClick={handlePasswordChange} />
-        </div>
-      </div>
-
-      {/* DELETE ACCOUNT */}
-      <div className="mb-8 p-5 bg-red-100 border border-red-300 rounded-lg">
-        <h3 className="font-semibold text-red-600 mb-2">Delete Account</h3>
-        <p className="text-sm text-red-700">Warning: This action cannot be undone.</p>
-        <div className="mt-3 w-[150px]">
-          <Button3 text="Delete Account" onClick={handleDeleteAccount} />
+        <div className="px-6 mt-16">
+          <div className="p-5 rounded-lg flex items-end">
+            <div className="flex flex-col gap-2">
+              <div>
+                <p className="text-xs text-red-700">Warning: This action cannot be undone.</p>
+              </div>
+              <div className="w-[120px]">
+                <Button3 text="Delete Account" onClick={handleDeleteAccount} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

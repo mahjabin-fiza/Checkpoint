@@ -6,10 +6,10 @@ const features = [
     desc: 'check trip cost? organise trip plans? set budget? we got you.',
   },
   {
-    title: 'Budget Plan That\'s Best For You',
+    title: "Budget Plan That's Best For You",
     desc: 'Generate a budget plan suitable for your budget',
   },
-    {
+  {
     title: 'Personalized Trip Plan',
     desc: 'Make the best budget plan for your trip',
   },

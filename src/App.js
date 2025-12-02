@@ -9,6 +9,7 @@ import Restaurant from './pages/Restaurant.jsx';
 import UserProfile from './pages/UserProfile.jsx';
 import SignUp from './pages/SignUp.jsx';
 import SignOut from './pages/SignOut';
+import Dashboard from './components/Dashboard.jsx';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="?user_profile" element={<UserProfile />} />
           <Route path="/sign_up" element={<SignUp />} />
           <Route path="/signout" element={<SignOut />} />
+          <Route path="/Details" element={<Dashboard />} />
         </Routes>
       </BrowserRouter>
     </>

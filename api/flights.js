@@ -1,8 +1,9 @@
-console.log(">>> USING flights.js FROM THIS EXACT FILE:", import.meta.url);
-
 import fetch from "node-fetch";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
+
+console.log(">>> USING flights.js FROM THIS EXACT FILE:", import.meta.url);
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyAe-TSXAAGfU6KfKTyKmAbXADSJLSOpTSs",

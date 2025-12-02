@@ -29,13 +29,6 @@ function Header() {
           </Link>
 
           <Link
-            to="/Restaurant"
-            className="px-5 py-3 rounded text-sm font-medium hover:bg-[#D6E9D6] transition"
-          >
-            Restaurant
-          </Link>
-
-          <Link
             to="/Hotel"
             className="px-5 py-3 rounded text-sm font-medium hover:bg-[#D6E9D6] transition"
           >

@@ -9,7 +9,7 @@ const districtsName = [
   'Bogra',
   'Brahmanbaria',
   'Chandpur',
-  'Chattogram',
+  'Chittagong',
   'Chuadanga',
   'Comilla',
   "Cox's Bazar",

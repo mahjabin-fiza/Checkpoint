@@ -1,8 +1,6 @@
 import fetch from "node-fetch";
 
-// Firebase
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import admin from "../admin/firebaseAdmin.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAe-TSXAAGfU6KfKTyKmAbXADSJLSOpTSs",
@@ -13,8 +11,7 @@ const firebaseConfig = {
   appId: "1:755990588093:web:6ea45fa97efa3bf10d65d4"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db = admin.firestore();
 
 export default async function handler(req, res) {
   try {
@@ -90,7 +87,7 @@ export default async function handler(req, res) {
       timestamp: Date.now(),
     };
 
-    await addDoc(collection(db, "hotelSearches"), responseResult);
+    await db.collection("hotelSearches").add(responseResult);
 
     return res.status(200).json(responseResult);
   } catch (error) {

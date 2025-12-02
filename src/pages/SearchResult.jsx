@@ -170,112 +170,110 @@ function SearchResult() {
 
   // inside SearchResult component (place near handleSavePlan)
   // replace your current handleSaveFromPopup with this:
-const handleSaveFromPopup = async (planMeta) => {
-  const auth = getAuth();
-  const currentUser = auth.currentUser;
+  const handleSaveFromPopup = async (planMeta) => {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
 
-  if (!currentUser) {
-    alert('Please sign in to save a plan.');
-    return;
-  }
-
-  let idToken = null;
-  try {
-    idToken = await currentUser.getIdToken(false);
-  } catch (err) {
-    console.error('Failed to get idToken', err);
-    alert('Unable to validate session — please sign out and sign in again.');
-    return;
-  }
-
-const payload = {
-  id: planMeta.id || `plan_${Date.now()}`,
-  userId: currentUser.uid,
-  title: planMeta.title || 'Untitled trip',
-  from,
-  to,
-  travelers: Number(travelers) || 0,
-  start,
-  end,
-  budget: Number(budget) || 0,
-  totals: {
-    travel: Number(costBoxTotal.total || 0),
-    travelFrom: Number(costBoxTotal.travel1 || 0),
-    travelTo: Number(costBoxTotal.travel2 || 0),
-    perDayTotal: Number(totalPerDay || 0),
-    recreation: Number(planTotal || 0),
-    grandTotal:
-      Number(costBoxTotal.total || 0) + Number(totalPerDay || 0) + Number(planTotal || 0),
-  },
-  perDay: perDayBox,
-  hotelCategories,
-  recreationPlans: savedPlans, // ← ADD THIS LINE
-  createdAt: new Date().toISOString(),
-  updatePlanId: planMeta.updatePlanId || null,
-};
-
-
-  console.log('Attempting to save payload:', payload);
-
-  const trySaveRemote = async () => {
-    const res = await fetch('/api/save-plan', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${idToken}`,
-      },
-      body: JSON.stringify(payload),
-    });
-    return res;
-  };
-
-  try {
-    const res = await trySaveRemote();
-
-    if (res.ok) {
-      // expected JSON { ok: true, plan: {...} }
-      const json = await res.json();
-      console.log('Saved plan response from server:', json);
-      const saved = json.plan || payload;
-      setSavedPlans((prev) => [saved, ...prev]);
-      alert('Plan saved successfully (server).');
-      setSavePlanOpen(false);
+    if (!currentUser) {
+      alert('Please sign in to save a plan.');
       return;
     }
 
-    // If backend returns 404 specifically, treat as "route not implemented"
-    if (res.status === 404) {
-      console.warn('Backend route not found (404). Falling back to local demo save.');
-      // fall through to local save
-    } else {
-      // other non-ok status: parse text for debug
-      const txt = await res.text();
-      console.error(`Server returned ${res.status}: ${txt}`);
-      // fallback to local save for demo (but notify)
-      alert('Server rejected save (non-OK). Falling back to local save for demo.');
+    let idToken = null;
+    try {
+      idToken = await currentUser.getIdToken(false);
+    } catch (err) {
+      console.error('Failed to get idToken', err);
+      alert('Unable to validate session — please sign out and sign in again.');
+      return;
     }
-  } catch (err) {
-    console.warn('Network/error saving to server — falling back to local demo save.', err);
-  }
 
-  // --- Local fallback save (demo mode) ---
-  try {
-    const demoKey = `demo_saved_plans_${currentUser.uid}`;
-    const raw = localStorage.getItem(demoKey);
-    const list = raw ? JSON.parse(raw) : [];
-    const stored = { ...payload, _local: true };
-    list.unshift(stored);
-    localStorage.setItem(demoKey, JSON.stringify(list));
-    setSavedPlans((prev) => [stored, ...prev]);
-    console.log('Saved plan to localStorage for demo:', stored);
-    alert('Plan saved locally (demo mode). When backend is ready it will save to server.');
-    setSavePlanOpen(false);
-  } catch (err) {
-    console.error('Failed to save demo locally:', err);
-    alert('Failed to save plan (both server and local demo). See console for details.');
-  }
-};
+    const payload = {
+      id: planMeta.id || `plan_${Date.now()}`,
+      userId: currentUser.uid,
+      title: planMeta.title || 'Untitled trip',
+      from,
+      to,
+      travelers: Number(travelers) || 0,
+      start,
+      end,
+      budget: Number(budget) || 0,
+      totals: {
+        travel: Number(costBoxTotal.total || 0),
+        travelFrom: Number(costBoxTotal.travel1 || 0),
+        travelTo: Number(costBoxTotal.travel2 || 0),
+        perDayTotal: Number(totalPerDay || 0),
+        recreation: Number(planTotal || 0),
+        grandTotal:
+          Number(costBoxTotal.total || 0) + Number(totalPerDay || 0) + Number(planTotal || 0),
+      },
+      perDay: perDayBox,
+      hotelCategories,
+      recreationPlans: savedPlans, // ← ADD THIS LINE
+      createdAt: new Date().toISOString(),
+      updatePlanId: planMeta.updatePlanId || null,
+    };
 
+    console.log('Attempting to save payload:', payload);
+
+    const trySaveRemote = async () => {
+      const res = await fetch('/api/save-plan', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify(payload),
+      });
+      return res;
+    };
+
+    try {
+      const res = await trySaveRemote();
+
+      if (res.ok) {
+        // expected JSON { ok: true, plan: {...} }
+        const json = await res.json();
+        console.log('Saved plan response from server:', json);
+        const saved = json.plan || payload;
+        setSavedPlans((prev) => [saved, ...prev]);
+        alert('Plan saved successfully (server).');
+        setSavePlanOpen(false);
+        return;
+      }
+
+      // If backend returns 404 specifically, treat as "route not implemented"
+      if (res.status === 404) {
+        console.warn('Backend route not found (404). Falling back to local demo save.');
+        // fall through to local save
+      } else {
+        // other non-ok status: parse text for debug
+        const txt = await res.text();
+        console.error(`Server returned ${res.status}: ${txt}`);
+        // fallback to local save for demo (but notify)
+        alert('Server rejected save (non-OK). Falling back to local save for demo.');
+      }
+    } catch (err) {
+      console.warn('Network/error saving to server — falling back to local demo save.', err);
+    }
+
+    // --- Local fallback save (demo mode) ---
+    try {
+      const demoKey = `demo_saved_plans_${currentUser.uid}`;
+      const raw = localStorage.getItem(demoKey);
+      const list = raw ? JSON.parse(raw) : [];
+      const stored = { ...payload, _local: true };
+      list.unshift(stored);
+      localStorage.setItem(demoKey, JSON.stringify(list));
+      setSavedPlans((prev) => [stored, ...prev]);
+      console.log('Saved plan to localStorage for demo:', stored);
+      alert('Plan saved locally (demo mode). When backend is ready it will save to server.');
+      setSavePlanOpen(false);
+    } catch (err) {
+      console.error('Failed to save demo locally:', err);
+      alert('Failed to save plan (both server and local demo). See console for details.');
+    }
+  };
 
   return (
     <>
@@ -291,13 +289,13 @@ const payload = {
         />
       </div>
 
-      <div class="w-full h-full relative flex flex-col items-center py-4 px-16">
+      <div className="w-full h-full relative flex flex-col items-center py-4 px-16">
         {loading && (
           <div className="absolute inset-0 z-50 flex justify-center bg-white/50 backdrop-blur-sm">
             <p className="px-4 py-5 font-bold text-black animate-pulse">Loading...</p>
           </div>
         )}
-        <div class="bg-white w-[50%] h-[15%] p-3 flex flex-col rounded-lg mb-4 shadow-lg">
+        <div className="bg-white w-[50%] h-[15%] p-3 flex flex-col rounded-lg mb-4 shadow-lg">
           <h1 className="font-semibold">Cost Summery:</h1>
           <div className="w-full flex justify-between items-center">
             <h1>Travel: {Number(costBoxTotal.total).toLocaleString('en-BD')}</h1>
@@ -306,26 +304,25 @@ const payload = {
           </div>
         </div>
 
-        <div class="flex gap-4">
-          <div class="w-[350px] h-[850px] rounded-lg flex flex-col">
+        <div className="flex gap-4">
+          <div className="w-[350px] h-[920px] rounded-lg flex flex-col">
             <p className="text-lg font-bold">{to}</p>
-            <DestinationBox />
+            <DestinationBox to={to} />
             <div className="scale-95 py-6 flex items-end justify-end">
               <div>
                 <Button1
-  text="Save Plan"
-  onClick={() => {
-    console.log("Saving plan...");
-    console.log({
-      costBoxTotal,
-      totalPerDay,
-      planTotal,
-      perDayBox,
-    });
-    setSavePlanOpen(true);
-  }}
-/>
-
+                  text="Save Plan"
+                  onClick={() => {
+                    console.log('Saving plan...');
+                    console.log({
+                      costBoxTotal,
+                      totalPerDay,
+                      planTotal,
+                      perDayBox,
+                    });
+                    setSavePlanOpen(true);
+                  }}
+                />
               </div>
               <div>
                 <Button1 onClick={() => setPopSave(true)} text="show" />
@@ -359,7 +356,7 @@ const payload = {
 
           {popSave && <SavedPlanPop onClose={() => setPopSave(false)} />}
 
-          <div class="max-w-[600px] h-[100vh] rounded-lg flex flex-col gap-2">
+          <div className="max-w-[600px] h-[100vh] rounded-lg flex flex-col gap-2">
             <CostBox1
               to={to}
               from={from}

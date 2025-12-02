@@ -126,7 +126,9 @@ function RecreationBox({ cost, onValueChange, onPlansChange }) {
                         </div>
                       </button>
                       <div className="flex justify-between bg-gray-200 p-2 rounded-lg w-full items-center">
-                        <div><div>{item.title}</div></div>
+                        <div>
+                          <div>{item.title}</div>
+                        </div>
                         <div>{item.budget.toLocaleString('en-BD')}</div>
                       </div>
                     </div>

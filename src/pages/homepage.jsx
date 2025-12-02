@@ -23,7 +23,6 @@ function Homepage() {
         <Search />
         <Features />
         <PopularDestinations />
-        <TrendingDeals />
         <WhyChooseUs />
       </div>
     </div>
