@@ -92,10 +92,7 @@ function DestinationBox({ to }) {
             <p className="font-semibold">Popular Attractions:</p>
             <div className="flex flex-wrap gap-2 mt-1">
               {destination.popularAttractions.map((attr, idx) => (
-                <span
-                  key={idx}
-                  className="bg-blue-200 text-blue-900 px-2 py-1 rounded text-xs"
-                >
+                <span key={idx} className="bg-blue-200 text-blue-900 px-2 py-1 rounded text-xs">
                   {attr}
                 </span>
               ))}

@@ -125,7 +125,6 @@ function LocationDetails({ onClose, to, list, initialIndex = 0 }) {
 
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold">{activeDestination.name}</h2>
-
           </div>
 
           <div className="flex flex-col gap-3 text-sm">

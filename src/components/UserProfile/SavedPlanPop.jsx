@@ -1,159 +1,123 @@
-// SavedPlanPop.jsx
-import React from 'react';
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 function SavedPlanPop({ onClose }) {
+  const { currentUser } = useAuth();
+  const [plans, setPlans] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // LOAD PLANS
+useEffect(() => {
+  const loadPlans = async () => {
+    if (!currentUser) {
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const token = await currentUser.getIdToken();
+      if (!token) throw new Error("No ID token found for current user");
+
+      const res = await fetch("http://localhost:5001/api/get-plans", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const json = await res.json();
+
+      if (!json.ok) {
+        console.error("Server error:", json.error);
+        alert("Failed to load saved plans: " + json.error);
+        setLoading(false);
+        return;
+      }
+
+      setPlans(json.plans);
+    } catch (err) {
+      console.error("LOAD PLANS ERROR:", err);
+      alert("Error loading saved plans. Make sure you are logged in.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadPlans();
+}, [currentUser]);
+
+
+  // DELETE PLAN
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this trip plan permanently?")) return;
+
+    try {
+      const token = await currentUser.getIdToken();
+
+      const res = await fetch(`/api/delete-plan/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const json = await res.json();
+
+      if (json.ok) {
+        setPlans((prev) => prev.filter((p) => p.id !== id));
+        alert("Plan deleted.");
+      } else {
+        alert("Delete failed.");
+      }
+    } catch (err) {
+      console.error("DELETE ERROR:", err);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
-      <div className="bg-white w-[65%] h-[620px] rounded-lg shadow-lg flex flex-col gap-1 p-2">
-        <div>
-          <h2 className="text-lg font-semibold text-center">Saved Plan</h2>
-        </div>
+    <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white w-[65%] h-[620px] p-4 rounded shadow-lg flex flex-col">
 
-        <div className="flex flex-col items-center">
-          <div className="w-full h-[65px] gap-1 rounded-lg flex flex-wrap justify-center items-center">
-            <div className="flex-shrink min-w-[90px] h-full flex flex-col bg-gray-200 p-2 rounded-lg">
-              <div className="text-xs">From</div>
-              <div className="mt-2 text-sm font-semibold break-words">Dhaka</div>
-            </div>
+        <h1 className="text-xl font-bold text-center">Saved Plans</h1>
 
-            <div className="flex-shrink min-w-[90px] h-full flex flex-col bg-gray-200 p-2 rounded-lg">
-              <div className="text-xs">To</div>
-              <div className="mt-2 text-sm font-semibold break-words">Cox's Bazar</div>
-            </div>
-
-            <div className="flex-shrink min-w-[80px] h-full flex flex-col bg-gray-200 p-2 rounded-lg">
-              <div className="text-xs">Traveler(s)</div>
-              <div className="mt-2 text-sm font-semibold break-words">5</div>
-            </div>
-
-            <div className="flex-shrink min-w-[80px] h-full flex flex-col bg-gray-200 p-2 rounded-lg">
-              <div className="text-xs">Duration</div>
-              <div className="mt-2 text-sm font-semibold break-words">6 Days</div>
-            </div>
-
-            <div className="flex-shrink min-w-[80px] h-full flex flex-col bg-gray-200 p-2 rounded-lg">
-              <div className="text-xs">Budget</div>
-              <div className="mt-2 text-sm font-semibold break-words">3000</div>
-            </div>
+        {loading ? (
+          <div className="flex items-center justify-center flex-1">
+            Loading...
           </div>
-          <div className="p-2 text-sm font-semibold">12/06/2025 - 15/06/2025</div>
-        </div>
-        <div className="flex justify-start text-sm px-3 flex-1 min-h-0">
-          <div className="w-[40%] flex flex-col gap-3 border p-4 rounded overflow-y-auto min-h-0">
-            <div className="">
-              <div className="">Travel Details:</div>
-              <div className="w-full h-full rounded flex flex-col gap-2">
-                <div className="flex flex-col gap-2 p-1 bg-gray-300 rounded">
-                  <div className="font-semibold">→ Cox's Bazar</div>
-                  <div className="flex justify-between">
-                    <div>Mode: Bus</div>
-                    <div>Cost: 1000</div>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-2 bg-gray-200 rounded">
-                  <div className="font-semibold">→ Dhaka</div>
-                  <div className="flex justify-between">
-                    <div>Mode: Bus</div>
-                    <div>Cost: 1000</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="">
-              <div className="">Hotel Details:</div>
-              <div className="w-full h-full rounded flex flex-col gap-2">
-                <div className="flex flex-col gap-1 p-1 bg-gray-300 rounded">
-                  <div className="font-semibold">→12/06/2025</div>
-                  <div className="flex justify-between">
-                    <div>Low Range - [2 Rooms]</div>
-                    <div>Cost: 1000</div>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1 p-1 bg-gray-300 rounded">
-                  <div className="font-semibold">→13/06/2025</div>
-                  <div className="flex justify-between">
-                    <div>Low Range</div>
-                    <div>Cost: 1000</div>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1 p-1 bg-gray-300 rounded">
-                  <div className="font-semibold">→13/06/2025</div>
-                  <div className="flex justify-between">
-                    <div>Low Range</div>
-                    <div>Cost: 1000</div>
-                  </div>
-                </div>
-                <div className="flex flex-col gap-1 p-1 bg-gray-300 rounded">
-                  <div className="font-semibold">→13/06/2025</div>
-                  <div className="flex justify-between">
-                    <div>Low Range</div>
-                    <div>Cost: 1000</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+        ) : plans.length === 0 ? (
+          <div className="flex items-center justify-center flex-1 text-gray-500">
+            No saved plans found.
           </div>
-          <div className="w-[60%] flex flex-col gap-6 p-2">
-            <div className="">
-              <div className="">Cost Summary:</div>
-              <div className="flex justify-between gap-2 p-1 rounded border border-2">
-                <div className="flex flex-col gap-1">
-                  <div className="font-semibold">Travel</div>
-                  <div>2,000</div>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <div className="font-semibold">Hotel</div>
-                  <div>2,000</div>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <div className="font-semibold">Food</div>
-                  <div>2,000</div>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <div className="font-semibold">Others</div>
-                  <div>2,000</div>
-                </div>
-              </div>
-              <div className="text-xs">500 - exceeded budget</div>
-            </div>
-
-            <div className="flex-1 overflow-y-auto min-h-0">
-              <div className="">
-                <div>Trip Plan:</div>
+        ) : (
+          <div className="flex-1 overflow-y-auto mt-4">
+            {plans.map((p) => (
+              <div
+                key={p.id}
+                className="p-3 mb-3 bg-gray-100 border rounded flex justify-between items-center"
+              >
                 <div>
-                  <div className="w-full h-full rounded flex flex-col gap-2">
-                    <div className="flex justify-between gap-1 p-2 bg-gray-300 rounded">
-                      <div className="font-semibold">Plan : Himchori</div>
-                      <div>Cost: 1000</div>
-                    </div>
-                    <div className="flex justify-between gap-1 p-2 bg-gray-300 rounded">
-                      <div className="font-semibold">Plan : Himchori</div>
-                      <div>Cost: 1000</div>
-                    </div>
-                  </div>
+                  <p className="font-semibold">{p.title}</p>
+                  <p className="text-sm">{p.from} → {p.to}</p>
+                  <p className="text-xs text-gray-500">
+                    {new Date(p.createdAt).toLocaleString()}
+                  </p>
                 </div>
-              </div>
-            </div>
 
-            {/* Fixed bottom comment section */}
-            <div className="w-full bg-gray-50 p-1 rounded">
-              <div>
-                <div className="text-xs text-gray-600 mb-1">Comment:</div>
-                <div className="bg-white p-2 rounded min-h-[50px] break-words">Comment</div>
+                <button
+                  onClick={() => handleDelete(p.id)}
+                  className="text-red-600 hover:underline"
+                >
+                  Delete
+                </button>
               </div>
-            </div>
+            ))}
           </div>
-        </div>
+        )}
 
-        <div className="flex justify-end">
+        <div className="flex justify-end mt-3">
           <button
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             onClick={onClose}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >
             Close
           </button>
         </div>
+
       </div>
     </div>
   );

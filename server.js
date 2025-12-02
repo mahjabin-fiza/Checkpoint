@@ -25,16 +25,18 @@ async function verifyTokenMiddleware(req, res, next) {
   }
 }
 
-
-
-
-
 const app = express();
-app.use(cors({
-  origin: "http://localhost:3000",
-  methods: ["GET", "POST"],
-  credentials: true
-}));
+app.use(cors());
+app.use(express.json());
+
+
+
+// const app = express();
+// app.use(cors({
+//   origin: "http://localhost:3000",
+//   methods: ["GET", "POST"],
+//   credentials: true
+// }));
 
 
 app.get("/api/hotelPrices", hotelPrices);
@@ -54,22 +56,25 @@ app.post("/api/save-plan", verifyTokenMiddleware, async (req, res) => {
       db.collection("users").doc(uid).collection("plans").doc().id;
 
     const now = new Date().toISOString();
-    const planData = {
-      id: planId,
-      userId: uid,
-      title: body.title || "Untitled Trip",
-      from: body.from,
-      to: body.to,
-      travelers: Number(body.travelers || 0),
-      start: body.start || null,
-      end: body.end || null,
-      budget: Number(body.budget || 0),
-      totals: body.totals || {},
-      perDay: Array.isArray(body.perDay) ? body.perDay : [],
-      hotelCategories: body.hotelCategories || {},
-      createdAt: body.createdAt || now,
-      updatedAt: now,
-    };
+
+const planData = {
+  id: planId,
+  userId: uid,
+  title: body.title || "Untitled Trip",
+  from: body.from,
+  to: body.to,
+  travelers: Number(body.travelers || 0),
+  start: body.start || null,
+  end: body.end || null,
+  budget: Number(body.budget || 0),
+  totals: body.totals || {},
+  perDay: Array.isArray(body.perDay) ? body.perDay : [],
+  recreationPlans: Array.isArray(body.recreationPlans) ? body.recreationPlans : [],
+  hotelCategories: body.hotelCategories || {},
+  createdAt: body.createdAt || now,
+  updatedAt: now,
+};
+
 
     await db.collection("users").doc(uid).collection("plans").doc(planId).set(planData, { merge: true });
     return res.json({ ok: true, plan: planData });

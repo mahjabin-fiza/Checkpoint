@@ -42,16 +42,15 @@ export default function PopularDestinations() {
                 }}
               >
                 <div className="w-full bg-gradient-to-t from-black/60 to-transparent px-3 py-2">
-                  <h3 className="text-white text-lg font-semibold truncate">
-                    {name}
-                  </h3>
+                  <h3 className="text-white text-lg font-semibold truncate">{name}</h3>
                 </div>
               </div>
 
               <div className="px-3 py-2 bg-white">
                 <p className="text-sm text-gray-600">
                   {dest.destinationDetails
-                    ? dest.destinationDetails.slice(0, 90) + (dest.destinationDetails.length > 90 ? '…' : '')
+                    ? dest.destinationDetails.slice(0, 90) +
+                      (dest.destinationDetails.length > 90 ? '…' : '')
                     : 'No description available.'}
                 </p>
               </div>
@@ -62,11 +61,7 @@ export default function PopularDestinations() {
 
       {/* Modal for details (pass topFive as list and the initial index) */}
       {open && (
-        <LocationDetails
-          onClose={() => setOpen(false)}
-          list={topFive}
-          initialIndex={startIndex}
-        />
+        <LocationDetails onClose={() => setOpen(false)} list={topFive} initialIndex={startIndex} />
       )}
     </section>
   );
