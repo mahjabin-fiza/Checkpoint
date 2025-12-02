@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { getAuth } from 'firebase/auth';
 import Header from '../components/Header.jsx';
 import CostBox1 from '../components/SearchResultTab/CostBox1.jsx';
 import PerDayBox from '../components/SearchResultTab/PerDayBox.jsx';
@@ -6,7 +7,6 @@ import SearchBar from '../components/SearchBar.jsx';
 import { useLocation } from 'react-router-dom';
 import RecreationBox from '../components/RecreationBox.jsx';
 import TotalBox from '../components/TotalBox.jsx';
-import LocationDetails from '../components/SearchResultTab/LocationDetails.jsx';
 import { useHotelContext } from '../context/HotelContext';
 import Button1 from '../components/Button1.jsx';
 import SavedPlanPop from '../components/UserProfile/SavedPlanPop.jsx';
@@ -20,7 +20,6 @@ function SearchResult() {
   const [popSave, setPopSave] = useState(false);
   const [savedPlans, setSavedPlans] = useState([]);
   const [savePlanOpen, setSavePlanOpen] = useState(false);
-  const [currentPlanData, setCurrentPlanData] = useState({});
 
   const [costBoxTotal, setCostBoxTotal] = useState({
     total: 0,
@@ -38,11 +37,20 @@ function SearchResult() {
   const handlePerDayValue = (index, value) => {
     setPerDayBox((prev) => {
       const current = prev[index];
+
+      const curTotal = current?.total ?? 0;
+      const curHotelTotal = current?.hotelTotal ?? 0;
+      const curFoodTotal = current?.foodTotal ?? 0;
+
+      const newTotal = value?.total ?? 0;
+      const newHotelTotal = value?.hotelTotal ?? 0;
+      const newFoodTotal = value?.foodTotal ?? 0;
+
       if (
         current &&
-        current.total === value.total &&
-        current.hotel === value.hotel &&
-        current.foodTotal === value.food
+        curTotal === newTotal &&
+        curHotelTotal === newHotelTotal &&
+        curFoodTotal === newFoodTotal
       ) {
         return prev;
       }
@@ -160,6 +168,113 @@ function SearchResult() {
     console.log('Demo saved plan payload:', demoPlan);
   };
 
+  // inside SearchResult component (place near handleSavePlan)
+  // replace your current handleSaveFromPopup with this:
+const handleSaveFromPopup = async (planMeta) => {
+  const auth = getAuth();
+  const currentUser = auth.currentUser;
+
+  if (!currentUser) {
+    alert('Please sign in to save a plan.');
+    return;
+  }
+
+  let idToken = null;
+  try {
+    idToken = await currentUser.getIdToken(false);
+  } catch (err) {
+    console.error('Failed to get idToken', err);
+    alert('Unable to validate session — please sign out and sign in again.');
+    return;
+  }
+
+  const payload = {
+    id: planMeta.id || `plan_${Date.now()}`,
+    userId: currentUser.uid,
+    title: planMeta.title || 'Untitled trip',
+    from,
+    to,
+    travelers: Number(travelers) || 0,
+    start,
+    end,
+    budget: Number(budget) || 0,
+    totals: {
+      travel: Number(costBoxTotal.total || 0),
+      travelFrom: Number(costBoxTotal.travel1 || 0),
+      travelTo: Number(costBoxTotal.travel2 || 0),
+      perDayTotal: Number(totalPerDay || 0),
+      recreation: Number(planTotal || 0),
+      grandTotal:
+        Number(costBoxTotal.total || 0) + Number(totalPerDay || 0) + Number(planTotal || 0),
+    },
+    perDay: perDayBox,
+    hotelCategories,
+    createdAt: new Date().toISOString(),
+    updatePlanId: planMeta.updatePlanId || null,
+  };
+
+  console.log('Attempting to save payload:', payload);
+
+  const trySaveRemote = async () => {
+    const res = await fetch('/api/save-plan', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${idToken}`,
+      },
+      body: JSON.stringify(payload),
+    });
+    return res;
+  };
+
+  try {
+    const res = await trySaveRemote();
+
+    if (res.ok) {
+      // expected JSON { ok: true, plan: {...} }
+      const json = await res.json();
+      console.log('Saved plan response from server:', json);
+      const saved = json.plan || payload;
+      setSavedPlans((prev) => [saved, ...prev]);
+      alert('Plan saved successfully (server).');
+      setSavePlanOpen(false);
+      return;
+    }
+
+    // If backend returns 404 specifically, treat as "route not implemented"
+    if (res.status === 404) {
+      console.warn('Backend route not found (404). Falling back to local demo save.');
+      // fall through to local save
+    } else {
+      // other non-ok status: parse text for debug
+      const txt = await res.text();
+      console.error(`Server returned ${res.status}: ${txt}`);
+      // fallback to local save for demo (but notify)
+      alert('Server rejected save (non-OK). Falling back to local save for demo.');
+    }
+  } catch (err) {
+    console.warn('Network/error saving to server — falling back to local demo save.', err);
+  }
+
+  // --- Local fallback save (demo mode) ---
+  try {
+    const demoKey = `demo_saved_plans_${currentUser.uid}`;
+    const raw = localStorage.getItem(demoKey);
+    const list = raw ? JSON.parse(raw) : [];
+    const stored = { ...payload, _local: true };
+    list.unshift(stored);
+    localStorage.setItem(demoKey, JSON.stringify(list));
+    setSavedPlans((prev) => [stored, ...prev]);
+    console.log('Saved plan to localStorage for demo:', stored);
+    alert('Plan saved locally (demo mode). When backend is ready it will save to server.');
+    setSavePlanOpen(false);
+  } catch (err) {
+    console.error('Failed to save demo locally:', err);
+    alert('Failed to save plan (both server and local demo). See console for details.');
+  }
+};
+
+
   return (
     <>
       <Header />
@@ -206,9 +321,9 @@ function SearchResult() {
           <SavePlanConfirmation
             isOpen={savePlanOpen}
             onClose={() => setSavePlanOpen(false)}
-            onSave={(plan) => {
-              console.log('Plan to save:', plan);
-              setSavePlanOpen(false);
+            onSave={(planMeta) => {
+              // planMeta comes from popup. We'll handle saving here
+              handleSaveFromPopup(planMeta);
             }}
             currentPlan={{
               from,
@@ -275,29 +390,6 @@ function SearchResult() {
             />
           </div>
         </div>
-        <SavePlanConfirmation
-          isOpen={savePlanOpen}
-          onClose={() => setSavePlanOpen(false)}
-          onSave={(plan) => {
-            console.log('Plan to save:', plan); // For now, just log it
-            setSavePlanOpen(false);
-          }}
-          currentPlan={{
-            from,
-            to,
-            travelers: Number(travelers),
-            start,
-            end,
-            budget: Number(budget),
-            travel: costBoxTotal.total,
-            fromCost: costBoxTotal.travel1,
-            toCost: costBoxTotal.travel2,
-            totalPerDay,
-            planTotal,
-            perDayBox,
-            savedPlans,
-          }}
-        />
       </div>
     </>
   );

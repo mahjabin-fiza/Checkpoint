@@ -43,10 +43,7 @@ function Header() {
           </Link>
 
           <div className="px-4">
-            {/* 👇 SHOW SIGN IN ONLY IF USER NOT LOGGED IN */}
             {!user && <Button1 text="Sign In" to="/Signin" />}
-
-            {/* 👇 SHOW PROFILE ONLY IF USER LOGGED IN */}
             {user && <ProfileDropdown />}
           </div>
         </div>
