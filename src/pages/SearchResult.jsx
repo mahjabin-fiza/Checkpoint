@@ -161,7 +161,7 @@ function SearchResult() {
       totalPerDay,
       planTotal,
       perDayBox,
-      savedPlans,
+      recreationPlans: savedPlans,
       createdAt: new Date().toISOString(),
     };
 
@@ -188,30 +188,32 @@ const handleSaveFromPopup = async (planMeta) => {
     return;
   }
 
-  const payload = {
-    id: planMeta.id || `plan_${Date.now()}`,
-    userId: currentUser.uid,
-    title: planMeta.title || 'Untitled trip',
-    from,
-    to,
-    travelers: Number(travelers) || 0,
-    start,
-    end,
-    budget: Number(budget) || 0,
-    totals: {
-      travel: Number(costBoxTotal.total || 0),
-      travelFrom: Number(costBoxTotal.travel1 || 0),
-      travelTo: Number(costBoxTotal.travel2 || 0),
-      perDayTotal: Number(totalPerDay || 0),
-      recreation: Number(planTotal || 0),
-      grandTotal:
-        Number(costBoxTotal.total || 0) + Number(totalPerDay || 0) + Number(planTotal || 0),
-    },
-    perDay: perDayBox,
-    hotelCategories,
-    createdAt: new Date().toISOString(),
-    updatePlanId: planMeta.updatePlanId || null,
-  };
+const payload = {
+  id: planMeta.id || `plan_${Date.now()}`,
+  userId: currentUser.uid,
+  title: planMeta.title || 'Untitled trip',
+  from,
+  to,
+  travelers: Number(travelers) || 0,
+  start,
+  end,
+  budget: Number(budget) || 0,
+  totals: {
+    travel: Number(costBoxTotal.total || 0),
+    travelFrom: Number(costBoxTotal.travel1 || 0),
+    travelTo: Number(costBoxTotal.travel2 || 0),
+    perDayTotal: Number(totalPerDay || 0),
+    recreation: Number(planTotal || 0),
+    grandTotal:
+      Number(costBoxTotal.total || 0) + Number(totalPerDay || 0) + Number(planTotal || 0),
+  },
+  perDay: perDayBox,
+  hotelCategories,
+  recreationPlans: savedPlans, // ← ADD THIS LINE
+  createdAt: new Date().toISOString(),
+  updatePlanId: planMeta.updatePlanId || null,
+};
+
 
   console.log('Attempting to save payload:', payload);
 
@@ -310,7 +312,20 @@ const handleSaveFromPopup = async (planMeta) => {
             <DestinationBox />
             <div className="scale-95 py-6 flex items-end justify-end">
               <div>
-                <Button1 text="Save Plan" onClick={() => setSavePlanOpen(true)} />
+                <Button1
+  text="Save Plan"
+  onClick={() => {
+    console.log("Saving plan...");
+    console.log({
+      costBoxTotal,
+      totalPerDay,
+      planTotal,
+      perDayBox,
+    });
+    setSavePlanOpen(true);
+  }}
+/>
+
               </div>
               <div>
                 <Button1 onClick={() => setPopSave(true)} text="show" />

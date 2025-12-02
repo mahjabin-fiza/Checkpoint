@@ -2,31 +2,27 @@ import React from 'react';
 
 const features = [
   {
-    icon: '💸',
-    title: 'Best Price Guarantee',
-    desc: 'Lowest fares and exclusive deals.',
+    title: 'All in One Place',
+    desc: 'check trip cost? organise trip plans? set budget? we got you.',
   },
   {
-    icon: '🔒',
-    title: 'Secure Payments',
-    desc: 'Safe and fast payment options.',
+    title: 'Budget Plan That\'s Best For You',
+    desc: 'Generate a budget plan suitable for your budget',
+  },
+    {
+    title: 'Personalized Trip Plan',
+    desc: 'Make the best budget plan for your trip',
   },
   {
-    icon: '✔️',
-    title: 'Verified Hotels',
-    desc: 'Trusted and authenticated stays.',
-  },
-  {
-    icon: '📞',
-    title: '24/7 Support',
-    desc: 'We are always here to help.',
+    title: 'Keep Track',
+    desc: 'Save and track your trip plan',
   },
 ];
 
 export default function WhyChooseUs() {
   return (
     <section className="max-w-7xl mx-auto mt-24 px-6">
-      <h2 className="text-3xl font-semibold text-[#4B3A2D] text-center mb-12">Why Choose Us?</h2>
+      <h2 className="text-3xl font-semibold text-[#4B3A2D] text-center mb-12">Why Checkpoint?</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {features.map((f, i) => (

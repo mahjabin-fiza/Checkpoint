@@ -10,7 +10,8 @@ function RecreationBox({ cost, onValueChange, onPlansChange }) {
 
   const handleAdd = () => {
     if (!plan && !numericBudget) return;
-    setSaved((prev) => [...prev, { id: Date.now(), plan, budget: numericBudget }]);
+    const newItem = { id: Date.now(), title: plan, budget: numericBudget }; // title instead of plan
+    setSaved((prev) => [...prev, newItem]);
     setPlan('');
     setBudget('');
   };
@@ -125,7 +126,7 @@ function RecreationBox({ cost, onValueChange, onPlansChange }) {
                         </div>
                       </button>
                       <div className="flex justify-between bg-gray-200 p-2 rounded-lg w-full items-center">
-                        <div>{item.plan}</div>
+                        <div><div>{item.title}</div></div>
                         <div>{item.budget.toLocaleString('en-BD')}</div>
                       </div>
                     </div>
