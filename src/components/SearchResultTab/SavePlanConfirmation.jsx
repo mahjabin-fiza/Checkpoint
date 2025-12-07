@@ -1,19 +1,17 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button2 from '../Button2';
 import { getAuth } from 'firebase/auth';
 
 const SavePlanConfirmation = ({ isOpen, onClose, onSave, currentPlan }) => {
-  const [step, setStep] = useState('choose'); // 'choose' | 'new' | 'update'
+  const [step, setStep] = useState('choose');
   const [tripTitle, setTripTitle] = useState('');
   const [selectedPlanId, setSelectedPlanId] = useState(null);
   const [error, setError] = useState('');
 
-  // plans fetched from server
   const [fetchedPlans, setFetchedPlans] = useState([]);
   const [plansLoading, setPlansLoading] = useState(false);
   const [plansError, setPlansError] = useState(null);
 
-  // helper to compute days left; returns string
   const daysLeftText = (plan) => {
     if (!plan?.start) return '—';
     const start = new Date(plan.start);
@@ -25,7 +23,6 @@ const SavePlanConfirmation = ({ isOpen, onClose, onSave, currentPlan }) => {
     return `Started ${Math.abs(diffDays)} day${Math.abs(diffDays) > 1 ? 's' : ''} ago`;
   };
 
-  // function to fetch plans from backend
   const fetchPlansFromServer = async () => {
     setPlansLoading(true);
     setPlansError(null);
@@ -59,18 +56,14 @@ const SavePlanConfirmation = ({ isOpen, onClose, onSave, currentPlan }) => {
     }
   };
 
-  // when user navigates to update step, fetch plans
   useEffect(() => {
     if (step === 'update') {
       fetchPlansFromServer();
       setSelectedPlanId(null);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step, isOpen]);
 
   if (!isOpen) {
-    // reset some transient UI state so next open starts clean
-    // keep tripTitle, etc. optional depending on usage
     return null;
   }
 
@@ -219,30 +212,32 @@ const SavePlanConfirmation = ({ isOpen, onClose, onSave, currentPlan }) => {
                         fetchedPlans.map((plan) => {
                           const isSelected = String(plan.id) === String(selectedPlanId);
                           return (
-                            <div className='p-2'>
-                            <button
-                              key={plan.id}
-                              type="button"
-                              onClick={() => setSelectedPlanId(plan.id)}
-                              className={`w-44 h-28 bg-white border rounded-lg shadow p-4 flex flex-col justify-between transition transform scale-100 hover:scale-105 focus:outline-none ${
-                                isSelected ? 'scale-105 ring-2 ring-gray-600 border-blue-200' : 'border-gray-200'
-                              }`}
-                            >
-                              <div className="w-full items-start">
-                                <div className="font-semibold text-sm break-words text-left">
-                                  {plan.title || 'Untitled'}
+                            <div className="p-2">
+                              <button
+                                key={plan.id}
+                                type="button"
+                                onClick={() => setSelectedPlanId(plan.id)}
+                                className={`w-44 h-28 bg-white border rounded-lg shadow p-4 flex flex-col justify-between transition transform scale-100 hover:scale-105 focus:outline-none ${
+                                  isSelected
+                                    ? 'scale-105 ring-2 ring-gray-600 border-blue-200'
+                                    : 'border-gray-200'
+                                }`}
+                              >
+                                <div className="w-full items-start">
+                                  <div className="font-semibold text-sm break-words text-left">
+                                    {plan.title || 'Untitled'}
+                                  </div>
                                 </div>
-                              </div>
 
-                              <div className="w-full flex justify-between items-start">
-                                <div className="text-xs text-gray-800 text-left">
-                                {plan.from ? `${plan.to || '—'}` : ''}
-                              </div>
-                              <div className="text-xs text-gray-600">
-                                  ({daysLeftText(plan)})
+                                <div className="w-full flex justify-between items-start">
+                                  <div className="text-xs text-gray-800 text-left">
+                                    {plan.from ? `${plan.to || '—'}` : ''}
+                                  </div>
+                                  <div className="text-xs text-gray-600">
+                                    ({daysLeftText(plan)})
+                                  </div>
                                 </div>
-                              </div>
-                            </button>
+                              </button>
                             </div>
                           );
                         })

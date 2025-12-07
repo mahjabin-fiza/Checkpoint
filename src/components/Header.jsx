@@ -12,8 +12,8 @@ function Header() {
   }, []);
 
   return (
-    <header className="w-full px-14 py-6 bg-white">
-      <div className="max-w-8xl mx-auto flex items-center justify-between">
+    <header className="w-full px-14 py-4 bg-white items-center justify-center sticky top-0 z-50">
+      <div className="max-w-6xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link to="/">
           <h1 className="text-4xl font-bold text-[#4B3A2D]">Checkpoint</h1>
@@ -35,7 +35,7 @@ function Header() {
             Hotel
           </Link>
 
-          <div className="px-4">
+          <div className="">
             {!user && <Button1 text="Sign In" to="/Signin" />}
             {user && <ProfileDropdown />}
           </div>

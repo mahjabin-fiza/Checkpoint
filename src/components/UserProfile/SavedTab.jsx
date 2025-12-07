@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
-import UserPlanDetails from "./UserPlanDetails"; // import your popup component
+import React, { useEffect, useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import UserPlanDetails from './UserPlanDetails'; // import your popup component
 
 export default function SavedTab() {
   const { currentUser } = useAuth();
@@ -13,7 +13,7 @@ export default function SavedTab() {
     try {
       if (!currentUser) return setPlans([]);
       const token = await currentUser.getIdToken();
-      const res = await fetch("http://localhost:5001/api/get-plans", {
+      const res = await fetch('http://localhost:5001/api/get-plans', {
         headers: { Authorization: `Bearer ${token}` },
       });
       const json = await res.json();
@@ -30,48 +30,48 @@ export default function SavedTab() {
   }, [currentUser]);
 
   const handleDelete = async (planId) => {
-  if (!window.confirm("Are you sure you want to delete this plan?")) return;
+    if (!window.confirm('Are you sure you want to delete this plan?')) return;
 
-  try {
-    if (!currentUser) throw new Error("Not signed in");
-    const token = await currentUser.getIdToken();
+    try {
+      if (!currentUser) throw new Error('Not signed in');
+      const token = await currentUser.getIdToken();
 
-    const res = await fetch(`http://localhost:5001/api/delete-plan/${encodeURIComponent(planId)}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
+      const res = await fetch(
+        `http://localhost:5001/api/delete-plan/${encodeURIComponent(planId)}`,
+        {
+          method: 'DELETE',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
-    // helpful debug logs
-    if (!res.ok) {
-      const txt = await res.text().catch(() => "[no body]");
-      console.error("DELETE /api/delete-plan failed", res.status, txt);
-      alert("Error deleting plan. See console for details.");
-      return;
+      // helpful debug logs
+      if (!res.ok) {
+        const txt = await res.text().catch(() => '[no body]');
+        console.error('DELETE /api/delete-plan failed', res.status, txt);
+        alert('Error deleting plan. See console for details.');
+        return;
+      }
+
+      const json = await res.json();
+      if (json.ok) {
+        // remove from local state
+        setPlans((prev) => prev.filter((p) => p.id !== planId));
+        alert('Plan deleted.');
+      } else {
+        console.error('delete returned ok:false', json);
+        alert('Error deleting plan: ' + (json.error || 'server error'));
+      }
+    } catch (err) {
+      console.error('DELETE ERROR:', err);
+      alert('Could not delete plan. See console for details.');
     }
+  };
 
-    const json = await res.json();
-    if (json.ok) {
-      // remove from local state
-      setPlans((prev) => prev.filter((p) => p.id !== planId));
-      alert("Plan deleted.");
-    } else {
-      console.error("delete returned ok:false", json);
-      alert("Error deleting plan: " + (json.error || "server error"));
-    }
-  } catch (err) {
-    console.error("DELETE ERROR:", err);
-    alert("Could not delete plan. See console for details.");
-  }
-};
-
-
-  if (!currentUser)
-    return <div className="p-8 text-center">Sign in to see saved plans.</div>;
-  if (loading)
-    return <div className="p-8 text-center">Loading saved plans...</div>;
+  if (!currentUser) return <div className="p-8 text-center">Sign in to see saved plans.</div>;
+  if (loading) return <div className="p-8 text-center">Loading saved plans...</div>;
 
   return (
     <div className="p-8">
@@ -86,9 +86,7 @@ export default function SavedTab() {
               const daysLeft = plan.start
                 ? Math.max(
                     0,
-                    Math.ceil(
-                      (new Date(plan.start) - new Date()) / (1000 * 60 * 60 * 24)
-                    )
+                    Math.ceil((new Date(plan.start) - new Date()) / (1000 * 60 * 60 * 24))
                   )
                 : null;
 
@@ -112,7 +110,7 @@ export default function SavedTab() {
                       {plan.from} → {plan.to}
                     </p>
                     <p className="text-xs text-gray-500 mt-1">
-                      Saved: {plan.createdAt ? new Date(plan.createdAt).toLocaleDateString() : "—"}
+                      Saved: {plan.createdAt ? new Date(plan.createdAt).toLocaleDateString() : '—'}
                     </p>
                     {daysLeft !== null && (
                       <p className="text-xs text-gray-700 mt-1">{daysLeft} days left</p>
@@ -137,14 +135,8 @@ export default function SavedTab() {
 
       {/* Show popup if a plan is selected */}
       {selectedPlan && (
-        <UserPlanDetails
-          plan={selectedPlan}
-          onClose={() => setSelectedPlan(null)}
-        />
+        <UserPlanDetails plan={selectedPlan} onClose={() => setSelectedPlan(null)} />
       )}
     </div>
   );
 }
-
-
-

@@ -22,7 +22,7 @@ const ProfileDropdown = ({ text = 'Profile', className }) => {
     <div className="relative inline-block w-full" ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
-        className={`bg-white flex justify-between items-center max-w-[120px] px-2 py-1 rounded text-[#4B3A2D] font-semibold border border-[#4B3A2D] border-2 shadow-md transition duration-300 ease-in-out ${
+        className={`bg-[#e9f5e9] flex justify-between items-center max-w-[120px] px-2 py-1 rounded text-[#4B3A2D] font-semibold transition duration-300 ease-in-out ${
           className || ''
         }`}
       >
@@ -40,11 +40,11 @@ const ProfileDropdown = ({ text = 'Profile', className }) => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-full mt-2 w-auto min-w-[150px] text-sm bg-gray-50 border border-[#CCC3AF] rounded-lg shadow-lg z-[9999] overflow-auto">
+        <div className="absolute right-0 top-full mt-2 w-auto min-w-[115px] text-sm bg-gray-50 border border-[#CCC3AF] rounded-lg shadow-lg z-[9999] overflow-auto">
           {/* Profile */}
           <Link
             to="/user_profile"
-            className="block w-full text-left px-3 py-2 hover:bg-gray-200"
+            className="block w-full text-left px-3 py-2 hover:bg-gray-100"
             onClick={() => setOpen(false)}
           >
             Profile
@@ -53,25 +53,16 @@ const ProfileDropdown = ({ text = 'Profile', className }) => {
           {/* Saved Budget Plan */}
           <Link
             to="/user_profile"
-            className="block w-full text-left px-3 py-2 hover:bg-gray-200"
+            className="block w-full text-left px-3 py-2 hover:bg-gray-100"
             onClick={() => setOpen(false)}
           >
-            Saved Budget Plan
-          </Link>
-
-          {/* Wishlist */}
-          <Link
-            to="/user_profile"
-            className="block w-full text-left px-3 py-2 hover:bg-gray-200"
-            onClick={() => setOpen(false)}
-          >
-            Wishlist
+            Saved Plan
           </Link>
 
           {/* Settings */}
           <Link
             to="/user_profile"
-            className="block w-full text-left px-3 py-2 hover:bg-gray-200"
+            className="block w-full text-left px-3 py-2 hover:bg-gray-100"
             onClick={() => setOpen(false)}
           >
             Settings
@@ -80,7 +71,7 @@ const ProfileDropdown = ({ text = 'Profile', className }) => {
           {/* SIGN OUT → goes to SignOut.jsx */}
           <Link
             to="/signout"
-            className="block w-full text-left px-3 py-2 hover:bg-gray-200 text-red-600"
+            className="block w-full text-left px-3 py-2 hover:bg-gray-100 text-red-700"
             onClick={() => setOpen(false)}
           >
             Sign Out

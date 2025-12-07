@@ -47,7 +47,8 @@ function UserPlanDetails({ plan, onClose }) {
             </div>
           </div>
           <div className="p-2 text-sm font-semibold">
-            {startDate ? startDate.toLocaleDateString() : '—'} - {endDate ? endDate.toLocaleDateString() : '—'}
+            {startDate ? startDate.toLocaleDateString() : '—'} -{' '}
+            {endDate ? endDate.toLocaleDateString() : '—'}
           </div>
         </div>
 
@@ -82,29 +83,38 @@ function UserPlanDetails({ plan, onClose }) {
                 {Array.isArray(plan.perDay) && plan.perDay.length > 0 ? (
                   plan.perDay.map((h, idx) => {
                     // date = start + idx days (user requested start + 1 style)
-                    const hotelDate = startDate ? new Date(startDate.getTime() + idx * 24 * 60 * 60 * 1000) : null;
+                    const hotelDate = startDate
+                      ? new Date(startDate.getTime() + idx * 24 * 60 * 60 * 1000)
+                      : null;
 
                     // compute per-day cost: prefer h.total, otherwise hotelTotal+foodTotal, otherwise h.cost
                     const perDayCost =
                       h?.total ??
-                      (Number(h?.hotelTotal || 0) + Number(h?.foodTotal || 0)) ??
-                      (h?.cost ?? 0);
+                      Number(h?.hotelTotal || 0) + Number(h?.foodTotal || 0) ??
+                      h?.cost ??
+                      0;
 
                     // display room count if available inside item.hotels entries or h.count
                     let roomInfo = '';
                     if (Array.isArray(h?.hotels) && h.hotels.length > 0) {
                       // try to find count on first hotel entry if present
                       const first = h.hotels[0];
-                      if (first?.count) roomInfo = ` - [${first.count} Room${first.count > 1 ? 's' : ''}]`;
+                      if (first?.count)
+                        roomInfo = ` - [${first.count} Room${first.count > 1 ? 's' : ''}]`;
                     } else if (h?.count) {
                       roomInfo = ` - [${h.count} Room${h.count > 1 ? 's' : ''}]`;
                     }
 
                     return (
                       <div key={idx} className="flex flex-col gap-1 p-1 bg-gray-300 rounded">
-                        <div className="font-semibold">→ {hotelDate ? hotelDate.toLocaleDateString() : `Day ${idx + 1}`}</div>
+                        <div className="font-semibold">
+                          → {hotelDate ? hotelDate.toLocaleDateString() : `Day ${idx + 1}`}
+                        </div>
                         <div className="flex justify-between">
-                          <div>Day - {idx + 1}{roomInfo}</div>
+                          <div>
+                            Day - {idx + 1}
+                            {roomInfo}
+                          </div>
                           <div>Cost: {fmt(perDayCost)}</div>
                         </div>
                       </div>
@@ -128,7 +138,11 @@ function UserPlanDetails({ plan, onClose }) {
                 </div>
                 <div className="flex flex-col gap-1">
                   <div className="font-semibold">Hotel+Food</div>
-                  <div>{fmt(Number(plan.totals?.perDayTotal || 0) + Number(plan.totals?.recreation || 0))}</div>
+                  <div>
+                    {fmt(
+                      Number(plan.totals?.perDayTotal || 0) + Number(plan.totals?.recreation || 0)
+                    )}
+                  </div>
                 </div>
                 <div className="flex flex-col gap-1">
                   <div className="font-semibold">Others</div>
@@ -150,7 +164,10 @@ function UserPlanDetails({ plan, onClose }) {
                   <div className="text-sm text-gray-500">No trip plans saved.</div>
                 ) : (
                   recPlans.map((item) => (
-                    <div key={item.id} className="flex justify-between gap-1 p-2 bg-gray-300 rounded mb-2">
+                    <div
+                      key={item.id}
+                      className="flex justify-between gap-1 p-2 bg-gray-300 rounded mb-2"
+                    >
                       <div className="font-semibold">Plan : {item.title || item.name}</div>
                       <div>Cost: {fmt(item.budget ?? item.cost)}</div>
                     </div>
@@ -163,14 +180,19 @@ function UserPlanDetails({ plan, onClose }) {
             <div className="w-full bg-gray-50 p-1 rounded">
               <div>
                 <div className="text-xs text-gray-600 mb-1">Comment:</div>
-                <div className="bg-white p-2 rounded min-h-[50px] break-words">{plan.comment || ''}</div>
+                <div className="bg-white p-2 rounded min-h-[50px] break-words">
+                  {plan.comment || ''}
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         <div className="flex justify-end">
-          <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={onClose}>
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            onClick={onClose}
+          >
             Close
           </button>
         </div>

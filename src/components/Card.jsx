@@ -32,56 +32,55 @@ const Card = ({ title = 'title', defaultText, onChange, initialValue = '', class
   }, []);
 
   return (
-    <>
-      <div>
-        <div
-          ref={dropdownRef}
-          className={`max-w-[130px] flex items-center px-2 py-2 text-sm bg-white border border-[#CCC3AF] rounded-xl text-gray-700 shadow-sm hover:border-[#A88B68] transition ${className || ''}`}
-        >
-          <div className="flex-1">
-            <p className="text-xs text-[#9C9087]">{title}</p>
-
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setOpen(true);
-                setShowAll(false);
-              }}
-              onFocus={() => setOpen(true)}
-              onClick={() => setShowAll(true)}
-              placeholder={defaultText}
-              className="w-full inline-block text-[#4B3A2D] mt-1 text-black focus:outline-none"
-            />
-          </div>
-
-          <div ref={dropdownRef} onClick={toggleDropdown} className="flex-shrink-0"></div>
+    <div>
+      <div
+        ref={dropdownRef}
+        className={`max-w-[150px] flex flex-col py-2 px-3 text-sm bg-white border border-gray-300 text-gray-700 shadow-sm hover:border-[#A88B68] transition ${className || ''}`}
+      >
+        <div className="py-1">
+          <p className="text-xs font-bold text-[#9C9087]">{title}</p>
+        </div>
+        <div>
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setOpen(true);
+              setShowAll(false);
+            }}
+            onFocus={() => setOpen(true)}
+            onClick={() => setShowAll(true)}
+            placeholder={defaultText}
+            className="w-full py-2 inline-block text-[#4B3A2D] mt-1 text-base text-black font-bold focus:outline-none"
+          />
         </div>
 
-        {isOpen ? (
-          <div className="absolute w-auto min-w-[200px] max-h-60 overflow-y-auto mt-2 bg-gray-50 border border-[#CCC3AF] rounded-lg shadow-lg z-10">
-            {filtered.length === 0 ? (
-              <div className="p-2 text-gray-500 bg-gray-50">No results found</div>
-            ) : (
-              filtered.map((districtsName) => (
-                <div
-                  key={districtsName}
-                  className="p-2 hover:bg-gray-100 cursor-pointer"
-                  onMouseDown={() => {
-                    setQuery(districtsName);
-                    setOpen(false);
-                    setShowAll(false);
-                  }}
-                >
-                  {districtsName}
-                </div>
-              ))
-            )}
-          </div>
-        ) : null}
+        <div ref={dropdownRef} onClick={toggleDropdown} className="flex-shrink-0"></div>
       </div>
-    </>
+
+      {isOpen ? (
+        <div className="absolute w-auto min-w-[180px] max-h-60 overflow-y-auto mt-2 bg-gray-50 border border-[#CCC3AF] rounded-lg shadow-lg z-10">
+          {filtered.length === 0 ? (
+            <div className="p-2 text-gray-500 bg-gray-50">No results found</div>
+          ) : (
+            filtered.map((districtsName) => (
+              <div
+                key={districtsName}
+                className="p-2 hover:bg-gray-100 cursor-pointer"
+                onMouseDown={() => {
+                  setQuery(districtsName);
+                  setOpen(false);
+                  setShowAll(false);
+                }}
+              >
+                {districtsName}
+              </div>
+            ))
+          )}
+        </div>
+      ) : null}
+    </div>
   );
 };
 

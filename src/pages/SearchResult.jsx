@@ -1,36 +1,34 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { getAuth } from "firebase/auth";
-import { useHotelContext } from "../context/HotelContext";
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { getAuth } from 'firebase/auth';
+import { useHotelContext } from '../context/HotelContext';
 
-import Header from "../components/Header";
-import SearchBar from "../components/SearchBar";
-import CostBox1 from "../components/SearchResultTab/CostBox1";
-import PerDayBox from "../components/SearchResultTab/PerDayBox";
-import RecreationBox from "../components/RecreationBox";
-import TotalBox from "../components/TotalBox";
-import DestinationBox from "../components/SearchResultTab/DestinationBox";
-import Button1 from "../components/Button1";
-import SavedPlanPop from "../components/UserProfile/SavedPlanPop";
-import SavePlanConfirmation from "../components/SearchResultTab/SavePlanConfirmation";
+import Header from '../components/Header';
+import SearchBar from '../components/SearchBar';
+import CostBox1 from '../components/SearchResultTab/CostBox1';
+import PerDayBox from '../components/SearchResultTab/PerDayBox';
+import RecreationBox from '../components/RecreationBox';
+import TotalBox from '../components/TotalBox';
+import DestinationBox from '../components/SearchResultTab/DestinationBox';
+import Button1 from '../components/Button1';
+import SavedPlanPop from '../components/UserProfile/SavedPlanPop';
+import SavePlanConfirmation from '../components/SearchResultTab/SavePlanConfirmation';
 
 function SearchResult() {
   const location = useLocation();
   const query = new URLSearchParams(location.search);
 
-  const from = query.get("from") || "";
-  const to = query.get("to") || "";
-  const travelers = query.get("travelers") || "";
-  const start = query.get("dateStart") || "";
-  const end = query.get("dateEnd") || "";
-  const budget = query.get("budget") || "";
+  const from = query.get('from') || '';
+  const to = query.get('to') || '';
+  const travelers = query.get('travelers') || '';
+  const start = query.get('dateStart') || '';
+  const end = query.get('dateEnd') || '';
+  const budget = query.get('budget') || '';
 
   const startDate = new Date(start);
   const endDate = new Date(end);
   const duration =
-    start && end
-      ? Math.max(1, Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1)
-      : 0;
+    start && end ? Math.max(1, Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1) : 0;
 
   const { fetchHotels, hotelStats } = useHotelContext();
 
@@ -54,10 +52,7 @@ function SearchResult() {
     high: { hotels: [], avg: 0, range: [0, 0] },
   });
 
-  const totalPerDay = perDayBox.reduce(
-    (sum, val) => sum + Number(val?.total || 0),
-    0
-  );
+  const totalPerDay = perDayBox.reduce((sum, val) => sum + Number(val?.total || 0), 0);
 
   const handlePerDayValue = (index, value) => {
     setPerDayBox((prev) => {
@@ -95,10 +90,10 @@ function SearchResult() {
     const startDateObj = new Date(start);
     const endDateObj = new Date(end);
     const midDate = new Date(startDateObj.getTime() + (endDateObj - startDateObj) / 2);
-    const checkin = midDate.toISOString().split("T")[0];
+    const checkin = midDate.toISOString().split('T')[0];
     const checkout = new Date(midDate.getTime() + 1 * 24 * 60 * 60 * 1000)
       .toISOString()
-      .split("T")[0];
+      .split('T')[0];
 
     fetchHotels(to, checkin, checkout)
       .then((result) => {
@@ -145,7 +140,7 @@ function SearchResult() {
     const currentUser = auth.currentUser;
 
     if (!currentUser) {
-      alert("Please sign in to save a plan.");
+      alert('Please sign in to save a plan.');
       return;
     }
 
@@ -153,15 +148,15 @@ function SearchResult() {
     try {
       idToken = await currentUser.getIdToken();
     } catch (err) {
-      console.error("Failed to get idToken", err);
-      alert("Unable to validate session — please sign out and sign in again.");
+      console.error('Failed to get idToken', err);
+      alert('Unable to validate session — please sign out and sign in again.');
       return;
     }
 
     const payload = {
       id: planMeta.id || `plan_${Date.now()}`,
       userId: currentUser.uid,
-      title: planMeta.title || "Untitled trip",
+      title: planMeta.title || 'Untitled trip',
       from,
       to,
       travelers: Number(travelers) || 0,
@@ -175,9 +170,7 @@ function SearchResult() {
         perDayTotal: Number(totalPerDay || 0),
         recreation: Number(planTotal || 0),
         grandTotal:
-          Number(costBoxTotal.total || 0) +
-          Number(totalPerDay || 0) +
-          Number(planTotal || 0),
+          Number(costBoxTotal.total || 0) + Number(totalPerDay || 0) + Number(planTotal || 0),
       },
       perDay: perDayBox,
       hotelCategories,
@@ -187,30 +180,29 @@ function SearchResult() {
     };
 
     try {
-      const res = await fetch("http://localhost:5001/api/save-plan", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${idToken}`,
-  },
-  body: JSON.stringify(payload),
-});
-
+      const res = await fetch('http://localhost:5001/api/save-plan', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify(payload),
+      });
 
       if (res.ok) {
         const json = await res.json();
         const saved = json.plan || payload;
         setSavedPlans((prev) => [saved, ...prev]);
-        alert("Plan saved successfully (server).");
+        alert('Plan saved successfully (server).');
         setSavePlanOpen(false);
         return;
       } else {
         const txt = await res.text();
         console.error(`Server returned ${res.status}: ${txt}`);
-        alert("Server rejected save — saving locally for demo.");
+        alert('Server rejected save — saving locally for demo.');
       }
     } catch (err) {
-      console.warn("Error saving to server, falling back to local save.", err);
+      console.warn('Error saving to server, falling back to local save.', err);
     }
 
     // Local fallback save
@@ -222,11 +214,11 @@ function SearchResult() {
       list.unshift(stored);
       localStorage.setItem(demoKey, JSON.stringify(list));
       setSavedPlans((prev) => [stored, ...prev]);
-      alert("Plan saved locally (demo mode).");
+      alert('Plan saved locally (demo mode).');
       setSavePlanOpen(false);
     } catch (err) {
-      console.error("Failed to save demo locally:", err);
-      alert("Failed to save plan (both server and local). See console for details.");
+      console.error('Failed to save demo locally:', err);
+      alert('Failed to save plan (both server and local). See console for details.');
     }
   };
 
@@ -270,14 +262,14 @@ function SearchResult() {
             </div>
           </div>
 
-            <SavePlanConfirmation
-              isOpen={savePlanOpen}
-              onClose={() => setSavePlanOpen(false)}
-              onSave={handleSaveFromPopup}
-              currentPlan={{ from, to, travelers, start, end, budget }}
-            />
+          <SavePlanConfirmation
+            isOpen={savePlanOpen}
+            onClose={() => setSavePlanOpen(false)}
+            onSave={handleSaveFromPopup}
+            currentPlan={{ from, to, travelers, start, end, budget }}
+          />
 
-            {popSave && <SavedPlanPop onClose={() => setPopSave(false)} />}
+          {popSave && <SavedPlanPop onClose={() => setPopSave(false)} />}
 
           <div className="max-w-[600px] h-[100vh] rounded-lg flex flex-col gap-2">
             <CostBox1
