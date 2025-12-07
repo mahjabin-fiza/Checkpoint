@@ -10,11 +10,13 @@ import UserProfile from './pages/UserProfile.jsx';
 import SignUp from './pages/SignUp.jsx';
 import SignOut from './pages/SignOut';
 import Dashboard from './components/Dashboard.jsx';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
     <>
       <BrowserRouter>
+      <Toaster position="center" />
         <Routes>
           <Route path="/" element={<Homepage />} />
           <Route path="/Search_Result" element={<SearchResult />} />

@@ -29,7 +29,7 @@ export default function PopularDestinations() {
             <button
               key={dest.id || name}
               onClick={() => handleOpenAt(idx)}
-              className="block rounded-lg overflow-hidden shadow-lg transform hover:-translate-y-1 transition text-left duration-300 ease-in-out"
+              className="block rounded-lg overflow-hidden bg-white shadow-lg transform hover:-translate-y-1 transition text-left duration-300 ease-in-out"
               aria-label={`Open details for ${name}`}
             >
               <div

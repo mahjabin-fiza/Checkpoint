@@ -7,6 +7,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Duration from './Duration.jsx';
 import Duration2 from './Duration2.jsx';
+import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 function SearchBar({
   initialFrom = '',
@@ -26,6 +28,19 @@ function SearchBar({
   const [budget, setBudget] = useState(initialBudget);
 
   const handleSearch = () => {
+    if (dateStart && dateEnd) {
+      const start = new Date(dateStart);
+      const end = new Date(dateEnd);
+      if (start > end) {
+        Swal.fire({
+          title: '<span style="font-size:18px;">Invalid Dates</span>',
+          text: 'Enter correct date.',
+          confirmButtonColor: '#A88B68',
+          width: 300,
+        });
+        return;
+      }
+    }
     const query = new URLSearchParams({
       from,
       to,
@@ -59,7 +74,7 @@ function SearchBar({
         />
       </div>
 
-      <div className="flex">
+      <div className="flex items-center justify-center">
         <Duration title="Start" value={dateStart} onChange={setDateStart} />
         <Duration2 title="End" value={dateEnd} onChange={setDateEnd} />
       </div>
@@ -69,7 +84,7 @@ function SearchBar({
       <Budget title="Budget" value={budget} onChange={setBudget} initialValue={budget} />
       <button
         onClick={handleSearch}
-        className="text-base shadow-md border border-2 border-transparent bg-[#A88B68] font-semibold text-white py-7 px-5 rounded-xl hover:bg-[#87A87C]/10 hover:text-[#4B3A2D] hover:border-[#4B3A2D] hover:scale-105 transition duration-300 ease-in-out relative z-10"
+        className="text-base border border-2 border-transparent bg-[#A88B68] font-semibold text-white py-6 px-5 rounded-xl hover:bg-[#87A87C]/10 hover:text-[#4B3A2D] hover:border-[#4B3A2D] hover:scale-105 transition duration-300 ease-in-out relative z-10"
       >
         Search
       </button>

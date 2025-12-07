@@ -12,30 +12,28 @@ const Counter = ({ title = 'title', value = 1, onChange }) => {
   }, [count, onChange]);
 
   return (
-    <div className="flex text-sm bg-white border border-gray-300 rounded-xl">
-      <div className="rounded-l-lg py-2 px-1 pl-1">
+    <div className="flex text-sm h-[79px] bg-white border border-[#CCC3AF] rounded-xl">
+      <div className="rounded-l-lg py-3">
         <div className="flex flex-col gap-2">
           <div>
-            <p className="text-xs text-[#9C9087] font-bold">{title}</p>
+            <p className="text-sm text-[#9C9087] font-bold px-2">{title}</p>
           </div>
-          <div className="text-[#4B3A2D] text-center text-base p-2 text-[#4B3A2D] font-bold">
+          <div className="text-[#4B3A2D] text-center text-base text-[#4B3A2D] font-bold">
             {count}
           </div>
         </div>
       </div>
-      <div className="">
-        <div className="flex flex-col">
+        <div className="flex flex-col h-full w-full items-end justify-between bg-[#CCC3AF] rounded-xl">
           <div>
-            <button onClick={increment} className='w-full hover:bg-[#CCC3AF] p-1.5 hover:text-white bg-gray-200 rounded-tr-xl text-lg transition duration-200 ease-in-out'>
+            <button onClick={increment} className='hover:bg-[#CCC3AF] px-1 h-[38.5px] hover:text-white bg-gray-100 rounded-tr-xl text-lg transition duration-200 ease-in-out'>
               +
             </button>
           </div>
           <div>
-            <button onClick={decrement} className="w-full hover:bg-[#CCC3AF] p-1.5 hover:text-white bg-gray-200 rounded-br-xl text-lg transition duration-200 ease-in-out">
+            <button onClick={decrement} className="hover:bg-[#CCC3AF] w-[18.5px] h-[38.5px] hover:text-white bg-gray-100 rounded-br-xl text-lg transition duration-200 ease-in-out">
               -
             </button>
           </div>
-        </div>
       </div>
     </div>
   );

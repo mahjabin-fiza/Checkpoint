@@ -35,10 +35,10 @@ const Card = ({ title = 'title', defaultText, onChange, initialValue = '', class
     <div>
       <div
         ref={dropdownRef}
-        className={`max-w-[150px] flex flex-col py-2 px-3 text-sm bg-white border border-gray-300 text-gray-700 shadow-sm hover:border-[#A88B68] transition ${className || ''}`}
+        className={`max-w-[140px] flex flex-col py-2 px-3 text-sm bg-white border border-[#CCC3AF] text-gray-700 shadow-sm hover:border-[#A88B68] transition ${className || ''}`}
       >
         <div className="py-1">
-          <p className="text-xs font-bold text-[#9C9087]">{title}</p>
+          <p className="text-sm font-bold text-[#9C9087]">{title}</p>
         </div>
         <div>
           <input
@@ -52,7 +52,7 @@ const Card = ({ title = 'title', defaultText, onChange, initialValue = '', class
             onFocus={() => setOpen(true)}
             onClick={() => setShowAll(true)}
             placeholder={defaultText}
-            className="w-full py-2 inline-block text-[#4B3A2D] mt-1 text-base text-black font-bold focus:outline-none"
+            className="w-full py-1 inline-block text-[#4B3A2D] text-base text-black font-bold focus:outline-none"
           />
         </div>
 

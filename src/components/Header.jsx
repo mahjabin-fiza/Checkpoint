@@ -12,7 +12,7 @@ function Header() {
   }, []);
 
   return (
-    <header className="w-full px-14 py-4 bg-white items-center justify-center sticky top-0 z-50">
+    <header className="w-full px-14 py-4 bg-black bg-white items-center justify-center sticky top-0 z-50">
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link to="/">
